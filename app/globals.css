@@ -1,26 +1,48 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf7f2;
+  --surface: #ffffff;
+  --foreground: #1f2a24;
+  --foreground-secondary: #55645b;
+  --foreground-tertiary: #8a9189;
+  --border-subtle: #e5dfd3;
+
+  /* Deep teal-green: trust, growth, "someone competent is in the room" */
+  --primary: #1b6b5c;
+  --primary-dark: #124a40;
+  --primary-tint: #e7f1ee;
+
+  /* Warm terracotta: the human, non-corporate accent. CTAs live here. */
+  --accent: #d97b3f;
+  --accent-dark: #b6602a;
+  --accent-tint: #fbeee1;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-tertiary: var(--foreground-tertiary);
+  --color-border-subtle: var(--border-subtle);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-tint: var(--primary-tint);
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-tint: var(--accent-tint);
+  --font-display: "Plus Jakarta Sans";
+  --font-body: "Inter";
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.01em;
 }

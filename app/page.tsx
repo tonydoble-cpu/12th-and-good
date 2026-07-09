@@ -1,65 +1,122 @@
-import Image from "next/image";
+import Container from "@/components/Container";
+import { ButtonLink } from "@/components/Button";
+
+const steps = [
+  {
+    title: "Book a session",
+    body: "Pick what you need help with and a time that works. No sales call first — you go straight to the calendar.",
+  },
+  {
+    title: "Pay securely",
+    body: "You pay per session, right on the platform. One flat price. Nothing added later.",
+  },
+  {
+    title: "Meet on video",
+    body: "Talk it through face to face, from wherever you are. The session and everything you decide stays in your account.",
+  },
+];
+
+const whyItMatters = [
+  {
+    title: "Nothing to sell",
+    body: "Your coach doesn't earn a commission on anything you buy. No products, no policies, no funds. Just your questions and your plan.",
+  },
+  {
+    title: "Plain English",
+    body: "No jargon, no 15-page statements. If a word needs a finance degree to understand, we don't use it here.",
+  },
+  {
+    title: "Built for everyone",
+    body: "Honest money help shouldn't be a luxury. This is built with a strong focus on communities that get left out of financial advice — and it's open to anyone who wants it.",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div>
+      <section className="bg-primary-tint">
+        <Container className="py-24 md:py-32">
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-5">
+            Conflict-free financial coaching
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          <h1 className="font-display text-4xl md:text-6xl font-semibold text-foreground max-w-3xl leading-tight">
+            Nothing to sell. No commission. Just honest help with your money.
+          </h1>
+          <p className="mt-6 text-lg text-foreground-secondary max-w-xl">
+            Book a real, 1:1 session with a fee-only coach. Build a budget,
+            make a plan, and know exactly what to do next — with someone who
+            doesn&apos;t earn a cent from what you buy.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row gap-4">
+            <ButtonLink href="/tony">Book a Session</ButtonLink>
+            <ButtonLink href="/tony" variant="ghost">
+              Meet Your Coach
+            </ButtonLink>
+          </div>
+        </Container>
+      </section>
+
+      <section>
+        <Container className="py-20">
+          <h2 className="font-display text-2xl md:text-3xl font-semibold text-foreground mb-12">
+            How it works
+          </h2>
+          <div className="grid md:grid-cols-3 gap-10">
+            {steps.map((step, i) => (
+              <div key={step.title}>
+                <div className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-display font-semibold text-sm mb-4">
+                  {i + 1}
+                </div>
+                <h3 className="font-display font-semibold text-lg text-foreground mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-foreground-secondary text-sm leading-relaxed">
+                  {step.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-surface border-y border-border-subtle">
+        <Container className="py-20">
+          <h2 className="font-display text-2xl md:text-3xl font-semibold text-foreground mb-12">
+            Why &quot;conflict-free&quot; matters
+          </h2>
+          <div className="grid md:grid-cols-3 gap-10">
+            {whyItMatters.map((item) => (
+              <div key={item.title}>
+                <h3 className="font-display font-semibold text-lg text-foreground mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-foreground-secondary text-sm leading-relaxed">
+                  {item.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section>
+        <Container className="py-20">
+          <div className="rounded-3xl bg-accent-tint p-10 md:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+            <div>
+              <h2 className="font-display text-2xl md:text-3xl font-semibold text-foreground">
+                Ready to see where you actually stand?
+              </h2>
+              <p className="mt-3 text-foreground-secondary max-w-md">
+                One session is enough to get clear. Book time with Tony and
+                bring whatever&apos;s on your mind.
+              </p>
+            </div>
+            <ButtonLink href="/tony" className="shrink-0">
+              Book a Session
+            </ButtonLink>
+          </div>
+        </Container>
+      </section>
     </div>
   );
 }
