@@ -18,7 +18,7 @@ export default function Header({
         >
           <BrandMark size={24} className="-mt-[1px]" />
           <span>
-            12th <span className="italic font-normal">&amp;</span> Good
+            12th <span className="italic font-normal">&amp;</span> Good Street
           </span>
         </Link>
 

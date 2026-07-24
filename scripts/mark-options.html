@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../node_modules/@fontsource/newsreader/files/newsreader-latin-500-normal.woff2") format("woff2");
+    font-weight: 500;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../node_modules/@fontsource/newsreader/files/newsreader-latin-400-normal.woff2") format("woff2");
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../node_modules/@fontsource/newsreader/files/newsreader-latin-400-italic.woff2") format("woff2");
+    font-weight: 400; font-style: italic;
+  }
+  body { margin:0; font-family:"Newsreader",Georgia,serif; background:#fff; }
+  .row { display:grid; grid-template-columns: 64px 130px 340px 90px 200px; gap:36px; align-items:center;
+         padding:34px 44px; border-bottom:1px solid #e7e4dd; background:#f5f4f1; }
+  .label { font-family:ui-monospace,Menlo,monospace; font-size:13px; letter-spacing:.06em; color:#71757c; }
+  .label b { display:block; font-size:17px; color:#191a1c; letter-spacing:0; margin-bottom:4px; }
+  .lockup { display:flex; align-items:center; gap:11px; font-size:23px; font-weight:500; color:#191a1c; letter-spacing:-0.01em; white-space:nowrap; }
+  .lockup em { font-weight:400; }
+  .small { display:flex; align-items:center; gap:18px; }
+  .cap { font-family:ui-monospace,Menlo,monospace; font-size:10px; color:#71757c; margin-top:6px; text-align:center; }
+  .dark { background:#15171b; border-radius:12px; padding:18px 22px; display:flex; align-items:center; gap:11px;
+          font-size:20px; font-weight:500; color:#f5f4f1; white-space:nowrap; }
+  .dark em { font-weight:400; }
+</style>
+</head>
+<body>
+
+<!-- A: ADDRESS PLATE -->
+<div class="row">
+  <div class="label"><b>A</b>address plate</div>
+  <svg width="96" height="96" viewBox="0 0 32 32">
+    <path d="M6 30 V15 A10 10 0 0 1 26 15 V30 Z" fill="#3a5a7d"/>
+    <text x="16" y="25.5" font-family="Newsreader,Georgia,serif" font-size="13.5" font-weight="500" fill="#f5f4f1" text-anchor="middle">12</text>
+  </svg>
+  <div class="lockup">
+    <svg width="27" height="27" viewBox="0 0 32 32"><path d="M6 30 V15 A10 10 0 0 1 26 15 V30 Z" fill="#3a5a7d"/><text x="16" y="25.5" font-family="Newsreader,Georgia,serif" font-size="13.5" font-weight="500" fill="#f5f4f1" text-anchor="middle">12</text></svg>
+    12th <em>&amp;</em> Good Street
+  </div>
+  <div class="small">
+    <div><svg width="16" height="16" viewBox="0 0 32 32"><path d="M6 30 V15 A10 10 0 0 1 26 15 V30 Z" fill="#3a5a7d"/><text x="16" y="26.5" font-family="Newsreader,Georgia,serif" font-size="15" font-weight="600" fill="#f5f4f1" text-anchor="middle">12</text></svg><div class="cap">16px</div></div>
+  </div>
+  <div class="dark">
+    <svg width="25" height="25" viewBox="0 0 32 32"><path d="M6 30 V15 A10 10 0 0 1 26 15 V30 Z" fill="#4c6f95"/><text x="16" y="25.5" font-family="Newsreader,Georgia,serif" font-size="13.5" font-weight="500" fill="#f5f4f1" text-anchor="middle">12</text></svg>
+    12th <em>&amp;</em> Good Street
+  </div>
+</div>
+
+<!-- B: TWELVE-DOT -->
+<div class="row">
+  <div class="label"><b>B</b>&ldquo;12.&rdquo; numerals</div>
+  <svg width="96" height="96" viewBox="0 0 32 32">
+    <text x="1" y="26" font-family="Newsreader,Georgia,serif" font-size="23" font-weight="500" fill="#3a5a7d">12</text>
+    <circle cx="27.5" cy="23" r="3.2" fill="#9c5b3c"/>
+  </svg>
+  <div class="lockup">
+    <svg width="27" height="27" viewBox="0 0 32 32"><text x="1" y="26" font-family="Newsreader,Georgia,serif" font-size="23" font-weight="500" fill="#3a5a7d">12</text><circle cx="27.5" cy="23" r="3.2" fill="#9c5b3c"/></svg>
+    12th <em>&amp;</em> Good Street
+  </div>
+  <div class="small">
+    <div><svg width="16" height="16" viewBox="0 0 32 32"><text x="0" y="27" font-family="Newsreader,Georgia,serif" font-size="25" font-weight="600" fill="#3a5a7d">12</text><circle cx="28.5" cy="23" r="3.6" fill="#9c5b3c"/></svg><div class="cap">16px</div></div>
+  </div>
+  <div class="dark">
+    <svg width="25" height="25" viewBox="0 0 32 32"><text x="1" y="26" font-family="Newsreader,Georgia,serif" font-size="23" font-weight="500" fill="#f5f4f1">12</text><circle cx="27.5" cy="23" r="3.2" fill="#c98a63"/></svg>
+    12th <em>&amp;</em> Good Street
+  </div>
+</div>
+
+<!-- C: THE CORNER -->
+<div class="row">
+  <div class="label"><b>C</b>the corner</div>
+  <svg width="96" height="96" viewBox="0 0 32 32" fill="none">
+    <path d="M8 5 V24 H27" stroke="#3a5a7d" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="17.5" cy="13.5" r="4.2" fill="#9c5b3c"/>
+  </svg>
+  <div class="lockup">
+    <svg width="27" height="27" viewBox="0 0 32 32" fill="none"><path d="M8 5 V24 H27" stroke="#3a5a7d" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17.5" cy="13.5" r="4.2" fill="#9c5b3c"/></svg>
+    12th <em>&amp;</em> Good Street
+  </div>
+  <div class="small">
+    <div><svg width="16" height="16" viewBox="0 0 32 32" fill="none"><path d="M8 5 V24 H27" stroke="#3a5a7d" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="13" r="4.6" fill="#9c5b3c"/></svg><div class="cap">16px</div></div>
+  </div>
+  <div class="dark">
+    <svg width="25" height="25" viewBox="0 0 32 32" fill="none"><path d="M8 5 V24 H27" stroke="#f5f4f1" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17.5" cy="13.5" r="4.2" fill="#c98a63"/></svg>
+    12th <em>&amp;</em> Good Street
+  </div>
+</div>
+
+</body>
+</html>
