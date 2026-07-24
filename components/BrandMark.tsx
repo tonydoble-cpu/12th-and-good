@@ -6,9 +6,9 @@ type Props = {
 };
 
 /**
- * The Confluence mark: two roads meeting and continuing as one —
- * your path joining a coach who has already walked it.
- * Slate = the road ahead; clay = the person arriving. Kept uneven on purpose.
+ * The Corner: two streets meeting at a curbed corner — 12th & Good.
+ * The clay dot is the person standing on it. Curve, not a right angle,
+ * so it reads as a street corner rather than a letter "L".
  */
 export default function BrandMark({
   size = 24,
@@ -27,19 +27,13 @@ export default function BrandMark({
       className={className}
     >
       <path
-        d="M9.5 28.5 16 15.5V4"
+        d="M8 4.5 V15 A9.5 9.5 0 0 0 17.5 24.5 H27"
         stroke={road}
-        strokeWidth={4.4}
+        strokeWidth={4.6}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path
-        d="M25 27 16 15.5"
-        stroke={clay}
-        strokeWidth={4.4}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <circle cx="17.5" cy="12.3" r="4" fill={clay} />
     </svg>
   );
 }
