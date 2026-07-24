@@ -15,6 +15,28 @@
 create extension if not exists "pgcrypto";
 
 -- ---------------------------------------------------------------------------
+-- blueprint_leads: quiz funnel captures. Written by /api/blueprint at gate1
+-- (email + archetype), gate2 (full blueprint unlocked), and waitlist opt-in.
+-- Upserts on email. RLS is enabled with NO public policies — only the
+-- service-role key (server-side API routes) can read or write. Keep it that
+-- way: this table is the lead list, it must never be browser-readable.
+-- ---------------------------------------------------------------------------
+create table if not exists blueprint_leads (
+  email text primary key,
+  first_name text,
+  archetype text,
+  pre_gate_answers jsonb,
+  post_gate_answers jsonb,
+  waitlist boolean not null default false,
+  gate1_at timestamptz,
+  gate2_at timestamptz,
+  waitlist_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz
+);
+alter table blueprint_leads enable row level security;
+
+-- ---------------------------------------------------------------------------
 -- coaches: public profile. `user_id` links to the Supabase auth user that's
 -- allowed to log into /coach for this row.
 -- ---------------------------------------------------------------------------
