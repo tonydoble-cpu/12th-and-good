@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# working screenshots at repo root (delivered via chat, not source)
+/homepage-*.png
