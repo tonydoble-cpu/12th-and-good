@@ -1,6 +1,6 @@
-# The Marketplace — POC
+# 12th & Good Street — POC
 
-Working title. A conflict-free financial coaching marketplace. This POC
+The marketplace for better money conversations. Fee-only financial coaching. This POC
 proves one thing: a real person can find the site, book a session with Tony,
 pay through the platform, meet him on video, and have it all live in their
 account — with real money, end to end.

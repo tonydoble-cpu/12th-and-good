@@ -1,5 +1,5 @@
 -- ============================================================================
--- The Marketplace — POC schema
+-- 12th & Good Street — POC schema
 -- Run this in the Supabase SQL editor (or via `supabase db push`) on a fresh
 -- project. Designed for ONE coach today, but every table is keyed by
 -- coach_id so a second coach is a data problem, not a schema rewrite.
@@ -23,9 +23,16 @@ create table if not exists coaches (
   user_id uuid references auth.users (id),
   slug text unique not null,
   full_name text not null,
+  -- Short sub-bio shown under the name on the profile header.
   headline text not null default '',
+  -- "My approach" copy: two paragraphs joined by a blank line (\n\n),
+  -- split on render rather than adding a separate paragraphs column.
   bio text not null default '',
   credentials text[] not null default '{}',
+  -- Chip tags shown under the profile header (e.g. "Budgeting & cash flow").
+  specialties text[] not null default '{}',
+  -- Shows the "Founding coach" badge on cards and the profile header.
+  founding boolean not null default false,
   video_intro_url text,
   photo_url text,
   created_at timestamptz not null default now()
@@ -159,37 +166,46 @@ create policy "clients read own bookings"
 -- Seed data for Tony (replace with real bio/credentials/prices before launch)
 -- ============================================================================
 
-insert into coaches (slug, full_name, headline, bio, credentials)
+insert into coaches (slug, full_name, headline, bio, credentials, specialties, founding, photo_url)
 values (
   'tony',
   'Tony Doble',
-  'Fee-only financial coach. Nothing to sell, ever.',
-  'I help people build a budget that actually works, get out from under debt, and make a plan they can stick to. I don''t sell investments, insurance, or any financial product.',
+  'Practical, plain-English money coaching — and the first coach on the marketplace. I''m taking these early calls myself, with no product behind me and nothing to sell you.',
+  E'I started taking these calls myself because I believe honest money help shouldn''t be a luxury — and it definitely shouldn''t come with a product attached. Whatever you''re working on, we''ll talk it through like real people.\n\nWe''ll start where you actually are, not where a brochure assumes you should be. You bring the real numbers and the real questions; I bring a clear head and a plan you can act on the same week. No jargon, no judgment, no pitch.',
   array[
     '10+ years advising individuals and small business owners',
     'Fee-only — paid only by you, never by commission',
     'Fiduciary coaching standard: your interest, not a product''s'
-  ]
+  ],
+  array[
+    'Budgeting & cash flow',
+    'Debt paydown strategies',
+    'First-time home buying',
+    'Investing basics',
+    'Understanding 401(k)s'
+  ],
+  true,
+  '/tony-doble.png'
 )
 on conflict (slug) do nothing;
 
 insert into session_types (coach_id, name, description, duration_minutes, price_cents)
-select id, 'First Session: Get Clear',
-  'We look at everything together and build one page you can actually understand.',
-  45, 9500
+select id, 'Free intro call',
+  'A no-pressure hello to see if we''re the right fit. No plan yet — just a conversation.',
+  20, 0
 from coaches where slug = 'tony'
 on conflict do nothing;
 
 insert into session_types (coach_id, name, description, duration_minutes, price_cents)
-select id, 'Build the Plan',
-  'We turn what we found in your first session into a concrete plan.',
-  45, 9500
+select id, 'Single session',
+  'A focused deep-dive on one goal, with a written plan and next steps afterward.',
+  60, 15000
 from coaches where slug = 'tony'
 on conflict do nothing;
 
 insert into session_types (coach_id, name, description, duration_minutes, price_cents)
-select id, 'Check-In Session',
-  'A shorter follow-up to review progress and adjust the plan.',
-  25, 6000
+select id, '3-session action plan',
+  'Build real momentum over a month — a plan, the work, and a check-in to keep it going.',
+  180, 42000
 from coaches where slug = 'tony'
 on conflict do nothing;

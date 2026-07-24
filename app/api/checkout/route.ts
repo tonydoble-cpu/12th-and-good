@@ -4,6 +4,7 @@ import { getAvailabilitySlotById, getCoachBySlug, getSessionTypeById } from "@/l
 import { createClient, createServiceRoleClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getStripe, isStripeConfigured } from "@/lib/stripe";
+import { createZoomMeeting } from "@/lib/zoom";
 
 const bodySchema = z.object({
   sessionTypeId: z.string().min(1),
@@ -55,10 +56,60 @@ export async function POST(request: Request) {
     await supabase!
       .from("client_profiles")
       .upsert({ id: data.user.id, email: data.user.email, full_name: name }, { onConflict: "id" });
-  } else {
-    if (!email) {
-      return NextResponse.json({ error: "Email is required." }, { status: 400 });
+  }
+  // Demo mode (no Supabase) doesn't require an email up front — Stripe
+  // Checkout collects it during payment, and a free intro call has no
+  // payment step at all to attach it to.
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const serviceClient = createServiceRoleClient();
+
+  // Free intro calls skip Stripe entirely — there's nothing to charge, and a
+  // $0 line item isn't something Stripe Checkout will create a session for.
+  // The booking goes straight to 'confirmed', same as a paid booking does
+  // once the webhook fires, so both paths land in the same state machine.
+  if (sessionType.price_cents === 0) {
+    let freeBookingId: string | null = null;
+
+    if (serviceClient && clientId) {
+      const { data: booking, error } = await serviceClient
+        .from("bookings")
+        .insert({
+          client_id: clientId,
+          coach_id: coach.id,
+          session_type_id: sessionType.id,
+          slot_id: slot.id,
+          status: "confirmed",
+          starts_at: slot.starts_at,
+          ends_at: slot.ends_at,
+          price_cents: 0,
+        })
+        .select("id")
+        .single();
+
+      if (error) {
+        return NextResponse.json({ error: "Couldn't create the booking. Try again." }, { status: 500 });
+      }
+      freeBookingId = booking.id;
+
+      const zoom = await createZoomMeeting({
+        topic: `Coaching session — ${booking.id}`,
+        startTimeIso: slot.starts_at,
+        durationMinutes: sessionType.duration_minutes,
+      });
+
+      await serviceClient
+        .from("bookings")
+        .update({
+          zoom_join_url: zoom?.joinUrl ?? null,
+          zoom_start_url: zoom?.startUrl ?? null,
+        })
+        .eq("id", freeBookingId);
+
+      await serviceClient.from("availability_slots").update({ is_booked: true }).eq("id", slot.id);
     }
+
+    return NextResponse.json({ url: `${siteUrl}/book/success?free=1` });
   }
 
   if (!isStripeConfigured) {
@@ -71,10 +122,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-
   let bookingId: string | null = null;
-  const serviceClient = createServiceRoleClient();
 
   if (serviceClient && clientId) {
     const { data: booking, error } = await serviceClient

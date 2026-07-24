@@ -1,48 +1,167 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf7f2;
+  /* Design system per Marketplace_POC design handoff (July 2026). */
+  --bg: #f5f4f1;
   --surface: #ffffff;
-  --foreground: #1f2a24;
-  --foreground-secondary: #55645b;
-  --foreground-tertiary: #8a9189;
-  --border-subtle: #e5dfd3;
+  --ink: #191a1c;
+  --ink-2: #3d4147;
+  --muted: #71757c;
+  --line: #e7e4dd;
 
-  /* Deep teal-green: trust, growth, "someone competent is in the room" */
-  --primary: #1b6b5c;
-  --primary-dark: #124a40;
-  --primary-tint: #e7f1ee;
+  /* Slate blue — CTAs, links, active states, numerals */
+  --accent: #3a5a7d;
+  --accent-hover: #2f4a68;
+  --accent-tint: #eef1f4;
 
-  /* Warm terracotta: the human, non-corporate accent. CTAs live here. */
-  --accent: #d97b3f;
-  --accent-dark: #b6602a;
-  --accent-tint: #fbeee1;
+  /* Clay — secondary accent from the brand mark: warmth, the person's side of the road.
+     Use sparingly (mark, small accents); --clay-soft is the legible variant for dark surfaces. */
+  --clay: #9c5b3c;
+  --clay-soft: #c98a63;
+
+  --footer-bg: #101215;
+  --dark-section: #15171b;
+
+  /* legacy aliases kept so existing components referencing these still work */
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --foreground-secondary: var(--ink-2);
+  --foreground-tertiary: var(--muted);
+  --border-subtle: var(--line);
+  --primary: var(--ink);
+  --primary-dark: #000000;
+  --primary-tint: var(--accent-tint);
+  --accent-dark: var(--accent-hover);
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-background: var(--bg);
   --color-surface: var(--surface);
-  --color-foreground: var(--foreground);
-  --color-foreground-secondary: var(--foreground-secondary);
-  --color-foreground-tertiary: var(--foreground-tertiary);
-  --color-border-subtle: var(--border-subtle);
+  --color-foreground: var(--ink);
+  --color-foreground-secondary: var(--ink-2);
+  --color-foreground-tertiary: var(--muted);
+  --color-border-subtle: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
   --color-primary-tint: var(--primary-tint);
   --color-accent: var(--accent);
-  --color-accent-dark: var(--accent-dark);
+  --color-accent-dark: var(--accent-hover);
+  --color-accent-hover: var(--accent-hover);
   --color-accent-tint: var(--accent-tint);
-  --font-display: "Plus Jakarta Sans";
-  --font-body: "Inter";
+  --color-clay: var(--clay);
+  --color-clay-soft: var(--clay-soft);
+  --color-footer-bg: var(--footer-bg);
+  --color-dark-section: var(--dark-section);
+  --font-display: "Newsreader";
+  --font-body: "Instrument Sans";
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.005em;
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display), Georgia, serif;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Rotated-square "dot" bullet used throughout the design as a bullet/accent */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: rotate(45deg);
+  flex: none;
+  display: inline-block;
+}
+
+/* Striped placeholder swatch for un-shot imagery */
+.placeholder-swatch {
+  background-color: #ecebe5;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(58, 90, 125, 0.055) 0,
+    rgba(58, 90, 125, 0.055) 1px,
+    transparent 1px,
+    transparent 10px
+  );
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+/* Blog article prose styling */
+.prose-brand p {
+  font-size: 16px;
+  line-height: 1.72;
+  color: var(--ink-2);
+  margin-bottom: 1.25em;
+}
+.prose-brand h2 {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+}
+.prose-brand h3 {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.prose-brand ul {
+  margin: 1em 0;
+  padding-left: 1.5em;
+  list-style: disc;
+}
+.prose-brand li {
+  font-size: 16px;
+  line-height: 1.72;
+  color: var(--ink-2);
+  margin-bottom: 0.5em;
+}
+.prose-brand strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.prose-brand a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-brand a:hover {
+  color: var(--accent-hover);
+}
+
+/* Scroll-reveal, matching the design handoff's motion spec. Respects
+   prefers-reduced-motion and has a safety timeout in ScrollReveal.tsx so
+   nothing stays permanently hidden if JS is slow to attach. */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.6, 0.2, 1),
+    transform 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }

@@ -1,19 +1,25 @@
 import { Suspense } from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import LoginForm from "./LoginForm";
 
 export default function LoginPage() {
   return (
-    <Container className="py-20 max-w-md">
-      <h1 className="font-display text-2xl font-semibold text-foreground mb-2">
-        Sign in
-      </h1>
-      <p className="text-sm text-foreground-secondary mb-8">
-        Sign in to book, rebook, and see your session history.
-      </p>
-      <Suspense fallback={null}>
-        <LoginForm />
-      </Suspense>
-    </Container>
+    <div className="flex min-h-full flex-col">
+      <Header cta={null} />
+      <Container className="flex-1 py-20 max-w-md">
+        <h1 className="font-display text-2xl font-semibold text-foreground mb-2">
+          Sign in
+        </h1>
+        <p className="text-sm text-foreground-secondary mb-8">
+          Sign in to book, rebook, and see your session history.
+        </p>
+        <Suspense fallback={null}>
+          <LoginForm />
+        </Suspense>
+      </Container>
+      <Footer variant="simple" />
+    </div>
   );
 }

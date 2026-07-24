@@ -15,9 +15,18 @@ export type Coach = {
   id: string;
   slug: string;
   full_name: string;
+  /** Short one-line sub-bio shown under the name on the profile header. */
   headline: string;
+  /**
+   * "My approach" copy — two paragraphs joined by a blank line (`\n\n`).
+   * Split on render rather than adding a separate array column.
+   */
   bio: string;
   credentials: string[];
+  /** Chip tags shown under the profile header (e.g. "Budgeting & cash flow"). */
+  specialties: string[];
+  /** Shows the "Founding coach" badge on cards and the profile header. */
+  founding: boolean;
   video_intro_url: string | null;
   photo_url: string | null;
 };

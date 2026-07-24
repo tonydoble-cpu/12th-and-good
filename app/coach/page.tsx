@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { format } from "date-fns";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -13,17 +15,22 @@ import AddAvailabilityForm from "./AddAvailabilityForm";
 export default async function CoachDashboardPage() {
   if (!isSupabaseConfigured) {
     return (
-      <Container className="py-20 max-w-lg">
-        <h1 className="font-display text-2xl font-semibold text-foreground mb-3">
-          Coach dashboard isn&apos;t live yet
-        </h1>
-        <p className="text-foreground-secondary leading-relaxed">
-          This requires Supabase to be configured and a coach account signed
-          in. Run <code>supabase/schema.sql</code> against your project,
-          create a Supabase auth user for Tony, and set that user&apos;s{" "}
-          <code>id</code> as <code>coaches.user_id</code>. See README.md.
-        </p>
-      </Container>
+      <div className="flex min-h-full flex-col">
+        <Header cta={null} />
+        <Container className="flex-1 py-20 max-w-lg">
+          <h1 className="font-display text-2xl font-semibold text-foreground mb-3">
+            Coach dashboard isn&apos;t live yet
+          </h1>
+          <p className="text-foreground-secondary leading-relaxed">
+            This requires Supabase to be configured and a coach account
+            signed in. Run <code>supabase/schema.sql</code> against your
+            project, create a Supabase auth user for Tony, and set that
+            user&apos;s <code>id</code> as <code>coaches.user_id</code>. See
+            README.md.
+          </p>
+        </Container>
+        <Footer variant="simple" />
+      </div>
     );
   }
 
@@ -36,16 +43,20 @@ export default async function CoachDashboardPage() {
   const coach = await getCoachForUser(data.user.id);
   if (!coach) {
     return (
-      <Container className="py-20 max-w-lg">
-        <h1 className="font-display text-2xl font-semibold text-foreground mb-3">
-          No coach profile linked
-        </h1>
-        <p className="text-foreground-secondary leading-relaxed">
-          You&apos;re signed in, but this account isn&apos;t linked to a
-          coach row. Set <code>coaches.user_id</code> to this user&apos;s ID
-          in Supabase.
-        </p>
-      </Container>
+      <div className="flex min-h-full flex-col">
+        <Header cta={null} />
+        <Container className="flex-1 py-20 max-w-lg">
+          <h1 className="font-display text-2xl font-semibold text-foreground mb-3">
+            No coach profile linked
+          </h1>
+          <p className="text-foreground-secondary leading-relaxed">
+            You&apos;re signed in, but this account isn&apos;t linked to a
+            coach row. Set <code>coaches.user_id</code> to this user&apos;s
+            ID in Supabase.
+          </p>
+        </Container>
+        <Footer variant="simple" />
+      </div>
     );
   }
 
@@ -63,7 +74,9 @@ export default async function CoachDashboardPage() {
   );
 
   return (
-    <Container className="py-16">
+    <div className="flex min-h-full flex-col">
+      <Header cta={null} />
+      <Container className="flex-1 py-16">
       <h1 className="font-display text-2xl md:text-3xl font-semibold text-foreground mb-2">
         Coach Dashboard
       </h1>
@@ -158,6 +171,8 @@ export default async function CoachDashboardPage() {
           </section>
         </div>
       </div>
-    </Container>
+      </Container>
+      <Footer variant="simple" />
+    </div>
   );
 }

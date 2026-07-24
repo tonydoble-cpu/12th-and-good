@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { format } from "date-fns";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import { ButtonLink } from "@/components/Button";
 import { getCurrentUserBookings } from "@/lib/bookings-data";
@@ -10,15 +12,19 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 export default async function AccountPage() {
   if (!isSupabaseConfigured) {
     return (
-      <Container className="py-20 max-w-lg">
-        <h1 className="font-display text-2xl font-semibold text-foreground mb-3">
-          Accounts aren&apos;t connected yet
-        </h1>
-        <p className="text-foreground-secondary leading-relaxed">
-          Your booking history and one-click rebooking live here once
-          Supabase is configured. See <code>README.md</code> for setup.
-        </p>
-      </Container>
+      <div className="flex min-h-full flex-col">
+        <Header cta={null} />
+        <Container className="flex-1 py-20 max-w-lg">
+          <h1 className="font-display text-2xl font-semibold text-foreground mb-3">
+            Accounts aren&apos;t connected yet
+          </h1>
+          <p className="text-foreground-secondary leading-relaxed">
+            Your booking history and one-click rebooking live here once
+            Supabase is configured. See <code>README.md</code> for setup.
+          </p>
+        </Container>
+        <Footer variant="simple" />
+      </div>
     );
   }
 
@@ -37,7 +43,9 @@ export default async function AccountPage() {
   );
 
   return (
-    <Container className="py-16">
+    <div className="flex min-h-full flex-col">
+      <Header cta={null} />
+      <Container className="flex-1 py-16">
       <h1 className="font-display text-2xl md:text-3xl font-semibold text-foreground mb-10">
         My Account
       </h1>
@@ -113,6 +121,8 @@ export default async function AccountPage() {
           </div>
         </section>
       )}
-    </Container>
+      </Container>
+      <Footer variant="simple" />
+    </div>
   );
 }

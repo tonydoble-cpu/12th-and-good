@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import { ButtonLink } from "@/components/Button";
 import { getBookingById } from "@/lib/bookings-data";
@@ -15,16 +17,20 @@ export default async function SessionPage({
 
   if (!isSupabaseConfigured) {
     return (
-      <Container className="py-20 max-w-lg">
-        <h1 className="font-display text-2xl font-semibold text-foreground mb-3">
-          Live session page
-        </h1>
-        <p className="text-foreground-secondary leading-relaxed">
-          This page shows the Zoom join link for a real, paid booking. It
-          needs Supabase and Stripe connected to have a real booking to show
-          — see README.md.
-        </p>
-      </Container>
+      <div className="flex min-h-full flex-col">
+        <Header cta={null} />
+        <Container className="flex-1 py-20 max-w-lg">
+          <h1 className="font-display text-2xl font-semibold text-foreground mb-3">
+            Live session page
+          </h1>
+          <p className="text-foreground-secondary leading-relaxed">
+            This page shows the Zoom join link for a real, paid booking. It
+            needs Supabase and Stripe connected to have a real booking to
+            show — see README.md.
+          </p>
+        </Container>
+        <Footer variant="simple" />
+      </div>
     );
   }
 
@@ -32,7 +38,9 @@ export default async function SessionPage({
   if (!booking) notFound();
 
   return (
-    <Container className="py-20 max-w-lg">
+    <div className="flex min-h-full flex-col">
+    <Header cta={null} />
+    <Container className="flex-1 py-20 max-w-lg">
       <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">
         {booking.status === "confirmed" ? "Confirmed session" : booking.status}
       </p>
@@ -76,5 +84,7 @@ export default async function SessionPage({
         </Link>
       </div>
     </Container>
+    <Footer variant="simple" />
+    </div>
   );
 }
