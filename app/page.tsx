@@ -1,12 +1,11 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
-import SearchBar from "@/components/SearchBar";
-import CategoryPills from "@/components/CategoryPills";
 import CoachCard from "@/components/CoachCard";
 import { JoiningSoonCard, BecomeCoachCard } from "@/components/JoiningSoonCard";
 import { getCoachBySlug, getSessionTypes } from "@/lib/coach-data";
 import { cheapestPaidPrice } from "@/lib/pricing";
+import { ARCHETYPES } from "@/lib/archetypes";
 
 const HOW_IT_WORKS = [
   {
@@ -94,14 +93,75 @@ export default async function Home() {
             questions; they bring a real plan.
           </p>
 
-          <SearchBar className="mx-auto mt-10 max-w-[680px]" />
-          <CategoryPills />
-
-          <p className="mt-[34px] text-[13.5px] tracking-[0.01em] text-muted">
-            Financial coaching that works for you — not for a commission.
-          </p>
+          <div className="mt-10 flex flex-col items-center gap-[14px]">
+            <a
+              href="/blueprint"
+              className="inline-flex items-center gap-[10px] rounded-[11px] bg-accent px-[34px] py-[17px] text-[16.5px] font-semibold text-white shadow-[0_14px_34px_-14px_rgba(58,90,125,0.85)] transition-all hover:-translate-y-px hover:bg-accent-hover"
+            >
+              Get your free Money Blueprint <span aria-hidden>&rarr;</span>
+            </a>
+            <p className="text-[13.5px] tracking-[0.01em] text-muted">
+              7 questions · 2 minutes · see your money archetype instantly — no
+              email needed
+            </p>
+            <a
+              href="/coaches"
+              className="text-[14.5px] font-semibold text-accent hover:text-accent-hover"
+            >
+              or browse coaches <span aria-hidden>&rarr;</span>
+            </a>
+          </div>
         </Container>
       </header>
+
+      {/* blueprint hook */}
+      <section
+        className="reveal border-y border-line bg-surface py-24"
+        id="blueprint"
+      >
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:items-center">
+            <div>
+              <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
+                Start here — it&rsquo;s free
+              </p>
+              <h2 className="mt-4 font-display text-[30px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
+                First, find out how you work with money.
+              </h2>
+              <p className="mt-6 text-[17px] md:text-[18px] leading-[1.6] text-ink-2">
+                Seven questions, about two minutes. You&rsquo;ll get your money
+                archetype — how you naturally handle money, the strength you
+                already have, and the blind spot that quietly costs you — plus
+                three concrete moves for your next 90 days.
+              </p>
+              <a
+                href="/blueprint"
+                className="mt-8 inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
+              >
+                Take the quiz <span aria-hidden>&rarr;</span>
+              </a>
+              <p className="mt-4 text-[13px] text-muted">
+                No account needed. Your archetype shows instantly.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[14px]">
+              {Object.values(ARCHETYPES).map((a) => (
+                <div
+                  key={a.name}
+                  className="rounded-xl border border-line bg-background p-5"
+                >
+                  <h3 className="font-display text-[18px] font-medium text-ink">
+                    {a.name}
+                  </h3>
+                  <p className="mt-[6px] text-[13.5px] leading-[1.5] text-muted">
+                    {a.tagline}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
 
       <hr className="mx-auto max-w-[1060px] border-line" />
 
@@ -192,15 +252,33 @@ export default async function Home() {
         </Container>
       </section>
 
-      {/* mission strip */}
-      <section className="reveal bg-dark-section py-[92px] text-center text-white">
+      {/* founder story */}
+      <section className="reveal bg-dark-section py-[100px] text-white">
         <Container width="narrow">
-          <h2 className="mx-auto max-w-[720px] font-display text-[28px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-white">
-            Good financial guidance shouldn&rsquo;t be hard to find.
+          <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-clay-soft">
+            Why 12th &amp; Good
+          </p>
+          <h2 className="mt-5 max-w-[640px] font-display text-[28px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-white">
+            The name is a real corner.
           </h2>
-          <p className="mx-auto mt-[22px] max-w-[560px] text-[18px] md:text-[20px] leading-[1.55] text-white/76">
-            Wherever you are with money, a conversation with the right person
-            can make the next step clearer.
+          <div className="mt-7 max-w-[680px] space-y-5 text-[17px] md:text-[18px] leading-[1.65] text-white/80">
+            <p>
+              When I was 12, the man from the power company knocked on our door
+              on 12th Street. My mom was at work. He was kind about it — but I
+              was a kid, I couldn&rsquo;t write a check, and the bill was due.
+              The lights went off, and I sat in the dark waiting for her to
+              come home.
+            </p>
+            <p>
+              We weren&rsquo;t careless with money. We just had no one to talk
+              to about it — no advisor, no playbook, no one a step ahead of us.
+              12th &amp; Good is the corner I wish had existed: where the
+              street you&rsquo;re from meets the guidance you deserve. Every
+              coach here signed up to be the person my family never had.
+            </p>
+          </div>
+          <p className="mt-8 font-display text-[17px] italic text-white/70">
+            — Tony, founder
           </p>
         </Container>
       </section>
@@ -353,16 +431,16 @@ export default async function Home() {
           </p>
           <div className="mt-[38px] flex flex-wrap justify-center gap-[14px]">
             <a
-              href="/coaches"
+              href="/blueprint"
               className="inline-flex items-center gap-[9px] rounded-[9px] bg-white px-[25px] py-[14px] text-[15px] font-semibold text-ink transition-all hover:-translate-y-px hover:shadow-[0_14px_30px_-14px_rgba(0,0,0,0.45)]"
             >
-              Browse coaches <span aria-hidden>&rarr;</span>
+              Get your free Money Blueprint <span aria-hidden>&rarr;</span>
             </a>
             <a
-              href="/employers"
+              href="/coaches"
               className="inline-flex items-center gap-[9px] rounded-[9px] border border-white/30 bg-transparent px-[25px] py-[14px] text-[15px] font-semibold text-white transition-all hover:border-white hover:bg-white/10"
             >
-              For employers
+              Browse coaches
             </a>
           </div>
         </Container>

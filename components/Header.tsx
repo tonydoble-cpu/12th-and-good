@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default function Header({
-  cta = { label: "Book a session", href: "/coaches" },
+  cta = { label: "Get your Blueprint", href: "/blueprint" },
 }: Props) {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-[rgba(245,244,241,0.82)] backdrop-blur-md">
