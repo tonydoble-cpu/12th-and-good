@@ -82,6 +82,17 @@ export default async function CoachProfilePage() {
             </span>
             <span>&#8226;&nbsp; Online, video sessions</span>
             <span>&#8226;&nbsp; English</span>
+            <span>
+              &#8226;&nbsp;{" "}
+              <a
+                href="https://www.linkedin.com/in/tonydoble"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-accent hover:text-accent-hover"
+              >
+                LinkedIn &#8599;
+              </a>
+            </span>
           </div>
         </div>
 
