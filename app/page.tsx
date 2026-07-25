@@ -1,160 +1,228 @@
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
-import CoachCard from "@/components/CoachCard";
-import { JoiningSoonCard, BecomeCoachCard } from "@/components/JoiningSoonCard";
-import { getCoachBySlug, getSessionTypes } from "@/lib/coach-data";
+import StickyBookBar from "@/components/homeb/StickyBookBar";
+import HomeFaq from "@/components/homeb/HomeFaq";
+import { NextTimePills } from "@/components/homeb/NextTimes";
+import { getCoachBySlug, getOpenAvailability, getSessionTypes } from "@/lib/coach-data";
 import { cheapestPaidPrice } from "@/lib/pricing";
+import { formatPrice } from "@/lib/types";
 import { ARCHETYPES } from "@/lib/archetypes";
 
-const HOW_IT_WORKS = [
+// THE HOMEPAGE — book-first ("B carries more weight" — Tony, July 26, 2026).
+// Grow Therapy's conversion physics in our brand: the one action never
+// leaves the screen, a real person with real near-term times above the
+// fold, concrete numbers everywhere. The quiz-first variant lives on at
+// /home-a. Availability renders live — hence force-dynamic.
+
+export const dynamic = "force-dynamic";
+
+const HOW = [
   {
     n: "01",
-    title: "Look around",
-    body: "Every coach here is fee-only and screened. Read their profile, see if the fit feels right.",
+    title: "Book & tell us what's on your mind",
+    body: "Pick a time and write a few sentences about what you're working on. Tony reads it before you meet.",
   },
   {
     n: "02",
-    title: "Book a time",
-    body: "Pick a time and tell your coach what you're working on — they show up prepared.",
+    title: "Talk it through — 60 minutes",
+    body: "Video call, your real numbers, your real questions. He shows up already prepared for exactly your situation.",
   },
   {
     n: "03",
-    title: "Have the conversation",
-    body: "Show up over video with your real numbers and your real questions. That's all you need.",
-  },
-  {
-    n: "04",
-    title: "Leave with a plan",
-    body: "You'll get a written plan in plain language, with steps you can start on the same week.",
-  },
-];
-
-const TRUST = [
-  { title: "Fee-only", body: "Your coach is paid by you, not by a product company or a commission. That's the whole arrangement." },
-  {
-    title: "Conflict-free",
-    body: "There's no hidden incentive behind the advice. If a coach recommends something, it's because they think it helps you.",
-  },
-  {
-    title: "Vetted coaches",
-    body: "Every coach is credentialed, experienced, and screened before they join — not everyone who applies gets in.",
-  },
-  { title: "Advice is the product", body: "There's nothing else for sale. The session itself is what you're paying for, and that's what makes the conversation different." },
-];
-
-const RESOURCES = [
-  {
-    kind: "Calculator",
-    title: "401(k) & employer match calculator",
-    body: "See how much of your employer match you're actually using — and what the gap costs over time.",
-    cover: "calculator preview",
-    href: "/resources/401k-calculator",
-  },
-  {
-    kind: "Planner",
-    title: "Debt payoff planner",
-    body: "Run your numbers and see what different payoff orders look like.",
-    cover: "planner preview",
-    href: "/resources/debt-payoff",
-  },
-  {
-    kind: "Checkup",
-    title: "Benefits checkup",
-    body: "A quick walkthrough of employer benefits most people underuse. You might have more than you think.",
-    cover: "checkup preview",
-    href: "/resources/benefits-checkup",
+    title: "Leave with a written plan",
+    body: "Plain language, steps you can start the same week. Worth every dollar — or you don't pay for it.",
   },
 ];
 
 export default async function Home() {
   const coach = await getCoachBySlug("tony");
   const sessionTypes = coach ? await getSessionTypes(coach.id) : [];
+  const availability = coach ? await getOpenAvailability(coach.id) : [];
   const fromPrice = cheapestPaidPrice(sessionTypes);
+  const nextSlots = availability.slice(0, 3).map((s) => s.starts_at);
+  const nextIso = nextSlots[0] ?? null;
 
   return (
     <div className="flex min-h-full flex-col">
-      <Header />
+      <Header cta={{ label: "Book a session", href: "/tony#book" }} />
+      <StickyBookBar nextIso={nextIso} />
 
-      {/* hero */}
-      <header className="pt-24 pb-[76px] text-center">
-        <Container>
-          <div className="chip mx-auto mb-[26px] inline-flex items-center gap-2 rounded-full border border-[#dde5ec] bg-accent-tint px-[14px] py-[7px] text-[12.5px] font-medium text-ink-2">
-            <span className="dot" />
-            Conflict-free financial coaching
-          </div>
-          <h1 className="mx-auto max-w-[840px] font-display text-[40px] md:text-[62px] font-normal leading-[1.04] tracking-[-0.021em] text-ink">
-            Talk to someone who has{" "}
-            <span className="text-accent">nothing to sell you.</span>
-          </h1>
-          <p className="mx-auto mt-7 max-w-[600px] text-[18px] md:text-[20px] leading-[1.55] tracking-[-0.008em] text-ink-2">
-            A vetted, fee-only coach who&rsquo;s lived what you&rsquo;re living
-            — paid by you, never by a product company. You bring the real
-            questions; they bring a real plan.
-          </p>
-
-          <div className="mt-10 flex flex-col items-center gap-[14px]">
-            <a
-              href="/blueprint"
-              className="inline-flex items-center gap-[10px] rounded-[11px] bg-accent px-[34px] py-[17px] text-[16.5px] font-semibold text-white shadow-[0_14px_34px_-14px_rgba(58,90,125,0.85)] transition-all hover:-translate-y-px hover:bg-accent-hover"
-            >
-              Get your free Money Blueprint <span aria-hidden>&rarr;</span>
-            </a>
-            <p className="text-[13.5px] tracking-[0.01em] text-muted">
-              8 questions · 2 minutes · see your money style instantly — no
-              email needed
+      {/* HERO — headline + concrete numbers, real person on the right */}
+      <header className="border-b border-line bg-surface">
+        <Container width="wide" className="grid grid-cols-1 items-center gap-12 py-16 md:py-20 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <div className="chip inline-flex items-center gap-2 rounded-full border border-[#dde5ec] bg-accent-tint px-[14px] py-[7px] text-[12.5px] font-medium text-ink-2">
+              <span className="dot" />
+              Fee-only financial coaching
+            </div>
+            <h1 className="mt-6 max-w-[620px] font-display text-[40px] font-normal leading-[1.05] tracking-[-0.021em] text-ink md:text-[56px]">
+              Talk to someone who has{" "}
+              <span className="text-accent">nothing to sell you.</span>
+            </h1>
+            <p className="mt-6 max-w-[520px] text-[17px] leading-[1.6] text-ink-2 md:text-[19px]">
+              A real conversation about your money with a coach who&rsquo;s
+              paid by you and no one else. {fromPrice > 0 && (
+                <>Sessions are {formatPrice(fromPrice)} flat, 60 minutes, with
+                a written plan you keep.</>
+              )}{" "}
+              And if your first session isn&rsquo;t worth every dollar —
+              you don&rsquo;t pay.
             </p>
-            <a
-              href="/coaches"
-              className="text-[14.5px] font-semibold text-accent hover:text-accent-hover"
-            >
-              or browse coaches <span aria-hidden>&rarr;</span>
-            </a>
+            <div className="mt-8 flex flex-wrap items-center gap-[14px]">
+              <a
+                href="/tony#book"
+                className="inline-flex items-center gap-[10px] rounded-[11px] bg-accent px-[28px] py-[15px] text-[16px] font-semibold text-white shadow-[0_14px_34px_-14px_rgba(58,90,125,0.85)] transition-all hover:-translate-y-px hover:bg-accent-hover"
+              >
+                Book a session <span aria-hidden>&rarr;</span>
+              </a>
+              <a
+                href="/blueprint"
+                className="text-[15px] font-semibold text-accent hover:text-accent-hover"
+              >
+                or get your free Money Blueprint <span aria-hidden>&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          {/* The provider card — a real face with real near-term times,
+              above the fold. */}
+          <div className="rounded-[20px] border border-line bg-white p-[22px] shadow-[0_28px_60px_-38px_rgba(20,30,45,0.45)]">
+            <div className="flex items-center gap-4">
+              <div className="relative h-[76px] w-[76px] flex-none overflow-hidden rounded-2xl">
+                <Image
+                  src={coach?.photo_url ?? "/tony-doble.png"}
+                  alt={coach?.full_name ?? "Tony Doble"}
+                  fill
+                  sizes="76px"
+                  style={{ objectPosition: "50% 16%" }}
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <div>
+                <p className="font-display text-[21px] font-medium leading-[1.1] text-ink">
+                  {coach?.full_name ?? "Tony Doble"}
+                </p>
+                <p className="mt-[3px] text-[13px] font-medium text-ink-2">
+                  Founding coach · Fee-only — nothing to sell you
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-[7px]">
+              {(coach?.specialties ?? []).slice(0, 4).map((s) => (
+                <span
+                  key={s}
+                  className="rounded-full border border-[#dde5ec] bg-accent-tint px-[12px] py-[5px] text-[12px] font-medium text-ink-2"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+            <div className="mt-5 border-t border-line pt-4">
+              <p className="text-[11.5px] font-semibold uppercase tracking-[0.1em] text-ink-2">
+                Next available
+              </p>
+              <div className="mt-[10px]">
+                {nextSlots.length > 0 ? (
+                  <NextTimePills slots={nextSlots} />
+                ) : (
+                  <p className="text-[13.5px] text-ink-2">
+                    New times open soon —{" "}
+                    <a href="/blueprint" className="font-semibold text-accent">
+                      join the Corner
+                    </a>{" "}
+                    for first pick.
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         </Container>
       </header>
 
-      {/* blueprint hook */}
-      <section
-        className="reveal border-y border-line bg-surface py-24"
-        id="blueprint"
-      >
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:items-center">
+      {/* HONEST NUMBERS BAND — the numbers we can stand behind forever */}
+      <section className="border-b border-line py-12">
+        <Container width="wide">
+          <div className="grid grid-cols-1 gap-8 text-center sm:grid-cols-3">
+            <div>
+              <p className="font-display text-[38px] leading-none text-accent md:text-[44px]">$0</p>
+              <p className="mt-2 text-[14.5px] text-ink-2">
+                commissions, product fees, or kickbacks — ever
+              </p>
+            </div>
+            <div>
+              <p className="font-display text-[38px] leading-none text-accent md:text-[44px]">100%</p>
+              <p className="mt-2 text-[14.5px] text-ink-2">
+                of your session fee goes to your coach during our founding
+                phase
+              </p>
+            </div>
+            <div>
+              <p className="font-display text-[38px] leading-none text-accent md:text-[44px]">1</p>
+              <p className="mt-2 text-[14.5px] text-ink-2">
+                promise, in writing: not worth it? You don&rsquo;t pay
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* HOW IT WORKS — three steps, anchor target for the nav */}
+      <section className="border-b border-line py-20" id="how">
+        <Container width="wide">
+          <p className="text-center text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
+            How it works
+          </p>
+          <h2 className="mt-4 text-center font-display text-[28px] font-normal leading-[1.1] tracking-[-0.019em] text-ink md:text-[36px]">
+            One question in, one plan out.
+          </h2>
+          <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-3">
+            {HOW.map((s) => (
+              <div key={s.n}>
+                <p className="font-display text-[28px] text-accent">{s.n}</p>
+                <h3 className="mt-3 text-[16.5px] font-semibold text-ink">{s.title}</h3>
+                <p className="mt-2 text-[14.5px] leading-[1.65] text-ink-2">{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* LANE 2 — the Blueprint for people not ready to book */}
+      <section className="reveal border-b border-line bg-surface py-20" id="blueprint">
+        <Container width="wide">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             <div>
               <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
-                Start here — it&rsquo;s free
+                Not sure yet? Start free
               </p>
-              <h2 className="mt-4 font-display text-[30px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
-                First, find out how you work with money.
+              <h2 className="mt-4 font-display text-[30px] font-normal leading-[1.08] tracking-[-0.019em] text-ink md:text-[38px]">
+                Walk to the corner first.
               </h2>
-              <p className="mt-6 text-[17px] md:text-[18px] leading-[1.6] text-ink-2">
-                Eight questions, about two minutes. You&rsquo;ll get your money
-                style — how you naturally handle money, the strength you
-                already have, and the blind spot that quietly costs you — plus
-                three moves for your next 90 days.
+              <p className="mt-5 max-w-[460px] text-[16.5px] leading-[1.65] text-ink-2">
+                Eight questions, about two minutes — a walk from 4th &amp;
+                Good to 12th &amp; Good that shows you your money style, the
+                strength you already have, and three moves for your next 90
+                days. No email needed to see your style.
               </p>
               <a
                 href="/blueprint"
-                className="mt-8 inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
+                className="mt-7 inline-flex items-center gap-[9px] rounded-[9px] border border-accent px-[24px] py-[13px] text-[15px] font-semibold text-accent transition-all hover:-translate-y-px hover:bg-accent hover:text-white"
               >
-                Take the quiz <span aria-hidden>&rarr;</span>
+                Take the walk <span aria-hidden>&rarr;</span>
               </a>
-              <p className="mt-4 text-[13px] text-muted">
-                No account needed. Your money style shows instantly.
-              </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[14px]">
+            <div className="grid grid-cols-2 gap-[12px] sm:grid-cols-3">
               {Object.values(ARCHETYPES).map((a) => (
-                <div
-                  key={a.name}
-                  className="rounded-xl border border-line bg-background p-5"
-                >
-                  <h3 className="font-display text-[18px] font-medium text-ink">
+                <div key={a.id} className="rounded-xl border border-line bg-white p-4">
+                  <span
+                    className="block h-[8px] w-[8px] rounded-[2px]"
+                    style={{ background: a.accent, transform: "rotate(45deg)" }}
+                  />
+                  <p className="mt-3 font-display text-[16px] font-medium leading-[1.15] text-ink">
                     {a.name}
-                  </h3>
-                  <p className="mt-[6px] text-[13.5px] leading-[1.5] text-muted">
-                    {a.tagline}
                   </p>
                 </div>
               ))}
@@ -163,286 +231,55 @@ export default async function Home() {
         </Container>
       </section>
 
-      <hr className="mx-auto max-w-[1060px] border-line" />
-
-      {/* coaches */}
-      <section className="reveal pt-24 pb-[104px]" id="coaches">
-        <Container>
-          <div className="mb-[10px] flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
-                Meet the coaches
-              </p>
-              <h2 className="mt-4 font-display text-[32px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
-                We&rsquo;re starting small — on purpose.
-              </h2>
-            </div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#dde5ec] bg-accent-tint px-[14px] py-[7px] text-[12.5px] font-medium text-ink-2">
-              <span className="dot" />
-              More coaches joining soon
-            </span>
-          </div>
-          <p className="mb-9 max-w-[560px] text-[15px] text-muted">
-            Every coach here is fee-only and screened before they join. More
-            are coming — we&rsquo;d rather vet carefully than grow fast.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[22px]">
-            {coach && (
-              <CoachCard
-                coach={coach}
-                fromPriceCents={fromPrice}
-                blurb="Budgeting · Debt paydown · First home · Investing & 401(k)s"
-              />
-            )}
-            <JoiningSoonCard body="We're vetting the next cohort of conflict-free coaches." />
-            <JoiningSoonCard body="Specialists in retirement, business, and more." />
-            <BecomeCoachCard />
-          </div>
-        </Container>
-      </section>
-
-      {/* why we exist */}
-      <section className="reveal border-y border-line bg-surface py-24">
+      {/* FOUNDER — compressed; the full story lives at /about */}
+      <section className="border-b border-line bg-[#15171b] py-16 text-white">
         <Container width="narrow">
-          <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
-            Why we exist
+          <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-[var(--clay-soft)]">
+            Why this corner exists
           </p>
-          <h2 className="mt-5 max-w-[640px] font-display text-[28px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
-            A lot of financial &ldquo;advice&rdquo; has a product behind it.
-          </h2>
-          <p className="mt-[26px] text-[18px] md:text-[20px] leading-[1.55] tracking-[-0.008em] text-ink-2">
-            The person helping you plan is sometimes paid a commission on
-            what they recommend. Even good intentions can bend under that
-            pressure — and it&rsquo;s not easy to see when it&rsquo;s happening.
+          <p className="mt-5 font-display text-[22px] font-normal leading-[1.4] tracking-[-0.01em] md:text-[26px]">
+            &ldquo;When I was 12, the power company shut our lights off while
+            my mom was at work. We weren&rsquo;t careless with money — we just
+            had no one to talk to about it. This is the corner I wish had
+            existed.&rdquo;
           </p>
-          <p className="mt-5 max-w-[680px] text-[17px] text-ink-2">
-            We took that off the table. Our coaches don&rsquo;t sell products and
-            don&rsquo;t earn commission. The only thing they&rsquo;re paid for
-            is sitting down with you and helping you think through a decision.
-            That&rsquo;s the whole model.
-          </p>
+          <div className="mt-5 flex items-center justify-between">
+            <p className="text-[14px] text-white/70">— Tony, founder</p>
+            <a href="/about" className="text-[14px] font-semibold text-white/90 hover:text-white">
+              The whole story &rarr;
+            </a>
+          </div>
         </Container>
       </section>
 
-      {/* how it works */}
-      <section className="reveal py-24" id="how">
-        <Container>
-          <div className="mb-[60px] text-center">
-            <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
-              How it works
-            </p>
-            <h2 className="mt-4 font-display text-[32px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
-              Here&rsquo;s what it looks like.
+      {/* FAQ — the skeptic's four questions, answered plainly */}
+      <section className="py-20" id="resources">
+        <Container width="wide">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+            <h2 className="font-display text-[30px] font-normal leading-[1.1] tracking-[-0.019em] text-ink md:text-[36px]">
+              The questions worth asking any financial company.
             </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-9">
-            {HOW_IT_WORKS.map((step) => (
-              <div key={step.n}>
-                <div className="font-display text-[34px] font-light leading-none text-accent">
-                  {step.n}
-                </div>
-                <h3 className="mt-[18px] font-display text-[19px] font-medium text-ink">
-                  {step.title}
-                </h3>
-                <p className="mt-[11px] text-[14.5px] text-muted">{step.body}</p>
-              </div>
-            ))}
+            <HomeFaq />
           </div>
         </Container>
       </section>
 
-      {/* founder story */}
-      <section className="reveal bg-dark-section py-[100px] text-white">
+      {/* CLOSE */}
+      <section className="border-t border-line bg-surface py-16 text-center">
         <Container width="narrow">
-          <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-clay-soft">
-            Why 12th &amp; Good
-          </p>
-          <h2 className="mt-5 max-w-[640px] font-display text-[28px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-white">
-            The name is a real corner.
+          <h2 className="font-display text-[28px] font-normal leading-[1.1] tracking-[-0.019em] text-ink md:text-[34px]">
+            Bring one money question.
           </h2>
-          <div className="mt-7 max-w-[680px] space-y-5 text-[17px] md:text-[18px] leading-[1.65] text-white/80">
-            <p>
-              When I was 12, the man from the power company knocked on our door
-              on 12th Street. My mom was at work. He was kind about it — but I
-              was a kid, I couldn&rsquo;t write a check, and the bill was due.
-              The lights went off, and I sat in the dark waiting for her to
-              come home.
-            </p>
-            <p>
-              We weren&rsquo;t careless with money. We just had no one to talk
-              to about it — no advisor, no playbook, no one a step ahead of us.
-              12th &amp; Good is the corner I wish had existed: where the
-              street you&rsquo;re from meets the guidance you deserve. Every
-              coach here signed up to be the person my family never had.
-            </p>
-          </div>
-          <p className="mt-8 font-display text-[17px] italic text-white/70">
-            — Tony, founder
+          <p className="mx-auto mt-4 max-w-[440px] text-[16px] leading-[1.6] text-ink-2">
+            That&rsquo;s the whole ask. Sixty minutes later you&rsquo;ll have
+            a written plan — or you won&rsquo;t pay for it.
           </p>
-        </Container>
-      </section>
-
-      {/* individuals / employers */}
-      <section className="reveal py-24" id="employers">
-        <Container>
-          <div className="mb-[52px] text-center">
-            <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
-              Two ways in
-            </p>
-            <h2 className="mt-4 font-display text-[32px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
-              For you, or for your whole team.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-line bg-surface p-10 transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.7,0.3,1)] hover:-translate-y-[5px] hover:border-[#dcd8cf] hover:shadow-[0_26px_54px_-30px_rgba(20,30,45,0.42)]">
-              <h3 className="font-display text-[24px] font-medium text-ink">
-                For individuals
-              </h3>
-              <p className="mt-[14px] min-h-[66px] text-[15px] text-muted">
-                Book and pay on your own for a coach who works only for you.
-                There&rsquo;s nothing else being sold during the session.
-              </p>
-              <ul className="my-5 space-y-0 text-[14.5px] text-ink-2">
-                {[
-                  "Transparent, all-in pricing",
-                  "A written plan after every session",
-                  "Matched to the right coach for your goals",
-                ].map((item) => (
-                  <li key={item} className="flex gap-[11px] py-[7px]">
-                    <span className="dot mt-[7px]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="/coaches"
-                className="mt-4 inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
-              >
-                Browse coaches <span aria-hidden>&rarr;</span>
-              </a>
-            </div>
-            <div className="rounded-2xl border border-line bg-surface p-10 transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.7,0.3,1)] hover:-translate-y-[5px] hover:border-[#dcd8cf] hover:shadow-[0_26px_54px_-30px_rgba(20,30,45,0.42)]">
-              <h3 className="font-display text-[24px] font-medium text-ink">
-                For employers
-              </h3>
-              <p className="mt-[14px] min-h-[66px] text-[15px] text-muted">
-                Sponsor coaching as a workplace benefit. You cover the cost;
-                your team picks their own coach and books privately.
-              </p>
-              <ul className="my-5 space-y-0 text-[14.5px] text-ink-2">
-                {[
-                  "Sponsor sessions for your whole team",
-                  "Private — you never see individual details",
-                  "Simple per-seat or per-session plans",
-                ].map((item) => (
-                  <li key={item} className="flex gap-[11px] py-[7px]">
-                    <span className="dot mt-[7px]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="/employers"
-                className="mt-4 inline-flex items-center gap-[9px] rounded-[9px] border border-line bg-transparent px-[25px] py-[14px] text-[15px] font-semibold text-ink transition-all hover:border-ink hover:bg-white"
-              >
-                Bring this to your company <span aria-hidden>&rarr;</span>
-              </a>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* resources */}
-      <section className="reveal border-y border-line bg-surface py-24" id="resources">
-        <Container>
-          <div className="mb-[38px] flex flex-wrap items-baseline justify-between gap-5">
-            <div>
-              <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
-                Learn freely
-              </p>
-              <h2 className="mt-4 font-display text-[32px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
-                Plain-English financial wellness.
-              </h2>
-            </div>
-            <a
-              href="/resources"
-              className="inline-flex items-center gap-[6px] text-[15px] font-semibold text-accent hover:text-accent-hover"
-            >
-              Browse all resources <span aria-hidden>&rarr;</span>
-            </a>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {RESOURCES.map((r) => (
-              <a
-                key={r.title}
-                href={r.href}
-                className="block overflow-hidden rounded-2xl border border-line bg-surface text-inherit no-underline transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.7,0.3,1)] hover:-translate-y-[5px] hover:border-[#dcd8cf] hover:shadow-[0_26px_54px_-30px_rgba(20,30,45,0.42)]"
-              >
-                <div className="placeholder-swatch flex h-[158px] items-center justify-center border-0 border-b border-line">
-                  {r.cover}
-                </div>
-                <div className="p-6">
-                  <div className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-muted">
-                    {r.kind}
-                  </div>
-                  <h3 className="mt-[11px] font-display text-[20px] font-medium text-ink">
-                    {r.title}
-                  </h3>
-                  <p className="mt-[11px] text-[13.5px] text-muted">{r.body}</p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* trust */}
-      <section className="reveal py-24">
-        <Container className="text-center">
-          <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
-            What makes us different
-          </p>
-          <h2 className="mt-4 font-display text-[32px] md:text-[41px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
-            Why the conversation feels different here.
-          </h2>
-          <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[26px] text-left">
-            {TRUST.map((t) => (
-              <div key={t.title} className="border-t-2 border-accent pt-5">
-                <h3 className="font-display text-[19px] font-medium text-ink">
-                  {t.title}
-                </h3>
-                <p className="mt-[10px] text-[14px] text-muted">{t.body}</p>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* final cta */}
-      <section className="bg-accent py-[104px] text-center text-white">
-        <Container width="narrow">
-          <h2 className="mx-auto max-w-[680px] font-display text-[32px] md:text-[48px] font-normal text-white">
-            It starts with a conversation.
-          </h2>
-          <p className="mx-auto mt-6 max-w-[520px] text-[18px] md:text-[20px] leading-[1.55] text-white/84">
-            Whether it&rsquo;s for you or for your team — the first step is
-            the same. Talk to someone who&rsquo;s there to help, not to sell.
-          </p>
-          <div className="mt-[38px] flex flex-wrap justify-center gap-[14px]">
-            <a
-              href="/blueprint"
-              className="inline-flex items-center gap-[9px] rounded-[9px] bg-white px-[25px] py-[14px] text-[15px] font-semibold text-ink transition-all hover:-translate-y-px hover:shadow-[0_14px_30px_-14px_rgba(0,0,0,0.45)]"
-            >
-              Get your free Money Blueprint <span aria-hidden>&rarr;</span>
-            </a>
-            <a
-              href="/coaches"
-              className="inline-flex items-center gap-[9px] rounded-[9px] border border-white/30 bg-transparent px-[25px] py-[14px] text-[15px] font-semibold text-white transition-all hover:border-white hover:bg-white/10"
-            >
-              Browse coaches
-            </a>
-          </div>
+          <a
+            href="/tony#book"
+            className="mt-7 inline-flex items-center gap-[10px] rounded-[11px] bg-accent px-[30px] py-[15px] text-[16px] font-semibold text-white shadow-[0_14px_34px_-14px_rgba(58,90,125,0.85)] transition-all hover:-translate-y-px hover:bg-accent-hover"
+          >
+            Book your session <span aria-hidden>&rarr;</span>
+          </a>
         </Container>
       </section>
 

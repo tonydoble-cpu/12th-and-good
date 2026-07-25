@@ -56,7 +56,7 @@ export default function Footer({
           </div>
           <div className="flex flex-col gap-3">
             <span className="mb-[3px] font-semibold text-white">Learn</span>
-            <Link href="/#resources" className="text-[#aab0b9] hover:text-white">
+            <Link href="/resources" className="text-[#aab0b9] hover:text-white">
               Resources
             </Link>
             <Link href="/blog" className="text-[#aab0b9] hover:text-white">
