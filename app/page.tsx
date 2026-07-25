@@ -155,8 +155,8 @@ export default async function Home() {
             <div>
               <p className="font-display text-[38px] leading-none text-accent md:text-[44px]">100%</p>
               <p className="mt-2 text-[14.5px] text-ink-2">
-                of your session fee goes to your coach during our founding
-                phase
+                of your coach&rsquo;s pay comes from clients like you — never
+                from commissions or products
               </p>
             </div>
             <div>
