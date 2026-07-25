@@ -17,11 +17,11 @@ const FILTER_GROUPS = [
   },
   {
     title: "Session type",
-    items: ["Free intro call", "Single session", "3-session action plan"],
+    items: ["Single session", "3-session action plan"],
   },
   {
     title: "Price",
-    items: ["Free intro available", "Under $150", "$150 – $250", "$250+"],
+    items: ["Under $150", "$150 – $250", "$250+"],
   },
   {
     title: "Availability",

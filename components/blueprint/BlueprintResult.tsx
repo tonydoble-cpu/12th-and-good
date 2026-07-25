@@ -1,7 +1,36 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Archetype, QuizAnswer } from "@/lib/archetypes";
+import type { Archetype, ArchetypeId, QuizAnswer } from "@/lib/archetypes";
+
+// Each money style gets the two free tools that fit it best — real value
+// for people who aren't ready to book, already built at /resources/*.
+const TOOLKIT: Record<ArchetypeId, { title: string; why: string; href: string }[]> = {
+  bridge: [
+    { title: "Budget Builder", why: "Room for them AND a line that's only yours.", href: "/resources/budget-builder" },
+    { title: "Rainy-Day Fund", why: "A safety net for the safety net.", href: "/resources/emergency-fund" },
+  ],
+  builder: [
+    { title: "401(k) Calculator", why: "See what your next level compounds into.", href: "/resources/401k-calculator" },
+    { title: "Budget Builder", why: "Point the growth at a number you named.", href: "/resources/budget-builder" },
+  ],
+  guardian: [
+    { title: "Rainy-Day Fund", why: "Know exactly when safe becomes too safe.", href: "/resources/emergency-fund" },
+    { title: "Benefits Checkup", why: "Protection you may already be paying for.", href: "/resources/benefits-checkup" },
+  ],
+  reclaimer: [
+    { title: "Debt Payoff Planner", why: "A date when the last payment happens.", href: "/resources/debt-payoff" },
+    { title: "Budget Builder", why: "Built forward, not just away from the past.", href: "/resources/budget-builder" },
+  ],
+  steward: [
+    { title: "401(k) Calculator", why: "See what deploying — not just keeping — does.", href: "/resources/401k-calculator" },
+    { title: "Benefits Checkup", why: "Make what you've built work harder.", href: "/resources/benefits-checkup" },
+  ],
+  pathfinder: [
+    { title: "Money Wellness Check", why: "A clear picture of where you actually are.", href: "/resources/wellness-assessment" },
+    { title: "Budget Builder", why: "Your first system — one you choose.", href: "/resources/budget-builder" },
+  ],
+};
 
 // Gate 2 payoff — the full personalized Blueprint. The three post-gate
 // components (origin, need now, three steps) render here. Plus a share
@@ -67,7 +96,7 @@ export default function BlueprintResult({
                   transform: "rotate(45deg)",
                 }}
               />
-              <span>Your Blueprint</span>
+              <span>Welcome to 12th &amp; Good — your Blueprint</span>
             </div>
           </div>
 
@@ -166,7 +195,7 @@ export default function BlueprintResult({
               {goal && stage && " · "}
               {stage && <span className="font-medium text-ink">{stage.toLowerCase()}</span>}
               . These three moves are shaped with that in mind — and
-              they&rsquo;re exactly the kind of thing a free intro call digs
+              they&rsquo;re exactly the kind of thing a session digs
               into.
             </p>
           )}
@@ -195,10 +224,9 @@ export default function BlueprintResult({
           )}
         </div>
 
-        {/* What's next — talk to a real person THIS WEEK, not "we'll be in
-            touch." The waitlist killed momentum for every persona we tested;
-            the free intro call is the actual next step. Waitlist stays as
-            the secondary path for people who want a different coach. */}
+        {/* What's next — work it with Tony. No intro calls: the write-up at
+            booking + the guarantee do the trust work a free call used to.
+            Non-bookers aren't a dead end — they join the Corner (below). */}
         <div
           className="mt-4 rounded-[18px] p-[24px] text-white transition-all duration-700"
           style={{
@@ -209,24 +237,55 @@ export default function BlueprintResult({
           }}
         >
           <h3 className="font-display text-[24px] font-medium leading-[1.15] tracking-[-0.02em]">
-            Talk it through — free, this week.
+            Work these moves with Tony.
           </h3>
           <p className="mt-2 text-[14.5px] leading-[1.55] text-white/85">
-            Book a free 20-minute intro call with Tony, our founding coach.
-            No account, no card, nothing to buy — bring one money question
-            and talk to someone who has nothing to sell you.
+            Book a session, tell him what you&rsquo;re working on when you
+            book, and he shows up already prepared — a written plan you can
+            start the same week. And the promise is in writing: if your
+            first session isn&rsquo;t worth every dollar, you don&rsquo;t
+            pay.
           </p>
           <a
             href="/tony#book"
             className="mt-5 block w-full rounded-[10px] bg-white px-6 py-[13px] text-center text-[15px] font-semibold transition-all hover:-translate-y-px active:translate-y-0"
             style={{ color: archetype.accent }}
           >
-            Book your free intro call &rarr;
+            Book your session &rarr;
           </a>
+        </div>
+
+        {/* The Corner — belonging for people who aren't booking today.
+            "You live here now" has to be clickable, not a slogan. */}
+        <div
+          className="mt-4 rounded-[18px] border border-line bg-surface p-[24px] transition-all duration-700"
+          style={{
+            transitionDelay: "750ms",
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? "translateY(0)" : "translateY(8px)",
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <span
+              className="h-[8px] w-[8px] rounded-[2px]"
+              style={{ background: "var(--clay)", transform: "rotate(45deg)" }}
+            />
+            <span className="text-[11.5px] font-semibold uppercase tracking-[0.1em] text-ink-2">
+              Not booking today? You still live here.
+            </span>
+          </div>
+          <h3 className="mt-3 font-display text-[21px] font-medium leading-[1.2] text-ink">
+            Join the Corner.
+          </h3>
+          <p className="mt-2 text-[14px] leading-[1.6] text-ink-2">
+            A short letter from Tony most weeks — one real money conversation
+            at a time, in plain English. Plus first pick when new coaches and
+            new session times open up. No spam, leave any time.
+          </p>
           {waitlistJoined ? (
-            <div className="mt-3 rounded-[10px] bg-white/15 px-4 py-3 text-center text-[13px] font-medium">
-              You&rsquo;re on the match list — we&rsquo;ll reach out as new
-              coaches join.
+            <div className="mt-4 rounded-[10px] bg-accent-tint px-4 py-3 text-[14px] font-medium text-ink">
+              You&rsquo;re in. Welcome to the corner — look out for
+              Tony&rsquo;s next letter.
             </div>
           ) : (
             <button
@@ -242,11 +301,47 @@ export default function BlueprintResult({
                 }).catch(() => {});
                 setWaitlistJoined(true);
               }}
-              className="mt-3 w-full rounded-[10px] border border-white/40 bg-transparent px-6 py-[11px] text-[13.5px] font-medium text-white/90 transition-colors hover:bg-white/10"
+              className="mt-4 w-full rounded-[10px] border border-ink/15 bg-white px-6 py-[12px] text-[14.5px] font-semibold text-ink transition-colors hover:border-ink/40"
             >
-              Rather wait for a different coach? Join the match list
+              Count me in
             </button>
           )}
+        </div>
+
+        {/* Your style's toolkit — real, free, already built. Belonging you
+            can click: every archetype gets the two tools that fit it. */}
+        <div
+          className="mt-4 rounded-[18px] border border-line bg-surface p-[24px] transition-all duration-700"
+          style={{
+            transitionDelay: "800ms",
+            opacity: mounted ? 1 : 0,
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <span
+              className="h-[8px] w-[8px] rounded-[2px]"
+              style={{ background: archetype.accent, transform: "rotate(45deg)" }}
+            />
+            <span className="text-[11.5px] font-semibold uppercase tracking-[0.1em] text-ink-2">
+              Free tools for {archetype.name.replace("The ", "the ")}
+            </span>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-[10px] sm:grid-cols-2">
+            {TOOLKIT[archetype.id].map((t) => (
+              <a
+                key={t.href}
+                href={t.href}
+                className="rounded-[13px] border border-line bg-white px-[16px] py-[14px] transition-all hover:-translate-y-[1px] hover:border-ink/30"
+              >
+                <span className="block text-[14.5px] font-semibold text-ink">
+                  {t.title}
+                </span>
+                <span className="mt-[3px] block text-[12.5px] leading-[1.45] text-muted">
+                  {t.why}
+                </span>
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Share */}

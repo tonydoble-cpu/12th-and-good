@@ -16,7 +16,7 @@ const HOW_IT_WORKS = [
   {
     n: "02",
     title: "Book a time",
-    body: "Pick a slot and pay up front — or start with a free intro call if you'd rather talk first.",
+    body: "Pick a time and tell your coach what you're working on — they show up prepared.",
   },
   {
     n: "03",

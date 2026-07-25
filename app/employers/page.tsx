@@ -43,8 +43,8 @@ const PROGRAM = [
     body: "Over video, with a vetted, fee-only coach. This is the core — a real conversation about whatever's on their mind.",
   },
   {
-    title: "Free intro call for every employee",
-    body: "No commitment, no cost to them. A way to see if coaching is something they'd find useful before booking a full session.",
+    title: "The Money Blueprint for every employee",
+    body: "Their money style, their blind spot, and a 90-day plan — free to them, private from you. The door into coaching.",
   },
   {
     title: "Group sessions & lunch-and-learns",
@@ -424,7 +424,7 @@ export default function EmployersPage() {
               <ul className="my-[22px] space-y-0 text-sm text-ink-2">
                 {[
                   "Every employee covered",
-                  "Free intro call for everyone",
+                  "Money Blueprint for everyone",
                   "Group sessions & lunch-and-learns",
                   "Onboarding & comms support",
                 ].map((item) => (

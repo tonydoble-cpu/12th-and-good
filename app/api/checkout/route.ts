@@ -7,8 +7,8 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getStripe, isStripeConfigured } from "@/lib/stripe";
 import { createZoomMeeting } from "@/lib/zoom";
 import {
-  introBookedClientEmail,
-  introBookedFounderEmail,
+  sessionBookedClientEmail,
+  sessionBookedFounderEmail,
   notifyFounder,
   sendEmail,
 } from "@/lib/email";
@@ -18,13 +18,23 @@ const bodySchema = z.object({
   slotId: z.string().min(1),
   name: z.string().optional(),
   email: z.string().email().optional(),
+  // The write-up: required by the UI for every booking. Tony walks into
+  // each session already knowing what it's for.
+  intakeGoal: z.string().max(2000).optional(),
+  intakeWin: z.string().max(1000).optional(),
 });
 
 /**
- * Starts the transaction spine: validate the request, create a
- * 'pending_payment' booking row, and hand back a Stripe Checkout URL. The
- * booking only becomes 'confirmed' when the Stripe webhook fires — this
- * route never trusts the browser to say a payment succeeded.
+ * Books a session. Design rules (persona-audit + founder direction, July 2026):
+ *  - NO account wall, ever. Guests book with name + email; we create a
+ *    passwordless auth user server-side to satisfy the schema.
+ *  - Every booking carries an intake write-up -> coach_notes, so the coach
+ *    (and the AI prep pass) knows the agenda before the call.
+ *  - Stripe configured: paid sessions go through Checkout as designed.
+ *    Stripe NOT configured (founding phase): "reserve mode" — the booking is
+ *    created as pending_payment, the slot holds, and the client is told a
+ *    secure payment link arrives before the session. The UI must say this
+ *    plainly; no surprise invoices.
  */
 export async function POST(request: Request) {
   const json = await request.json().catch(() => null);
@@ -32,7 +42,7 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "Missing or invalid booking details." }, { status: 400 });
   }
-  const { sessionTypeId, slotId, name, email } = parsed.data;
+  const { sessionTypeId, slotId, name, email, intakeGoal, intakeWin } = parsed.data;
 
   const coach = await getCoachBySlug("tony");
   const sessionType = await getSessionTypeById(sessionTypeId);
@@ -45,15 +55,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "That time was just booked by someone else. Pick another." }, { status: 409 });
   }
 
-  // Resolve who's booking. Paid sessions require a signed-in client so the
-  // booking lands in their account. The FREE intro call must never hit an
-  // account wall — a first conversation gated behind "create an account"
-  // loses the people the whole site exists for. Guests give name + email;
-  // we create a passwordless auth user server-side (satisfies the
-  // client_profiles FK) and they never see a login screen.
+  // ---- Resolve who's booking (signed-in user OR guest by email) ----
   let clientId: string | null = null;
   let clientEmail = email ?? null;
-  const isFreeIntro = sessionType.price_cents === 0;
 
   if (isSupabaseConfigured) {
     const supabase = await createClient();
@@ -65,10 +69,10 @@ export async function POST(request: Request) {
       await supabase!
         .from("client_profiles")
         .upsert({ id: data.user.id, email: data.user.email, full_name: name }, { onConflict: "id" });
-    } else if (isFreeIntro) {
+    } else {
       if (!clientEmail) {
         return NextResponse.json(
-          { error: "Add your email so Tony can send you the video link." },
+          { error: "Add your email so we can confirm your session." },
           { status: 400 }
         );
       }
@@ -81,14 +85,12 @@ export async function POST(request: Request) {
       const { data: created, error: createErr } = await admin.auth.admin.createUser({
         email: normalized,
         email_confirm: true,
-        user_metadata: { full_name: name ?? null, source: "free_intro_guest" },
+        user_metadata: { full_name: name ?? null, source: "guest_booking" },
       });
 
       if (created?.user) {
         clientId = created.user.id;
       } else if (createErr) {
-        // Email already has an auth user (returning visitor) — find them via
-        // their profile row, falling back to the admin user list.
         const { data: profile } = await admin
           .from("client_profiles")
           .select("id")
@@ -109,93 +111,29 @@ export async function POST(request: Request) {
         .from("client_profiles")
         .upsert({ id: clientId, email: normalized, full_name: name ?? null }, { onConflict: "id" });
       clientEmail = normalized;
-    } else {
-      return NextResponse.json({ error: "Sign in before booking so we can save this to your account." }, { status: 401 });
     }
   }
-  // Demo mode (no Supabase) doesn't require an email up front — Stripe
-  // Checkout collects it during payment, and a free intro call has no
-  // payment step at all to attach it to.
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const serviceClient = createServiceRoleClient();
+  const whenText = format(new Date(slot.starts_at), "EEEE, MMMM d 'at' h:mm a");
 
-  // Free intro calls skip Stripe entirely — there's nothing to charge, and a
-  // $0 line item isn't something Stripe Checkout will create a session for.
-  // The booking goes straight to 'confirmed', same as a paid booking does
-  // once the webhook fires, so both paths land in the same state machine.
-  if (sessionType.price_cents === 0) {
-    let freeBookingId: string | null = null;
+  // Intake -> coach_notes. NOTE: coach_notes is shown back to the client on
+  // their session page as "notes", so only the client's own words go here —
+  // never private coach-side commentary.
+  const intakeNote = [
+    `WHAT YOU TOLD US AT BOOKING`,
+    intakeGoal ? `Working on: ${intakeGoal.trim()}` : null,
+    intakeWin ? `A win would be: ${intakeWin.trim()}` : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
 
-    if (serviceClient && clientId) {
-      const { data: booking, error } = await serviceClient
-        .from("bookings")
-        .insert({
-          client_id: clientId,
-          coach_id: coach.id,
-          session_type_id: sessionType.id,
-          slot_id: slot.id,
-          status: "confirmed",
-          starts_at: slot.starts_at,
-          ends_at: slot.ends_at,
-          price_cents: 0,
-        })
-        .select("id")
-        .single();
+  const isFree = sessionType.price_cents === 0;
+  const reserveMode = !isFree && !isStripeConfigured;
 
-      if (error) {
-        return NextResponse.json({ error: "Couldn't create the booking. Try again." }, { status: 500 });
-      }
-      freeBookingId = booking.id;
-
-      const zoom = await createZoomMeeting({
-        topic: `Coaching session — ${booking.id}`,
-        startTimeIso: slot.starts_at,
-        durationMinutes: sessionType.duration_minutes,
-      });
-
-      await serviceClient
-        .from("bookings")
-        .update({
-          zoom_join_url: zoom?.joinUrl ?? null,
-          zoom_start_url: zoom?.startUrl ?? null,
-        })
-        .eq("id", freeBookingId);
-
-      await serviceClient.from("availability_slots").update({ is_booked: true }).eq("id", slot.id);
-    }
-
-    // Confirmation emails — silent no-ops until RESEND_API_KEY is set.
-    // emailSent tells the success page whether it may promise an email.
-    let emailSent = false;
-    if (clientEmail) {
-      const whenText = format(new Date(slot.starts_at), "EEEE, MMMM d 'at' h:mm a");
-      const clientMsg = introBookedClientEmail({
-        firstName: name?.split(" ")[0] ?? null,
-        whenText,
-      });
-      emailSent = await sendEmail({ to: clientEmail, ...clientMsg });
-      const founderMsg = introBookedFounderEmail({ name: name ?? null, email: clientEmail, whenText });
-      notifyFounder(founderMsg.subject, founderMsg.html);
-    }
-
-    return NextResponse.json({
-      url: `${siteUrl}/book/success?free=1${emailSent ? "&mailed=1" : ""}`,
-    });
-  }
-
-  if (!isStripeConfigured) {
-    return NextResponse.json(
-      {
-        error:
-          "Stripe isn't connected yet. Add STRIPE_SECRET_KEY to .env.local to enable real checkout — see README.md.",
-      },
-      { status: 501 }
-    );
-  }
-
+  // ---- Create the booking row ----
   let bookingId: string | null = null;
-
   if (serviceClient && clientId) {
     const { data: booking, error } = await serviceClient
       .from("bookings")
@@ -204,10 +142,11 @@ export async function POST(request: Request) {
         coach_id: coach.id,
         session_type_id: sessionType.id,
         slot_id: slot.id,
-        status: "pending_payment",
+        status: isFree ? "confirmed" : "pending_payment",
         starts_at: slot.starts_at,
         ends_at: slot.ends_at,
         price_cents: sessionType.price_cents,
+        coach_notes: intakeNote || null,
       })
       .select("id")
       .single();
@@ -218,6 +157,76 @@ export async function POST(request: Request) {
     bookingId = booking.id;
   }
 
+  // ---- FREE session (legacy path; free intro is retired but harmless) ----
+  if (isFree) {
+    if (serviceClient && bookingId) {
+      const zoom = await createZoomMeeting({
+        topic: `Coaching session — ${bookingId}`,
+        startTimeIso: slot.starts_at,
+        durationMinutes: sessionType.duration_minutes,
+      });
+      await serviceClient
+        .from("bookings")
+        .update({ zoom_join_url: zoom?.joinUrl ?? null, zoom_start_url: zoom?.startUrl ?? null })
+        .eq("id", bookingId);
+      await serviceClient.from("availability_slots").update({ is_booked: true }).eq("id", slot.id);
+    }
+    let emailSent = false;
+    if (clientEmail) {
+      const msg = sessionBookedClientEmail({
+        firstName: name?.split(" ")[0] ?? null,
+        whenText,
+        sessionName: sessionType.name,
+        reserveMode: false,
+        priceText: "Free",
+      });
+      emailSent = await sendEmail({ to: clientEmail, ...msg });
+      const f = sessionBookedFounderEmail({
+        name: name ?? null,
+        email: clientEmail,
+        whenText,
+        sessionName: sessionType.name,
+        intake: intakeNote || null,
+        reserveMode: false,
+      });
+      notifyFounder(f.subject, f.html);
+    }
+    return NextResponse.json({
+      url: `${siteUrl}/book/success?free=1${emailSent ? "&mailed=1" : ""}`,
+    });
+  }
+
+  // ---- RESERVE MODE: paid session, Stripe not yet live ----
+  if (reserveMode) {
+    if (serviceClient && bookingId) {
+      await serviceClient.from("availability_slots").update({ is_booked: true }).eq("id", slot.id);
+    }
+    let emailSent = false;
+    if (clientEmail) {
+      const msg = sessionBookedClientEmail({
+        firstName: name?.split(" ")[0] ?? null,
+        whenText,
+        sessionName: sessionType.name,
+        reserveMode: true,
+        priceText: `$${(sessionType.price_cents / 100).toFixed(0)}`,
+      });
+      emailSent = await sendEmail({ to: clientEmail, ...msg });
+      const f = sessionBookedFounderEmail({
+        name: name ?? null,
+        email: clientEmail,
+        whenText,
+        sessionName: sessionType.name,
+        intake: intakeNote || null,
+        reserveMode: true,
+      });
+      notifyFounder(f.subject, f.html);
+    }
+    return NextResponse.json({
+      url: `${siteUrl}/book/success?reserved=1${emailSent ? "&mailed=1" : ""}`,
+    });
+  }
+
+  // ---- STRIPE checkout (paid, live) ----
   const stripe = getStripe();
   const checkoutSession = await stripe.checkout.sessions.create({
     mode: "payment",

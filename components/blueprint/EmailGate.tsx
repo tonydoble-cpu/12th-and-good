@@ -79,8 +79,9 @@ export default function EmailGate({
           Your Blueprint is ready.
         </h2>
         <p className="mx-auto mt-4 max-w-[430px] text-center text-[15.5px] leading-[1.55] text-ink-2">
-          See what shaped your money style, what you need right now, and
-          three moves for your next 90 days — made just for you.
+          You&rsquo;re at 7th &amp; Good — five blocks from your full
+          Blueprint: what shaped your money style, what you need right now,
+          and three moves for your next 90 days.
         </p>
 
         <form onSubmit={submit} className="mt-8 flex flex-col gap-3">

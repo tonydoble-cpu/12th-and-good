@@ -235,7 +235,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
 <h2>Where 12th & Good Street fits</h2>
 
-<p>We built 12th & Good Street to answer these questions before you ever have to ask them. Every coach on the platform is pre-vetted: conflict-free compensation, relevant credentials, no asset minimums, and a free intro call before any commitment.</p>
+<p>We built 12th & Good Street to answer these questions before you ever have to ask them. Every coach on the platform is pre-vetted: conflict-free compensation, relevant credentials, no asset minimums, and a first-session promise: if it isn't worth every dollar, you don't pay.</p>
 
 <p>If you're not ready to talk to a person yet, our <a href="/coach-ai">AI Money Coach</a> can help you think through what you'd even want to ask about. It's free, private, and available right now.</p>
 

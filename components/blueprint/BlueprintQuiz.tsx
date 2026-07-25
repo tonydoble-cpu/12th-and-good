@@ -83,8 +83,7 @@ export default function BlueprintQuiz() {
       <QuestionCard
         key={question.id}
         question={question}
-        currentStep={preIndex + 1}
-        totalSteps={PRE_GATE_QUESTIONS.length}
+        blockNumber={preIndex + 1}
         onSubmit={handlePreAnswer}
       />
     );
@@ -115,8 +114,7 @@ export default function BlueprintQuiz() {
       <QuestionCard
         key={question.id}
         question={question}
-        currentStep={postIndex + 1}
-        totalSteps={POST_GATE_QUESTIONS.length}
+        blockNumber={PRE_GATE_QUESTIONS.length + postIndex + 1}
         onSubmit={handlePostAnswer}
         accent={archetype.accent}
         subtle

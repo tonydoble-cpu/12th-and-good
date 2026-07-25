@@ -15,7 +15,7 @@ const SECTIONS = [
       "Money Blueprint quiz: your answers, your money style result, and — only if you choose to share it — your first name and email address. The first three questions and your result never require an email.",
       "Booking a session: your name, email, and the session details, so your coach can meet you and follow up.",
       "Employer inquiries: the contact details you submit on the employer form.",
-      "That's it. No account is required to take the quiz or book a free intro call. We don't run third-party ad trackers on this site.",
+      "That's it. No account is required to take the quiz or book a session. We don't run third-party ad trackers on this site.",
     ],
   },
   {

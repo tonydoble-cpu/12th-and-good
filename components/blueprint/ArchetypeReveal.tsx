@@ -45,7 +45,10 @@ export default function ArchetypeReveal({
       {phase === "reveal" ? (
         // Full-color flash — the moment they realize this is different
         <div className="flex flex-1 flex-col items-center justify-center text-center text-white">
-          <span className="text-[13px] font-medium uppercase tracking-[0.14em] text-white/70">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.16em] text-white/60">
+            {"7th & Good · three blocks in"}
+          </span>
+          <span className="mt-3 text-[13px] font-medium uppercase tracking-[0.14em] text-white/70">
             Right now, you&rsquo;re leading with
           </span>
           <h1
@@ -130,8 +133,8 @@ export default function ArchetypeReveal({
               Unlock your full Blueprint →
             </button>
             <p className="max-w-[340px] text-center text-[12px] leading-[1.45] text-muted">
-              See what shaped it, what you need right now, and three moves
-              made just for you.
+              Five blocks left on the walk: what shaped it, what you need
+              right now, and three moves made just for you.
             </p>
           </div>
         </div>

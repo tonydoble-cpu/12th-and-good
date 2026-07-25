@@ -2,25 +2,31 @@
 
 import { useMemo, useState } from "react";
 import { format } from "date-fns";
-import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/supabase/use-user";
 import { formatPrice, type AvailabilitySlot, type SessionType } from "@/lib/types";
 
 type Props = {
   sessionTypes: SessionType[];
   availability: AvailabilitySlot[];
+  /** True while Stripe isn't live: booking reserves the slot and a payment
+   * link follows by email. The card must say this plainly. */
+  reserveMode?: boolean;
 };
 
-// The one place a visitor becomes a conversation. Rules learned the hard way
-// (persona walkthroughs, July 2026):
-//   - Default to the FREE intro, not the paid session. "Total today $150"
-//     as the first number on screen reads as a price tag on the front door.
-//   - The free intro NEVER requires an account. Name + email inline.
-//   - No silent states: no slots → say so honestly; nothing selected →
-//     say what's missing. The button always explains itself.
+// The one place a visitor becomes a client. Rules (persona audit + founder
+// direction, July 2026):
+//   - No account wall for anyone. Name + email + a short write-up.
+//   - The write-up IS the product: Tony walks in prepared, which is why
+//     there are no "intro" calls anymore. Book or don't book.
+//   - No silent states, no surprise charges: reserve mode says exactly
+//     what happens and when.
+//   - The guarantee does the risk-taking, not a free call.
 
-export default function BookingCard({ sessionTypes, availability }: Props) {
-  const router = useRouter();
+export default function BookingCard({
+  sessionTypes,
+  availability,
+  reserveMode = false,
+}: Props) {
   const { user, loading, configured: authConfigured } = useUser();
 
   const days = useMemo(() => {
@@ -37,20 +43,16 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
         date: new Date(slots[0].starts_at),
         slots: [...slots].sort((a, b) => a.starts_at.localeCompare(b.starts_at)),
       }))
-      .slice(0, 6); // keep the day row tappable — earliest six days with times
+      .slice(0, 6);
   }, [availability]);
 
-  // Default to the free intro call — the lowest-commitment door in.
-  const defaultSessionIdx = Math.max(
-    0,
-    sessionTypes.findIndex((s) => s.price_cents === 0)
-  );
-
-  const [sessionIdx, setSessionIdx] = useState(defaultSessionIdx);
+  const [sessionIdx, setSessionIdx] = useState(0);
   const [dayIdx, setDayIdx] = useState(0);
   const [timeIdx, setTimeIdx] = useState(0);
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
+  const [intakeGoal, setIntakeGoal] = useState("");
+  const [intakeWin, setIntakeWin] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -58,11 +60,9 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
   const selectedDay = days[dayIdx];
   const selectedSlot = selectedDay?.slots[Math.min(timeIdx, selectedDay.slots.length - 1)];
 
-  const isFreeIntro = selectedSession?.price_cents === 0;
   const signedOut = authConfigured && !loading && !user;
-  // Only PAID sessions need an account. The free intro takes name + email.
-  const needsSignIn = signedOut && !isFreeIntro;
-  const needsGuestEmail = signedOut && isFreeIntro;
+  const noTimes = days.length === 0;
+  const isPlan = (selectedSession?.duration_minutes ?? 0) > 90;
 
   const total = !selectedSession
     ? null
@@ -72,12 +72,10 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
 
   let payLabel = "Select a session";
   if (selectedSession) {
-    payLabel = isFreeIntro ? "Book free intro call" : "Continue to secure payment";
+    payLabel = reserveMode ? "Reserve my session" : "Continue to secure payment";
+    if (selectedSession.price_cents === 0) payLabel = "Book this session";
   }
-  if (needsSignIn) payLabel = "Sign in to book";
   if (submitting) payLabel = "Booking…";
-
-  const noTimes = days.length === 0;
 
   async function handleBook() {
     setErrorMessage("");
@@ -90,15 +88,15 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
       setErrorMessage("Pick a day and time first.");
       return;
     }
-    if (needsSignIn) {
-      router.push("/login?next=/tony");
+    if (intakeGoal.trim().length < 10) {
+      setErrorMessage(
+        "Tell Tony what you want to work on (a sentence or two) — it's how he shows up prepared."
+      );
       return;
     }
-    if (needsGuestEmail) {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
-        setErrorMessage("Add your email so Tony can send you the video link.");
-        return;
-      }
+    if (signedOut && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
+      setErrorMessage("Add your email so we can confirm your session.");
+      return;
     }
 
     setSubmitting(true);
@@ -111,6 +109,8 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
           slotId: selectedSlot.id,
           name: guestName.trim() || undefined,
           email: guestEmail.trim() || undefined,
+          intakeGoal: intakeGoal.trim(),
+          intakeWin: intakeWin.trim() || undefined,
         }),
       });
       const data = await res.json();
@@ -166,8 +166,7 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
                     {s.name}
                   </span>
                   <span className="mt-[2px] block text-[12px] text-muted">
-                    {s.duration_minutes} min ·{" "}
-                    {s.price_cents === 0 ? "get to know each other" : "written plan included"}
+                    {s.duration_minutes} min · written plan included
                   </span>
                 </span>
                 <span className="whitespace-nowrap text-[14.5px] font-semibold text-ink">
@@ -179,13 +178,11 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
         </div>
 
         {noTimes ? (
-          // Honest empty state — never a dead button. If the calendar is
-          // empty, say so and give a real alternative.
           <div className="mt-5 rounded-[13px] border border-dashed border-[#ddd7cb] bg-[#faf9f6] px-[16px] py-[16px]">
             <p className="text-[13.5px] leading-[1.55] text-ink-2">
-              <b className="text-ink">New call times are being added.</b>{" "}
-              Check back tomorrow — or take the free Money Blueprint now and
-              you&rsquo;ll be first to hear when times open.
+              <b className="text-ink">New session times are being added.</b>{" "}
+              Take the free Money Blueprint and join the Corner — you&rsquo;ll
+              be first to hear when times open.
             </p>
             <a
               href="/blueprint"
@@ -259,38 +256,64 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
                     );
                   })}
                 </div>
+                {isPlan && (
+                  <p className="mt-[8px] text-[11.5px] leading-[1.5] text-muted">
+                    This books your first session — you and Tony will schedule
+                    the other two together on the call.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* The write-up — every booking, guest or signed in */}
+            <div className="mt-5 flex flex-col gap-[9px]">
+              <div className="text-xs font-semibold tracking-[0.02em] text-ink">
+                What do you want to work on?
+              </div>
+              <textarea
+                value={intakeGoal}
+                onChange={(e) => setIntakeGoal(e.target.value)}
+                placeholder="A sentence or two in your own words — Tony reads this before your session and shows up prepared."
+                rows={3}
+                className="w-full resize-none rounded-[10px] border border-line bg-white px-[14px] py-[11px] text-[14px] leading-[1.5] text-ink outline-none transition-colors placeholder:text-muted focus:border-accent"
+              />
+              <input
+                type="text"
+                value={intakeWin}
+                onChange={(e) => setIntakeWin(e.target.value)}
+                placeholder="Optional: what would make this session a win?"
+                className="w-full rounded-[10px] border border-line bg-white px-[14px] py-[11px] text-[14px] text-ink outline-none transition-colors placeholder:text-muted focus:border-accent"
+              />
+            </div>
+
+            {signedOut && (
+              <div className="mt-4 flex flex-col gap-[9px]">
+                <div className="text-xs font-semibold tracking-[0.02em] text-ink">
+                  Where should your confirmation go?
+                </div>
+                <input
+                  type="text"
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                  placeholder="First name"
+                  autoComplete="given-name"
+                  className="w-full rounded-[10px] border border-line bg-white px-[14px] py-[11px] text-[14px] text-ink outline-none transition-colors placeholder:text-muted focus:border-accent"
+                />
+                <input
+                  type="email"
+                  value={guestEmail}
+                  onChange={(e) => setGuestEmail(e.target.value)}
+                  placeholder="Email address"
+                  autoComplete="email"
+                  inputMode="email"
+                  className="w-full rounded-[10px] border border-line bg-white px-[14px] py-[11px] text-[14px] text-ink outline-none transition-colors placeholder:text-muted focus:border-accent"
+                />
+                <p className="text-[11.5px] leading-[1.5] text-muted">
+                  No account, no password required.
+                </p>
               </div>
             )}
           </>
-        )}
-
-        {/* Guest details — free intro only, when not signed in */}
-        {needsGuestEmail && !noTimes && (
-          <div className="mt-4 flex flex-col gap-[9px]">
-            <div className="text-xs font-semibold tracking-[0.02em] text-ink">
-              Where should the video link go?
-            </div>
-            <input
-              type="text"
-              value={guestName}
-              onChange={(e) => setGuestName(e.target.value)}
-              placeholder="First name"
-              autoComplete="given-name"
-              className="w-full rounded-[10px] border border-line bg-white px-[14px] py-[11px] text-[14px] text-ink outline-none transition-colors placeholder:text-muted focus:border-accent"
-            />
-            <input
-              type="email"
-              value={guestEmail}
-              onChange={(e) => setGuestEmail(e.target.value)}
-              placeholder="Email address"
-              autoComplete="email"
-              inputMode="email"
-              className="w-full rounded-[10px] border border-line bg-white px-[14px] py-[11px] text-[14px] text-ink outline-none transition-colors placeholder:text-muted focus:border-accent"
-            />
-            <p className="text-[11.5px] leading-[1.5] text-muted">
-              No account, no password. Just so Tony can reach you.
-            </p>
-          </div>
         )}
 
         <hr className="my-4 border-line" />
@@ -315,12 +338,21 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
           <span className="font-semibold text-accent">$0</span>
         </div>
         <hr className="my-[14px] border-line" />
-        <div className="mb-[18px] flex items-baseline justify-between">
-          <span className="text-[15px] font-semibold text-ink">Total today</span>
+        <div className="mb-[6px] flex items-baseline justify-between">
+          <span className="text-[15px] font-semibold text-ink">
+            {reserveMode ? "Charged today" : "Total today"}
+          </span>
           <span className="font-display text-[26px] font-medium text-ink">
-            {total ?? "—"}
+            {reserveMode ? "$0" : (total ?? "—")}
           </span>
         </div>
+        {reserveMode && total && total !== "Free" && (
+          <p className="mb-[14px] text-[12px] leading-[1.5] text-ink-2">
+            Your card isn&rsquo;t charged now — Tony sends a secure payment
+            link ({total}) before your session. Your spot holds in the
+            meantime.
+          </p>
+        )}
 
         <button
           type="button"
@@ -335,17 +367,11 @@ export default function BookingCard({ sessionTypes, availability }: Props) {
           <p className="mt-3 text-center text-[13px] text-red-600">{errorMessage}</p>
         )}
 
-        {!isFreeIntro && !noTimes && (
-          <p className="mt-3 flex items-center justify-center gap-[6px] text-center text-xs text-muted">
-            <span className="text-accent">&#128274;</span> Secure checkout ·
-            you won&rsquo;t be charged yet
-          </p>
-        )}
-        {isFreeIntro && !noTimes && (
-          <p className="mt-3 text-center text-xs text-muted">
-            20 minutes, no card, no pitch. Just a conversation.
-          </p>
-        )}
+        <p className="mt-3 text-center text-[12px] leading-[1.55] text-muted">
+          <b className="text-ink-2">The 12th &amp; Good promise:</b> if your
+          first session isn&rsquo;t worth every dollar, say so — you
+          don&rsquo;t pay.
+        </p>
       </div>
     </aside>
   );

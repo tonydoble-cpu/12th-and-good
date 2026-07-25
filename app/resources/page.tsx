@@ -104,13 +104,13 @@ export default function ResourcesPage() {
           </h2>
           <p className="mx-auto mt-3 max-w-[480px] text-[16px] text-ink-2">
             These tools can get you started. A coach can help you figure out
-            the specifics — and the intro call is free.
+            the specifics — and And the promise stands: if your first session isn't worth it, you don't pay.
           </p>
           <Link
             href="/coaches"
             className="mt-6 inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
           >
-            Book a free intro call <span aria-hidden>&rarr;</span>
+            Book a session <span aria-hidden>&rarr;</span>
           </Link>
         </Container>
       </section>

@@ -411,13 +411,13 @@ export default function DebtPayoff() {
         </h3>
         <p className="mt-2 mx-auto max-w-[420px] text-[15px] text-ink-2">
           A coach can look at the full picture with you &mdash; not just the
-          math, but what actually fits your life. The intro call is free.
+          math, but what actually fits your life. And the promise stands: if your first session isn't worth it, you don't pay.
         </p>
         <a
           href="/coaches"
           className="mt-5 inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[19px] py-[10px] text-sm font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
         >
-          Book a free intro call <span aria-hidden="true">&rarr;</span>
+          Book a session <span aria-hidden="true">&rarr;</span>
         </a>
       </section>
     </div>

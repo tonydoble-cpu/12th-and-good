@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import BookingCard from "@/components/BookingCard";
 import { getCoachBySlug, getOpenAvailability, getSessionTypes } from "@/lib/coach-data";
+import { isStripeConfigured } from "@/lib/stripe";
 
 const WALK_AWAY = [
   {
@@ -231,7 +232,11 @@ export default async function CoachProfilePage() {
           </div>
 
           {/* right: booking */}
-          <BookingCard sessionTypes={sessionTypes} availability={availability} />
+          <BookingCard
+            sessionTypes={sessionTypes}
+            availability={availability}
+            reserveMode={!isStripeConfigured}
+          />
         </div>
       </Container>
 

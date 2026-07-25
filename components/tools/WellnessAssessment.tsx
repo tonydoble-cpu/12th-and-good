@@ -351,14 +351,14 @@ export default function WellnessAssessment() {
           </h3>
           <p className="mt-2 max-w-[460px] mx-auto text-[15px] text-ink-2">
             A coach can help you turn this snapshot into a plan — starting
-            with whatever feels most pressing. The intro call is free.
+            with whatever feels most pressing. And the promise stands: if your first session isn't worth it, you don't pay.
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <a
               href="/coaches"
               className="inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[19px] py-[10px] text-sm font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
             >
-              Book a free intro call <span aria-hidden="true">&rarr;</span>
+              Book a session <span aria-hidden="true">&rarr;</span>
             </a>
             <button
               onClick={handleReset}

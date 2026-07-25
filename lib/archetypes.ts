@@ -195,6 +195,14 @@ export type QuizQuestion = {
    * exactly one answer each.
    */
   multi?: boolean;
+  /**
+   * Interaction style, so eight screens don't feel like the same test:
+   *   "cards" (default) — tall tap cards, for the emotional questions
+   *   "scale"           — one connected row of segments (ranges/brackets)
+   *   "chips"           — compact two-column grid of short answers
+   * Pure presentation; ids and weights are untouched.
+   */
+  ui?: "cards" | "scale" | "chips";
 };
 
 export const PRE_GATE_QUESTIONS: QuizQuestion[] = [
@@ -314,6 +322,7 @@ export const POST_GATE_QUESTIONS: QuizQuestion[] = [
   {
     id: "q4_income",
     prompt: "About how much does your household make in a year?",
+    ui: "scale",
     answers: [
       { id: "u1", label: "Under $50k", weights: {} },
       { id: "u2", label: "$50k – $100k", weights: {} },
@@ -325,6 +334,7 @@ export const POST_GATE_QUESTIONS: QuizQuestion[] = [
   {
     id: "q5_stage",
     prompt: "Where are you in life right now?",
+    ui: "chips",
     answers: [
       { id: "s1", label: "Starting out", weights: {} },
       { id: "s2", label: "Building my career", weights: {} },
@@ -337,6 +347,7 @@ export const POST_GATE_QUESTIONS: QuizQuestion[] = [
   {
     id: "q6_goal",
     prompt: "What's your #1 money goal for the next year?",
+    ui: "chips",
     answers: [
       { id: "g1", label: "Pay off debt", weights: {} },
       { id: "g2", label: "Save for a rainy day", weights: {} },

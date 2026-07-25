@@ -125,7 +125,7 @@ export default function CoachAIChat() {
             updated[updated.length - 1] = {
               ...last,
               content:
-                "Sorry, something went wrong on my end. Try again in a moment — or if you'd rather talk to a real person, you can book a free intro call at /coaches.",
+                "Sorry, something went wrong on my end. Try again in a moment — or if you'd rather talk to a real person, you can book a session with a real coach at /coaches.",
             };
           }
           return updated;

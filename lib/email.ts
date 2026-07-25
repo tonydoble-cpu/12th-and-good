@@ -72,36 +72,54 @@ export function notifyFounder(subject: string, html: string) {
 // Templates — plain, warm, no tracking pixels, no images.
 // ---------------------------------------------------------------------------
 
-export function introBookedClientEmail(opts: {
+export function sessionBookedClientEmail(opts: {
   firstName: string | null;
   whenText: string;
+  sessionName: string;
+  reserveMode: boolean;
+  priceText: string;
 }) {
   const name = opts.firstName ? `Hi ${opts.firstName}` : "Hi";
+  const payLine = opts.reserveMode
+    ? `<p><b>Payment:</b> nothing was charged today. Tony will send you a secure
+payment link (${opts.priceText}) before the session — your spot is held in
+the meantime.</p>`
+    : "";
   return {
-    subject: "Your intro call with Tony is booked",
+    subject: `Your session with Tony is booked — ${opts.whenText}`,
     html: `
 <p>${name},</p>
-<p>Your free 20-minute intro call is confirmed for <b>${opts.whenText}</b>.</p>
-<p>Tony will send the video link from this address before the call. Bring one
-money question that's been on your mind — that's the whole agenda.</p>
-<p>Nothing to prepare, nothing to buy. See you there.</p>
+<p>Your <b>${opts.sessionName}</b> is booked for <b>${opts.whenText}</b>.</p>
+<p>Tony read what you wrote when you booked — he'll come prepared for
+exactly that. The video link arrives from this address before the call.</p>
+${payLine}
+<p>One promise, in writing: if your first session isn't worth every dollar,
+say so and you don't pay.</p>
 <p>— 12th &amp; Good Street</p>
 <p style="color:#888;font-size:12px">Need to reschedule? Just reply to this email.</p>`,
   };
 }
 
-export function introBookedFounderEmail(opts: {
+export function sessionBookedFounderEmail(opts: {
   name: string | null;
   email: string;
   whenText: string;
+  sessionName: string;
+  intake: string | null;
+  reserveMode: boolean;
 }) {
   return {
-    subject: `New intro call booked — ${opts.whenText}`,
+    subject: `New booking: ${opts.sessionName} — ${opts.whenText}`,
     html: `
-<p>New free intro call on the books:</p>
 <p><b>${opts.name ?? "(no name given)"}</b> · ${opts.email}<br/>
-<b>${opts.whenText}</b></p>
-<p>To do: send them a video link from your email before the call.</p>`,
+<b>${opts.sessionName}</b> · <b>${opts.whenText}</b></p>
+${opts.intake ? `<p><b>Their write-up:</b><br/>${opts.intake.replace(/\n/g, "<br/>")}</p>` : ""}
+${
+  opts.reserveMode
+    ? "<p><b>To do:</b> send their payment link, then the video link before the call.</p>"
+    : "<p><b>To do:</b> send the video link before the call.</p>"
+}
+<p>Your AI prep brief for this session will follow.</p>`,
   };
 }
 
@@ -130,9 +148,10 @@ export function blueprintEmail(opts: {
 <p><b>What you likely need right now.</b> ${opts.needNow}</p>
 <h3 style="margin:18px 0 4px">Your three moves for the next 90 days</h3>
 ${steps}
-<p style="margin-top:18px">When you're ready to talk it through with someone
-who has nothing to sell you, your free 20-minute intro call is here:<br/>
-<a href="https://12thandgood.com/tony">12thandgood.com/tony</a></p>
-<p>— 12th &amp; Good Street</p>`,
+<p style="margin-top:18px">When you're ready to work these moves with someone
+who has nothing to sell you, book a session with Tony:<br/>
+<a href="https://12thandgood.com/tony">12thandgood.com/tony</a> — if your
+first session isn't worth every dollar, you don't pay.</p>
+<p>— 12th &amp; Good Street. You live here now.</p>`,
   };
 }
