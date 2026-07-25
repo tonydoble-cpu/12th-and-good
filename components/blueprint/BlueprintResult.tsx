@@ -165,8 +165,9 @@ export default function BlueprintResult({
               {goal && <span className="font-medium text-ink">{goal.toLowerCase()}</span>}
               {goal && stage && " · "}
               {stage && <span className="font-medium text-ink">{stage.toLowerCase()}</span>}
-              . These three moves are shaped with that in mind. Your full
-              Blueprint email includes more specific guidance for your stage.
+              . These three moves are shaped with that in mind — and
+              they&rsquo;re exactly the kind of thing a free intro call digs
+              into.
             </p>
           )}
         </div>
