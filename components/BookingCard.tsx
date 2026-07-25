@@ -129,7 +129,14 @@ export default function BookingCard({
   }
 
   return (
-    <aside className="lg:sticky lg:top-[92px]" id="book">
+    // max-h + overflow: the card grew (intake fields) and a sticky element
+    // taller than the viewport traps its Book button below the fold on
+    // short screens — found live, the button was unreachable. The card now
+    // scrolls internally when it exceeds the viewport.
+    <aside
+      className="lg:sticky lg:top-[92px] lg:max-h-[calc(100vh-108px)] lg:overflow-y-auto lg:overscroll-contain rounded-[18px]"
+      id="book"
+    >
       <div className="rounded-[18px] border border-line bg-surface px-6 pt-6 pb-[26px] shadow-[0_24px_56px_-34px_rgba(20,30,45,0.4)]">
         <div className="mb-1 flex items-baseline justify-between">
           <h3 className="font-display text-[21px] font-medium text-ink">
