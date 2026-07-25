@@ -28,7 +28,7 @@ const ROWS = [
   },
   {
     q: "So how does the platform make money?",
-    a: "Two ways, both from services — never from products: (1) In time, a flat, disclosed platform fee on paid sessions — shown on your receipt as its own line, never hidden in the price. During our founding phase it's $0: 100% of your session fee goes to your coach. (2) Employers who bring coaching to their teams pay us directly for the program.",
+    a: "Two ways, both from services — never from products: (1) A flat, disclosed platform fee on paid sessions — shown on your receipt as its own line, never hidden in the price. (2) Employers who bring coaching to their teams pay us directly for the program.",
   },
   {
     q: "What does 'fiduciary standard' mean here?",
