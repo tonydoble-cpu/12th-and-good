@@ -20,7 +20,17 @@ export default function ArchetypeReveal({
   const [phase, setPhase] = useState<"reveal" | "content">("reveal");
 
   useEffect(() => {
-    const t = setTimeout(() => setPhase("content"), 1400);
+    // Respect prefers-reduced-motion: skip the full-color flash entirely.
+    // (Also: one tester read the sudden full-screen red as a "DECLINED"
+    // alert — shorter flash softens that for everyone.)
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      setPhase("content");
+      return;
+    }
+    const t = setTimeout(() => setPhase("content"), 900);
     return () => clearTimeout(t);
   }, []);
 

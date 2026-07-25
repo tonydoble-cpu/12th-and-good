@@ -6,10 +6,16 @@ import { ButtonLink } from "@/components/Button";
 export default async function BookingSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ free?: string }>;
+  searchParams: Promise<{ free?: string; mailed?: string }>;
 }) {
-  const { free } = await searchParams;
+  const { free, mailed } = await searchParams;
   const isFree = free === "1";
+  const wasMailed = mailed === "1";
+
+  // Copy rule: only promise an email when one actually went out (mailed=1).
+  const freeCopy = wasMailed
+    ? "Your intro call is confirmed — nothing to pay. A confirmation just landed in your email, and Tony will send the video link from the same address before the call."
+    : "Your intro call is confirmed — nothing to pay. Tony will email you the video link before the call. Twenty minutes, no card, no pitch.";
 
   return (
     <div className="flex min-h-full flex-col">
@@ -21,13 +27,17 @@ export default async function BookingSuccessPage({
         <h1 className="font-display text-2xl font-semibold text-ink mb-3">
           You&apos;re booked
         </h1>
-        <p className="text-ink-2 leading-relaxed">
+        <p className="mx-auto max-w-[440px] text-ink-2 leading-relaxed">
           {isFree
-            ? "Your intro call is confirmed — nothing to pay. You'll get a confirmation and the video link by email, and both will show up in your account too."
+            ? freeCopy
             : "Payment went through and your session is confirmed. You'll get a confirmation and the video link by email, and both will show up in your account too."}
         </p>
         <div className="mt-8">
-          <ButtonLink href="/account">View My Account</ButtonLink>
+          {isFree ? (
+            <ButtonLink href="/">Back to 12th &amp; Good Street</ButtonLink>
+          ) : (
+            <ButtonLink href="/account">View My Account</ButtonLink>
+          )}
         </div>
       </Container>
       <Footer variant="simple" />

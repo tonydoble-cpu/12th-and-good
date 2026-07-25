@@ -1,10 +1,17 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { format } from "date-fns";
 import { getAvailabilitySlotById, getCoachBySlug, getSessionTypeById } from "@/lib/coach-data";
 import { createClient, createServiceRoleClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getStripe, isStripeConfigured } from "@/lib/stripe";
 import { createZoomMeeting } from "@/lib/zoom";
+import {
+  introBookedClientEmail,
+  introBookedFounderEmail,
+  notifyFounder,
+  sendEmail,
+} from "@/lib/email";
 
 const bodySchema = z.object({
   sessionTypeId: z.string().min(1),
@@ -38,24 +45,73 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "That time was just booked by someone else. Pick another." }, { status: 409 });
   }
 
-  // Resolve who's booking. Live mode requires a signed-in client so the
-  // booking lands in their account; demo mode (no Supabase yet) accepts a
-  // name/email so the flow is still previewable end-to-end.
+  // Resolve who's booking. Paid sessions require a signed-in client so the
+  // booking lands in their account. The FREE intro call must never hit an
+  // account wall — a first conversation gated behind "create an account"
+  // loses the people the whole site exists for. Guests give name + email;
+  // we create a passwordless auth user server-side (satisfies the
+  // client_profiles FK) and they never see a login screen.
   let clientId: string | null = null;
   let clientEmail = email ?? null;
+  const isFreeIntro = sessionType.price_cents === 0;
 
   if (isSupabaseConfigured) {
     const supabase = await createClient();
     const { data } = (await supabase?.auth.getUser()) ?? { data: { user: null } };
-    if (!data.user) {
+
+    if (data.user) {
+      clientId = data.user.id;
+      clientEmail = data.user.email ?? clientEmail;
+      await supabase!
+        .from("client_profiles")
+        .upsert({ id: data.user.id, email: data.user.email, full_name: name }, { onConflict: "id" });
+    } else if (isFreeIntro) {
+      if (!clientEmail) {
+        return NextResponse.json(
+          { error: "Add your email so Tony can send you the video link." },
+          { status: 400 }
+        );
+      }
+      const admin = createServiceRoleClient();
+      if (!admin) {
+        return NextResponse.json({ error: "Booking isn't available right now." }, { status: 500 });
+      }
+
+      const normalized = clientEmail.toLowerCase().trim();
+      const { data: created, error: createErr } = await admin.auth.admin.createUser({
+        email: normalized,
+        email_confirm: true,
+        user_metadata: { full_name: name ?? null, source: "free_intro_guest" },
+      });
+
+      if (created?.user) {
+        clientId = created.user.id;
+      } else if (createErr) {
+        // Email already has an auth user (returning visitor) — find them via
+        // their profile row, falling back to the admin user list.
+        const { data: profile } = await admin
+          .from("client_profiles")
+          .select("id")
+          .eq("email", normalized)
+          .maybeSingle();
+        if (profile) {
+          clientId = profile.id;
+        } else {
+          const { data: list } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+          clientId = list?.users.find((u) => u.email?.toLowerCase() === normalized)?.id ?? null;
+        }
+        if (!clientId) {
+          return NextResponse.json({ error: "Couldn't set up your booking. Try again." }, { status: 500 });
+        }
+      }
+
+      await admin
+        .from("client_profiles")
+        .upsert({ id: clientId, email: normalized, full_name: name ?? null }, { onConflict: "id" });
+      clientEmail = normalized;
+    } else {
       return NextResponse.json({ error: "Sign in before booking so we can save this to your account." }, { status: 401 });
     }
-    clientId = data.user.id;
-    clientEmail = data.user.email ?? clientEmail;
-
-    await supabase!
-      .from("client_profiles")
-      .upsert({ id: data.user.id, email: data.user.email, full_name: name }, { onConflict: "id" });
   }
   // Demo mode (no Supabase) doesn't require an email up front — Stripe
   // Checkout collects it during payment, and a free intro call has no
@@ -109,7 +165,23 @@ export async function POST(request: Request) {
       await serviceClient.from("availability_slots").update({ is_booked: true }).eq("id", slot.id);
     }
 
-    return NextResponse.json({ url: `${siteUrl}/book/success?free=1` });
+    // Confirmation emails — silent no-ops until RESEND_API_KEY is set.
+    // emailSent tells the success page whether it may promise an email.
+    let emailSent = false;
+    if (clientEmail) {
+      const whenText = format(new Date(slot.starts_at), "EEEE, MMMM d 'at' h:mm a");
+      const clientMsg = introBookedClientEmail({
+        firstName: name?.split(" ")[0] ?? null,
+        whenText,
+      });
+      emailSent = await sendEmail({ to: clientEmail, ...clientMsg });
+      const founderMsg = introBookedFounderEmail({ name: name ?? null, email: clientEmail, whenText });
+      notifyFounder(founderMsg.subject, founderMsg.html);
+    }
+
+    return NextResponse.json({
+      url: `${siteUrl}/book/success?free=1${emailSent ? "&mailed=1" : ""}`,
+    });
   }
 
   if (!isStripeConfigured) {

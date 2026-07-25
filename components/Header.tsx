@@ -59,7 +59,7 @@ export default function Header({
           >
             Blog
           </Link>
-          <Link href="#" className="text-sm font-semibold text-ink">
+          <Link href="/become-a-coach" className="text-sm font-semibold text-ink">
             Become a coach
           </Link>
           {cta && (

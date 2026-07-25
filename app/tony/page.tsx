@@ -1,5 +1,9 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+
+// Availability must be live — a static snapshot of the calendar means new
+// slots never appear and booked ones look open. Render on every request.
+export const dynamic = "force-dynamic";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
@@ -60,8 +64,8 @@ export default async function CoachProfilePage() {
               </span>
             )}
             <span className="inline-flex items-center gap-[6px] text-[13px] font-medium text-ink-2">
-              <span className="text-accent">&#10003;</span> Vetted &amp;
-              conflict-free
+              <span className="text-accent">&#10003;</span> Fee-only &mdash;
+              nothing to sell you
             </span>
           </div>
           <h1 className="font-display text-[36px] md:text-[46px] font-normal leading-[1.05] tracking-[-0.02em] text-ink">
@@ -134,6 +138,34 @@ export default async function CoachProfilePage() {
                   {p}
                 </p>
               ))}
+            </section>
+
+            <hr className="my-9 border-line" />
+
+            <section>
+              <h2 className="font-display text-[24px] md:text-[27px] font-medium leading-[1.15] tracking-[-0.014em] text-ink">
+                Background &amp; how I get paid
+              </h2>
+              {coach.credentials.length > 0 && (
+                <ul className="mt-5 flex flex-col gap-[10px]">
+                  {coach.credentials.map((c) => (
+                    <li key={c} className="flex items-start gap-[13px]">
+                      <span className="dot mt-[9px]" />
+                      <span className="text-[15.5px] leading-[1.6] text-ink-2">{c}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <div className="mt-6 rounded-[14px] border border-line bg-accent-tint/60 p-[20px]">
+                <p className="text-[15px] leading-[1.65] text-ink">
+                  <b>The whole fee model, in one sentence:</b> you pay for the
+                  session, and that is 100% of how I&rsquo;m paid — no
+                  commissions, no product fees, no referral kickbacks, not from
+                  anyone, ever. If I ever recommend something, it&rsquo;s
+                  because I think it helps you, and I don&rsquo;t make a dime
+                  either way.
+                </p>
+              </div>
             </section>
 
             <hr className="my-9 border-line" />

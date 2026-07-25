@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { ARCHETYPES, type ArchetypeId } from "@/lib/archetypes";
+import { blueprintEmail, notifyFounder, sendEmail } from "@/lib/email";
 
 // POST /api/blueprint
 //
@@ -117,21 +118,34 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // At gate2 we would trigger the email sequence via HubSpot / ConvertKit /
-    // Resend. For now, log the intended trigger so we know when it fires and
-    // add a small acknowledgement in the response.
-    let queuedEmail: string | null = null;
+    // Gate 2: send the Blueprint delivery email — a real send via lib/email
+    // when RESEND_API_KEY is configured, a no-op otherwise. emailQueued in
+    // the response tells the result page whether it may promise an email.
+    // RULE: the UI must never promise mail this endpoint didn't send.
+    let emailQueued = false;
     if (body.stage === "gate2" && body.archetype) {
-      queuedEmail = `blueprint:${body.archetype}`;
-      console.log(
-        `[blueprint:demo] queued email ${queuedEmail} to ${email}`
-      );
+      const a = ARCHETYPES[body.archetype];
+      const msg = blueprintEmail({
+        firstName: body.firstName ?? null,
+        archetypeName: a.name,
+        tagline: a.tagline,
+        strength: a.strength,
+        blindSpot: a.blindSpot,
+        needNow: a.needNow,
+        nextSteps: a.nextSteps,
+      });
+      emailQueued = await sendEmail({ to: email, ...msg });
     }
     if (body.stage === "waitlist") {
-      console.log(`[blueprint:demo] waitlist notify → ${email}`);
+      notifyFounder(
+        `Coach-match waitlist: ${email}`,
+        `<p><b>${email}</b> joined the coach-match waitlist${
+          body.archetype ? ` (${ARCHETYPES[body.archetype].name})` : ""
+        }.</p>`
+      );
     }
 
-    return NextResponse.json({ ok: true, queuedEmail });
+    return NextResponse.json({ ok: true, emailQueued });
   } catch (err) {
     console.error("Blueprint API error:", err);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });

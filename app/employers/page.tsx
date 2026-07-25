@@ -328,11 +328,44 @@ export default function EmployersPage() {
               Two ways to fund the program.
             </h2>
           </div>
-          <p className="mx-auto mb-12 max-w-[560px] text-center text-[15px] text-ink-2">
-            We&rsquo;re building this with our founding employer partners
-            right now, so pricing is flexible and negotiable. Let&rsquo;s
-            figure out what makes sense for your team.
+          <p className="mx-auto mb-8 max-w-[560px] text-center text-[15px] text-ink-2">
+            Start with a pilot you can approve without a committee — then
+            scale what works.
           </p>
+
+          {/* Founding pilot — a concrete, decidable offer. HR buyers can't
+              take "flexible and negotiable" into a budget meeting. */}
+          <div className="mx-auto mb-12 max-w-[820px] rounded-2xl border-2 border-accent bg-accent-tint p-8">
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h3 className="font-display text-[24px] font-medium text-ink">
+                Founding Employer Pilot
+              </h3>
+              <p className="font-display text-[26px] text-ink">
+                $10<span className="text-[15px] text-ink-2"> / employee / month</span>
+              </p>
+            </div>
+            <ul className="mt-4 grid grid-cols-1 gap-x-8 sm:grid-cols-2 text-sm text-ink-2">
+              {[
+                "One team or department — up to 50 people",
+                "90 days, cancel anytime, no long contract",
+                "Money Blueprint access for every employee",
+                "A pool of 1:1 sessions with a fee-only coach",
+                "Aggregate participation reporting (never individual data)",
+                "Founding-partner rate locked for year one if you continue",
+              ].map((item) => (
+                <li key={item} className="flex gap-[10px] py-[5px]">
+                  <span className="dot mt-[7px]" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <a
+              href="#contact"
+              className="mt-6 inline-flex w-full items-center justify-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover sm:w-auto"
+            >
+              Start the pilot conversation
+            </a>
+          </div>
           <div className="mx-auto grid max-w-[820px] grid-cols-1 md:grid-cols-2 gap-6">
             <div className="rounded-2xl border border-line bg-surface p-9 transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.7,0.3,1)] hover:-translate-y-[5px] hover:border-[#dcd8cf] hover:shadow-[0_26px_54px_-30px_rgba(20,30,45,0.42)]">
               <h3 className="font-display text-[22px] font-medium text-ink">

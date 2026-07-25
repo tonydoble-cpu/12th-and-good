@@ -43,10 +43,11 @@ export default function Intro({ onStart }: { onStart: () => void }) {
             onClick={onStart}
             className="w-full max-w-[340px] rounded-[11px] bg-accent px-6 py-[15px] text-[15.5px] font-semibold text-white shadow-[0_10px_28px_-14px_rgba(58,90,125,0.85)] transition-all hover:-translate-y-px hover:bg-accent-hover active:translate-y-0"
           >
-            Take the quiz — 60 seconds
+            Take the quiz
           </button>
           <p className="text-[12.5px] text-muted">
-            8 quick questions. Your Blueprint at the end.
+            8 quick questions &middot; about 2 minutes &middot; your Blueprint
+            at the end
           </p>
         </div>
 

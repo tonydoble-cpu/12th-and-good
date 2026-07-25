@@ -104,7 +104,7 @@ export const ARCHETYPES: Record<ArchetypeId, Archetype> = {
     strength:
       "You know what most people don't — that money is emotional, historical, and personal. Because you've done real work to move past a setback, bad advice, or a pattern you inherited, you approach money with a depth and self-awareness that pays dividends most people never get.",
     origin:
-      "Orientations like yours often form after a hard financial chapter — debt you're climbing out of, an investment that went wrong, a bankruptcy, a divorce. Sometimes it forms from watching family patterns you promised yourself you wouldn't repeat.",
+      "Orientations like yours often form after a hard money chapter — a setback you didn't choose, a job that ended, a plan that fell through, or a season that took more than it gave. Sometimes it forms from watching family patterns you promised yourself you wouldn't repeat.",
     blindSpot:
       "The past can quietly keep making today's decisions. You may over-correct — refusing to invest because you lost money before, over-saving because you were once broke, avoiding financial conversations because they hurt. Repair is important. But repair isn't the same as building.",
     needNow:
@@ -331,6 +331,7 @@ export const POST_GATE_QUESTIONS: QuizQuestion[] = [
       { id: "s3", label: "Juggling work and family", weights: {} },
       { id: "s4", label: "Settled, and thinking ahead", weights: {} },
       { id: "s5", label: "Starting a new chapter", weights: {} },
+      { id: "s6", label: "Between jobs or starting over", weights: {} },
     ],
   },
   {
@@ -343,6 +344,7 @@ export const POST_GATE_QUESTIONS: QuizQuestion[] = [
       { id: "g4", label: "Invest more often", weights: {} },
       { id: "g5", label: "Make more money", weights: {} },
       { id: "g6", label: "Get a clear plan for my money", weights: {} },
+      { id: "g7", label: "Make it to — and through — retirement", weights: {} },
     ],
   },
   {

@@ -29,6 +29,11 @@ const ASSUMPTIONS = {
   healthcareSavingsPerPerson: 271, // Financial Finesse/Fortune 100 study: $271.50/employee/year
   stressedTurnoverMultiple: 2, // PwC: financially stressed employees are 2x as likely to job search
   programCostPerEmployee: 10, // Mid-range: $3-$20/employee/month → $10 median
+  // Only count a quarter of modeled savings as realized. Un-haircut models
+  // in this category produce 15-20x ROI numbers that experienced HR buyers
+  // read as fantasy (the biggest incumbent publicly claims ~3x). A number a
+  // buyer believes beats a bigger one they don't.
+  realizationRate: 0.25,
 };
 
 /* ------------------------------------------------------------------ */
@@ -69,20 +74,21 @@ export default function EmployerROI() {
     // --- Program cost ---
     const annualProgramCost = employees * A.programCostPerEmployee * 12;
 
-    // --- Totals ---
-    const totalSavings =
+    // --- Totals (with conservatism haircut) ---
+    const modeledSavings =
       productivitySavings + turnoverSavings + absenteeismSavings + healthcareSavings;
+    const totalSavings = modeledSavings * A.realizationRate;
     const netSavings = totalSavings - annualProgramCost;
     const roi = annualProgramCost > 0 ? totalSavings / annualProgramCost : 0;
 
     return {
       stressedCount,
-      productivitySavings,
+      productivitySavings: productivitySavings * A.realizationRate,
       annualTurnover,
       turnoversAvoided,
-      turnoverSavings,
-      absenteeismSavings,
-      healthcareSavings,
+      turnoverSavings: turnoverSavings * A.realizationRate,
+      absenteeismSavings: absenteeismSavings * A.realizationRate,
+      healthcareSavings: healthcareSavings * A.realizationRate,
       totalSavings,
       annualProgramCost,
       netSavings,
@@ -189,6 +195,12 @@ export default function EmployerROI() {
           Based on {commas.format(results.stressedCount)} financially stressed
           employees out of {commas.format(employees)} total, at{" "}
           {usd.format(results.annualProgramCost)}/year program cost.
+        </p>
+        <p className="mt-2 text-[12.5px] text-muted">
+          Deliberately conservative: we only count 25% of research-modeled
+          savings as realized. Un-haircut versions of this math produce
+          15&ndash;20:1 claims — we don&rsquo;t believe those, and you
+          shouldn&rsquo;t either.
         </p>
       </div>
 
@@ -356,12 +368,14 @@ export default function EmployerROI() {
             <p>
               <strong className="text-ink">Overall ROI benchmark:</strong>{" "}
               Independent PFEEF study (8,233 participants) found $5.50 return per
-              $1 invested under conservative assumptions, up to $15:1 optimistically.
+              $1 invested under conservative assumptions. Our calculator applies
+              a further 25% realization haircut to everything it models — if
+              we&rsquo;re wrong, we&rsquo;d rather be wrong low.
             </p>
             <p>
               <strong className="text-ink">Program cost ($10/employee/month):</strong>{" "}
-              Market midpoint. Actual 12th & Good Street pricing is set during the scoping
-              conversation and depends on team size and program components.
+              Matches our Founding Employer Pilot rate, and the market midpoint
+              for programs like this ($3&ndash;$20/employee/month).
             </p>
             <p className="text-muted italic">
               All estimates are directional. Actual results depend on participation

@@ -50,7 +50,7 @@ export default function Footer({
             <Link href="/employers" className="text-[#aab0b9] hover:text-white">
               For employers
             </Link>
-            <Link href="#" className="text-[#aab0b9] hover:text-white">
+            <Link href="/become-a-coach" className="text-[#aab0b9] hover:text-white">
               Become a coach
             </Link>
           </div>
@@ -62,11 +62,14 @@ export default function Footer({
             <Link href="/blog" className="text-[#aab0b9] hover:text-white">
               Blog
             </Link>
-            <Link href="#" className="text-[#aab0b9] hover:text-white">
-              Our model
+            <Link href="/how-we-make-money" className="text-[#aab0b9] hover:text-white">
+              How we make money
             </Link>
-            <Link href="#" className="text-[#aab0b9] hover:text-white">
+            <Link href="/about" className="text-[#aab0b9] hover:text-white">
               About
+            </Link>
+            <Link href="/privacy" className="text-[#aab0b9] hover:text-white">
+              Privacy
             </Link>
           </div>
         </div>

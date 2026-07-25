@@ -18,10 +18,12 @@ export default function BlueprintResult({
 }) {
   const [mounted, setMounted] = useState(false);
   const [waitlistJoined, setWaitlistJoined] = useState(false);
+  const [emailQueued, setEmailQueued] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Fire the final payload to the API — updates the record with post-gate
-  // answers and triggers email sequence #1 (the Blueprint delivery email).
+  // Fire the final payload to the API — saves post-gate answers and, when
+  // email is configured server-side, sends the Blueprint delivery email.
+  // We only tell the user an email is coming if the API says one went out.
   useEffect(() => {
     fetch("/api/blueprint", {
       method: "POST",
@@ -35,7 +37,10 @@ export default function BlueprintResult({
         })),
         stage: "gate2",
       }),
-    }).catch(() => {});
+    })
+      .then((r) => r.json())
+      .then((d) => setEmailQueued(Boolean(d?.emailQueued)))
+      .catch(() => {});
   }, [email, archetype.id, postGateAnswers]);
 
   const goal = postGateAnswers.find((a) => a.id.startsWith("g"))?.label;
@@ -166,7 +171,7 @@ export default function BlueprintResult({
           )}
         </div>
 
-        {/* Confirmation */}
+        {/* Confirmation — only promise an email when one actually sent */}
         <div
           className="mt-6 rounded-[13px] border border-line bg-surface/60 px-[18px] py-[14px] text-[13.5px] leading-[1.5] text-ink-2 transition-all duration-700"
           style={{
@@ -174,12 +179,25 @@ export default function BlueprintResult({
             opacity: mounted ? 1 : 0,
           }}
         >
-          A full copy of your Blueprint is on its way to{" "}
-          <span className="font-medium text-ink">{email}</span>. Check spam if it
-          doesn&rsquo;t land in the next few minutes.
+          {emailQueued ? (
+            <>
+              A full copy of your Blueprint is on its way to{" "}
+              <span className="font-medium text-ink">{email}</span>. Check spam
+              if it doesn&rsquo;t land in the next few minutes.
+            </>
+          ) : (
+            <>
+              This page is yours — <span className="font-medium text-ink">
+              screenshot your three moves</span> or save the link so you can
+              come back to it.
+            </>
+          )}
         </div>
 
-        {/* What's next — coach match waitlist */}
+        {/* What's next — talk to a real person THIS WEEK, not "we'll be in
+            touch." The waitlist killed momentum for every persona we tested;
+            the free intro call is the actual next step. Waitlist stays as
+            the secondary path for people who want a different coach. */}
         <div
           className="mt-4 rounded-[18px] p-[24px] text-white transition-all duration-700"
           style={{
@@ -190,17 +208,24 @@ export default function BlueprintResult({
           }}
         >
           <h3 className="font-display text-[24px] font-medium leading-[1.15] tracking-[-0.02em]">
-            Ready to talk with a coach who gets it?
+            Talk it through — free, this week.
           </h3>
           <p className="mt-2 text-[14.5px] leading-[1.55] text-white/85">
-            12th & Good Street connects you with fee-only, fiduciary financial coaches
-            who reflect your background, language, and life experience. No
-            products. No commissions. Just guidance.
+            Book a free 20-minute intro call with Tony, our founding coach.
+            No account, no card, nothing to buy — bring one money question
+            and talk to someone who has nothing to sell you.
           </p>
+          <a
+            href="/tony#book"
+            className="mt-5 block w-full rounded-[10px] bg-white px-6 py-[13px] text-center text-[15px] font-semibold transition-all hover:-translate-y-px active:translate-y-0"
+            style={{ color: archetype.accent }}
+          >
+            Book your free intro call &rarr;
+          </a>
           {waitlistJoined ? (
-            <div className="mt-5 rounded-[10px] bg-white/15 px-4 py-3 text-[14px] font-medium">
-              You&rsquo;re on the list. We&rsquo;ll be in touch as soon as your
-              match is ready.
+            <div className="mt-3 rounded-[10px] bg-white/15 px-4 py-3 text-center text-[13px] font-medium">
+              You&rsquo;re on the match list — we&rsquo;ll reach out as new
+              coaches join.
             </div>
           ) : (
             <button
@@ -216,10 +241,9 @@ export default function BlueprintResult({
                 }).catch(() => {});
                 setWaitlistJoined(true);
               }}
-              className="mt-5 w-full rounded-[10px] bg-white px-6 py-[13px] text-[15px] font-semibold text-ink transition-all hover:-translate-y-px active:translate-y-0"
-              style={{ color: archetype.accent }}
+              className="mt-3 w-full rounded-[10px] border border-white/40 bg-transparent px-6 py-[11px] text-[13.5px] font-medium text-white/90 transition-colors hover:bg-white/10"
             >
-              Join the coach-match waitlist
+              Rather wait for a different coach? Join the match list
             </button>
           )}
         </div>
