@@ -68,7 +68,7 @@ export default function ArchetypeReveal({
               className="h-[6px] w-[6px] rounded-[2px]"
               style={{ background: "rgba(255,255,255,0.9)", transform: "rotate(45deg)" }}
             />
-            <span>Your orientation right now</span>
+            <span>Your money style right now</span>
           </div>
 
           <h1 className="mt-6 text-center font-display text-[40px] font-medium leading-[1.05] tracking-[-0.02em] text-ink md:text-[48px]">
@@ -120,8 +120,8 @@ export default function ArchetypeReveal({
               Unlock your full Blueprint →
             </button>
             <p className="max-w-[340px] text-center text-[12px] leading-[1.45] text-muted">
-              Get what shaped your orientation, what you need right now, and
-              three practical moves — personalized to you.
+              See what shaped it, what you need right now, and three moves
+              made just for you.
             </p>
           </div>
         </div>

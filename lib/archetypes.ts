@@ -188,67 +188,74 @@ export type QuizQuestion = {
   id: string;
   prompt: string;
   answers: QuizAnswer[];
+  /**
+   * Multi-select: user can pick several answers, then taps Next.
+   * Only used on post-gate personalization questions (no scoring weights),
+   * never on pre-gate questions — those drive the archetype math and need
+   * exactly one answer each.
+   */
+  multi?: boolean;
 };
 
 export const PRE_GATE_QUESTIONS: QuizQuestion[] = [
   {
     id: "q1_driver",
-    prompt: "What's currently driving most of your money decisions?",
+    prompt: "What's driving your money choices right now?",
     answers: [
       {
         id: "q1_a",
-        label: "Supporting family while also building for myself",
+        label: "Helping my family while I build my own future",
         weights: { bridge: 3 },
       },
       {
         id: "q1_b",
-        label: "Growing income, assets, or ownership",
+        label: "Growing my income and what I own",
         weights: { builder: 3, steward: 1 },
       },
       {
         id: "q1_c",
-        label: "Making sure the people I love are protected",
+        label: "Keeping the people I love safe",
         weights: { guardian: 3, bridge: 1 },
       },
       {
         id: "q1_d",
-        label: "Getting past debt, setbacks, or old patterns",
+        label: "Getting past debt, a setback, or old habits",
         weights: { reclaimer: 3 },
       },
       {
         id: "q1_e",
-        label: "Preserving what I've built and making it matter",
+        label: "Taking care of what I've built so it lasts",
         weights: { steward: 3 },
       },
       {
         id: "q1_f",
-        label: "Figuring out what's actually right for me",
+        label: "Figuring out what's right for me",
         weights: { pathfinder: 3 },
       },
     ],
   },
   {
     id: "q2_relationship",
-    prompt: "When you think about money and the people close to you, which feels most true?",
+    prompt: "Think about money and the people close to you. Which sounds most like you?",
     answers: [
       {
         id: "q2_a",
-        label: "I'm often the one others rely on financially",
+        label: "I'm the one people lean on for money help",
         weights: { bridge: 3, guardian: 1 },
       },
       {
         id: "q2_b",
-        label: "I want to give more, but I'm still building myself",
+        label: "I want to give more, but I'm still building my own life",
         weights: { bridge: 3, builder: 1 },
       },
       {
         id: "q2_c",
-        label: "I want my family protected no matter what",
+        label: "I want my family safe no matter what",
         weights: { guardian: 3 },
       },
       {
         id: "q2_d",
-        label: "I'm still working through what my family taught me about money",
+        label: "I'm still working through what I learned about money growing up",
         weights: { reclaimer: 2, pathfinder: 2 },
       },
       {
@@ -265,16 +272,16 @@ export const PRE_GATE_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: "q3_stress",
-    prompt: "When money feels stressful, it's usually because...",
+    prompt: "When money stresses you out, it's mostly because...",
     answers: [
       {
         id: "q3_a",
-        label: "I'm carrying more than one person's financial weight",
+        label: "I'm carrying money worries for more than just me",
         weights: { bridge: 3 },
       },
       {
         id: "q3_b",
-        label: "I keep pushing the goalposts and never feel done",
+        label: "Even when I hit a goal, I never feel done",
         weights: { builder: 3 },
       },
       {
@@ -284,7 +291,7 @@ export const PRE_GATE_QUESTIONS: QuizQuestion[] = [
       },
       {
         id: "q3_d",
-        label: "I'm still recovering from something",
+        label: "I'm still coming back from something hard",
         weights: { reclaimer: 3 },
       },
       {
@@ -306,7 +313,7 @@ export const PRE_GATE_QUESTIONS: QuizQuestion[] = [
 export const POST_GATE_QUESTIONS: QuizQuestion[] = [
   {
     id: "q4_income",
-    prompt: "What's your current household income range?",
+    prompt: "About how much does your household make in a year?",
     answers: [
       { id: "u1", label: "Under $50k", weights: {} },
       { id: "u2", label: "$50k – $100k", weights: {} },
@@ -317,48 +324,50 @@ export const POST_GATE_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: "q5_stage",
-    prompt: "Which life stage feels most true right now?",
+    prompt: "Where are you in life right now?",
     answers: [
       { id: "s1", label: "Starting out", weights: {} },
-      { id: "s2", label: "Building a career", weights: {} },
-      { id: "s3", label: "Balancing career and family", weights: {} },
-      { id: "s4", label: "Established, thinking ahead", weights: {} },
-      { id: "s5", label: "Transitioning to a new chapter", weights: {} },
+      { id: "s2", label: "Building my career", weights: {} },
+      { id: "s3", label: "Juggling work and family", weights: {} },
+      { id: "s4", label: "Settled, and thinking ahead", weights: {} },
+      { id: "s5", label: "Starting a new chapter", weights: {} },
     ],
   },
   {
     id: "q6_goal",
-    prompt: "What's your #1 financial goal for the next 12 months?",
+    prompt: "What's your #1 money goal for the next year?",
     answers: [
-      { id: "g1", label: "Pay down debt", weights: {} },
-      { id: "g2", label: "Build an emergency fund", weights: {} },
-      { id: "g3", label: "Save for something specific (home, business, education)", weights: {} },
-      { id: "g4", label: "Invest more consistently", weights: {} },
-      { id: "g5", label: "Increase income", weights: {} },
-      { id: "g6", label: "Get financial clarity and a plan", weights: {} },
+      { id: "g1", label: "Pay off debt", weights: {} },
+      { id: "g2", label: "Save for a rainy day", weights: {} },
+      { id: "g3", label: "Save for something big — a home, a business, school", weights: {} },
+      { id: "g4", label: "Invest more often", weights: {} },
+      { id: "g5", label: "Make more money", weights: {} },
+      { id: "g6", label: "Get a clear plan for my money", weights: {} },
     ],
   },
   {
     id: "q7_coach_fit",
-    prompt: "When you imagine working with a financial coach, what would matter most?",
+    prompt: "What would you want in a money coach?",
+    multi: true,
     answers: [
-      { id: "c1", label: "Someone who reflects my cultural background", weights: {} },
-      { id: "c2", label: "Someone who speaks my language (literally or in life experience)", weights: {} },
-      { id: "c3", label: "Someone who has navigated a similar path", weights: {} },
-      { id: "c4", label: "Deep technical expertise", weights: {} },
-      { id: "c5", label: "Someone who understands my family dynamics", weights: {} },
-      { id: "c6", label: "I'm still figuring out what would matter most", weights: {} },
+      { id: "c1", label: "They share my culture or background", weights: {} },
+      { id: "c2", label: "They speak my language", weights: {} },
+      { id: "c3", label: "They've been where I am", weights: {} },
+      { id: "c4", label: "They really know their stuff", weights: {} },
+      { id: "c5", label: "They understand how family and money mix", weights: {} },
+      { id: "c6", label: "I'm not sure yet", weights: {} },
     ],
   },
   {
     id: "q8_trust",
-    prompt: "What would make you trust a financial coach?",
+    prompt: "What would make you trust a money coach?",
+    multi: true,
     answers: [
-      { id: "t1", label: "They don't sell products or earn commissions", weights: {} },
+      { id: "t1", label: "They have nothing to sell me", weights: {} },
       { id: "t2", label: "They've worked with people like me", weights: {} },
-      { id: "t3", label: "They come recommended by someone I trust", weights: {} },
-      { id: "t4", label: "They're transparent about how they get paid", weights: {} },
-      { id: "t5", label: "I can meet them in person or by video, not just text", weights: {} },
+      { id: "t3", label: "Someone I trust recommends them", weights: {} },
+      { id: "t4", label: "They're upfront about how they get paid", weights: {} },
+      { id: "t5", label: "I can meet them face to face or on video", weights: {} },
     ],
   },
 ];

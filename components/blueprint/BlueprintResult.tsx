@@ -228,8 +228,8 @@ export default function BlueprintResult({
         <ShareCard archetype={archetype} mounted={mounted} />
 
         <p className="mt-10 text-center text-[11.5px] text-muted">
-          Money orientations reflect what&rsquo;s leading your decisions right
-          now. They shift as your life does. Retake the quiz any time.
+          Your money style shows what&rsquo;s leading your choices right now.
+          It shifts as your life does. Retake the quiz any time.
         </p>
       </div>
     </div>
@@ -328,7 +328,7 @@ function ShareCard({
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <p className="font-display text-[18px] font-medium leading-[1.2] text-ink">
-            Share your orientation
+            Share your money style
           </p>
           <p className="mt-[2px] text-[13.5px] leading-[1.5] text-ink-2">
             Pass this to someone who&rsquo;d want to see themselves in it.

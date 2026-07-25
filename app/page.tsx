@@ -101,7 +101,7 @@ export default async function Home() {
               Get your free Money Blueprint <span aria-hidden>&rarr;</span>
             </a>
             <p className="text-[13.5px] tracking-[0.01em] text-muted">
-              7 questions · 2 minutes · see your money archetype instantly — no
+              8 questions · 2 minutes · see your money style instantly — no
               email needed
             </p>
             <a
@@ -129,10 +129,10 @@ export default async function Home() {
                 First, find out how you work with money.
               </h2>
               <p className="mt-6 text-[17px] md:text-[18px] leading-[1.6] text-ink-2">
-                Seven questions, about two minutes. You&rsquo;ll get your money
-                archetype — how you naturally handle money, the strength you
+                Eight questions, about two minutes. You&rsquo;ll get your money
+                style — how you naturally handle money, the strength you
                 already have, and the blind spot that quietly costs you — plus
-                three concrete moves for your next 90 days.
+                three moves for your next 90 days.
               </p>
               <a
                 href="/blueprint"
@@ -141,7 +141,7 @@ export default async function Home() {
                 Take the quiz <span aria-hidden>&rarr;</span>
               </a>
               <p className="mt-4 text-[13px] text-muted">
-                No account needed. Your archetype shows instantly.
+                No account needed. Your money style shows instantly.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-[14px]">

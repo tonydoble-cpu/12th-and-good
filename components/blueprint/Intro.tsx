@@ -34,8 +34,8 @@ export default function Intro({ onStart }: { onStart: () => void }) {
         </h1>
 
         <p className="mx-auto mt-6 max-w-[440px] text-center text-[16px] leading-[1.55] text-ink-2">
-          Discover the money orientation leading your decisions right now — the
-          strength it gives you, and the pattern that may be holding you back.
+          Find your money style — the strength it gives you, and the habit
+          that may be holding you back.
         </p>
 
         <div className="mt-10 flex flex-col items-center gap-3">
@@ -46,7 +46,7 @@ export default function Intro({ onStart }: { onStart: () => void }) {
             Take the quiz — 60 seconds
           </button>
           <p className="text-[12.5px] text-muted">
-            8 questions. Personalized Blueprint at the end.
+            8 quick questions. Your Blueprint at the end.
           </p>
         </div>
 

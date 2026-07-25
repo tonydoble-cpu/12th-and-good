@@ -42,8 +42,10 @@ export default function BlueprintQuiz() {
 
   const archetype = archetypeId ? ARCHETYPES[archetypeId] : null;
 
-  function handlePreAnswer(answer: QuizAnswer) {
-    const next = [...preGateAnswers, answer];
+  // Both handlers take arrays: single-select questions submit one answer,
+  // multi-select questions (coach fit, trust) submit everything picked.
+  function handlePreAnswer(answers: QuizAnswer[]) {
+    const next = [...preGateAnswers, ...answers];
     setPreGateAnswers(next);
     if (preIndex < PRE_GATE_QUESTIONS.length - 1) {
       setPreIndex(preIndex + 1);
@@ -52,8 +54,8 @@ export default function BlueprintQuiz() {
     }
   }
 
-  function handlePostAnswer(answer: QuizAnswer) {
-    const next = [...postGateAnswers, answer];
+  function handlePostAnswer(answers: QuizAnswer[]) {
+    const next = [...postGateAnswers, ...answers];
     setPostGateAnswers(next);
     if (postIndex < POST_GATE_QUESTIONS.length - 1) {
       setPostIndex(postIndex + 1);
@@ -83,7 +85,7 @@ export default function BlueprintQuiz() {
         question={question}
         currentStep={preIndex + 1}
         totalSteps={PRE_GATE_QUESTIONS.length}
-        onAnswer={handlePreAnswer}
+        onSubmit={handlePreAnswer}
       />
     );
   }
@@ -115,7 +117,7 @@ export default function BlueprintQuiz() {
         question={question}
         currentStep={postIndex + 1}
         totalSteps={POST_GATE_QUESTIONS.length}
-        onAnswer={handlePostAnswer}
+        onSubmit={handlePostAnswer}
         accent={archetype.accent}
         subtle
       />
