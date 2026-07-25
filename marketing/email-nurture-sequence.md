@@ -99,7 +99,7 @@ That's why 12th & Good Street only works with conflict-free coaches. No commissi
 If you've ever wanted to talk to someone about money but felt weird about it, this is what we built for you:
 → [link to /coaches]
 
-The intro call is free. No pitch, no pressure. Just a conversation about where you are and what would help.
+No pitch, no pressure. And the promise is in writing: if your first session isn't worth every dollar, you don't pay.
 
 — Tony
 
