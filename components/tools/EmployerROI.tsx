@@ -374,8 +374,9 @@ export default function EmployerROI() {
             </p>
             <p>
               <strong className="text-ink">Program cost ($10/employee/month):</strong>{" "}
-              Matches our Founding Employer Pilot rate, and the market midpoint
-              for programs like this ($3&ndash;$20/employee/month).
+              The market midpoint for programs like this
+              ($3&ndash;$20/employee/month) — a modeling assumption, not a
+              quote. Pilot pricing is set in one call.
             </p>
             <p className="text-muted italic">
               All estimates are directional. Actual results depend on participation
