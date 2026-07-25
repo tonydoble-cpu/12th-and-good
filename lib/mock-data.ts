@@ -34,16 +34,6 @@ export const DEMO_COACH: Coach = {
 
 export const DEMO_SESSION_TYPES: SessionType[] = [
   {
-    id: "session-free-intro",
-    coach_id: DEMO_COACH.id,
-    name: "Free intro call",
-    description:
-      "A quick hello to see if we're the right fit. No plan yet — just a conversation to figure out if this makes sense.",
-    duration_minutes: 20,
-    price_cents: 0,
-    active: true,
-  },
-  {
     id: "session-single",
     coach_id: DEMO_COACH.id,
     name: "Single session",
