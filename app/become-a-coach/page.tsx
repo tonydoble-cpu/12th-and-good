@@ -41,9 +41,8 @@ export default function BecomeACoachPage() {
         <p className="mt-6 text-[17px] leading-[1.7] text-ink-2">
           12th &amp; Good Street is a marketplace for fee-only financial
           coaching, built for people who never got the family playbook. Your
-          clients pay you directly. You keep 100% of your session fee during
-          the founding phase. You never have to hit a product quota, and you
-          never have to pretend a sales pitch is advice.
+          clients pay you directly. You never have to hit a product quota,
+          and you never have to pretend a sales pitch is advice.
         </p>
 
         <h2 className="mt-12 font-display text-[24px] font-medium text-ink">
