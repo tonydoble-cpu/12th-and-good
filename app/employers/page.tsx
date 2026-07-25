@@ -340,8 +340,9 @@ export default function EmployersPage() {
               <h3 className="font-display text-[24px] font-medium text-ink">
                 Founding Employer Pilot
               </h3>
-              <p className="font-display text-[26px] text-ink">
-                $10<span className="text-[15px] text-ink-2"> / employee / month</span>
+              <p className="font-display text-[22px] text-ink">
+                Flat per-employee rate
+                <span className="text-[15px] text-ink-2"> · quoted in one call</span>
               </p>
             </div>
             <ul className="mt-4 grid grid-cols-1 gap-x-8 sm:grid-cols-2 text-sm text-ink-2">
