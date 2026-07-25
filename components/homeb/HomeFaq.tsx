@@ -12,7 +12,7 @@ const FAQS = [
   },
   {
     q: "How does 12th & Good Street make money?",
-    a: "You pay your coach for the session — that's 100% of how they're paid. During our founding phase the platform takes $0. We never earn from products, referrals, or your data. The full model is on our How We Make Money page.",
+    a: "You pay your coach for the session — that's 100% of how they're paid. Any platform fee is flat and disclosed, shown as its own line — never hidden in the price. We never earn from products, referrals, or your data. The full model is on our How We Make Money page.",
   },
   {
     q: "What actually happens in a session?",
