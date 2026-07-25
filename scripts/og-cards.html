@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../node_modules/@fontsource/newsreader/files/newsreader-latin-500-normal.woff2") format("woff2");
+    font-weight: 500;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../node_modules/@fontsource/newsreader/files/newsreader-latin-400-italic.woff2") format("woff2");
+    font-weight: 400; font-style: italic;
+  }
+  @font-face {
+    font-family: "Instrument Sans";
+    src: url("../node_modules/@fontsource/instrument-sans/files/instrument-sans-latin-500-normal.woff2") format("woff2");
+    font-weight: 500;
+  }
+  * { margin: 0; box-sizing: border-box; }
+  body { font-family: "Instrument Sans", sans-serif; }
+
+  .card {
+    width: 1200px; height: 630px; position: relative; overflow: hidden;
+    background: #f5f4f1; padding: 64px 72px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  /* the road: a corner path across the card, quiet */
+  .road {
+    position: absolute; right: -40px; top: -40px; width: 560px; height: 560px;
+    opacity: 0.1;
+  }
+  .eyebrow {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 22px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #71757c; font-weight: 500;
+  }
+  .eyebrow .dot { width: 14px; height: 14px; border-radius: 3px; transform: rotate(45deg); }
+  h1 {
+    font-family: "Newsreader", Georgia, serif; font-weight: 500;
+    font-size: 124px; line-height: 1.02; letter-spacing: -0.02em; color: #191a1c;
+    max-width: 860px;
+  }
+  .tagline {
+    font-family: "Newsreader", Georgia, serif; font-style: italic; font-weight: 400;
+    font-size: 40px; color: #3d4147; margin-top: 22px; max-width: 820px; line-height: 1.25;
+  }
+  .footer {
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 16px;
+    font-family: "Newsreader", Georgia, serif; font-size: 34px; font-weight: 500; color: #191a1c;
+  }
+  .brand em { font-weight: 400; }
+  .cta { font-size: 24px; color: #71757c; font-weight: 500; }
+  .cta b { color: #3a5a7d; }
+  .accentbar { position: absolute; left: 0; top: 0; bottom: 0; width: 18px; }
+</style>
+</head>
+<body>
+<template id="tpl">
+  <div class="card">
+    <div class="accentbar"></div>
+    <svg class="road" viewBox="0 0 32 32" fill="none">
+      <path d="M8 2 V15 A9.5 9.5 0 0 0 17.5 24.5 H32" stroke="#191a1c" stroke-width="4.6" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="eyebrow"><span class="dot"></span><span class="eyebrow-text"></span></div>
+      <h1></h1>
+      <div class="tagline"></div>
+    </div>
+    <div class="footer">
+      <div class="brand">
+        <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+          <path d="M8 4.5 V15 A9.5 9.5 0 0 0 17.5 24.5 H27" stroke="#3a5a7d" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="17.5" cy="12.3" r="4" fill="#9c5b3c"/>
+        </svg>
+        <span>12th <em>&amp;</em> Good Street</span>
+      </div>
+      <div class="cta">What&rsquo;s your money style? &nbsp;<b>12thandgood.com/blueprint</b></div>
+    </div>
+  </div>
+</template>
+<div id="mount"></div>
+<script>
+  const CARDS = [
+    { id: "bridge",     name: "The Bridge",     tagline: "You think in generations, not quarters.",      accent: "#3a5a7d", eyebrow: "My money style" },
+    { id: "builder",    name: "The Builder",    tagline: "You’re always building the next level.",        accent: "#2f5741", eyebrow: "My money style" },
+    { id: "guardian",   name: "The Guardian",   tagline: "You protect what matters.",                     accent: "#6b4423", eyebrow: "My money style" },
+    { id: "reclaimer",  name: "The Reclaimer",  tagline: "You’re rewriting the story.",                   accent: "#7a3b3b", eyebrow: "My money style" },
+    { id: "steward",    name: "The Steward",    tagline: "You’re building something that lasts.",         accent: "#4a3a5c", eyebrow: "My money style" },
+    { id: "pathfinder", name: "The Pathfinder", tagline: "You’re finding your own direction.",            accent: "#2f5760", eyebrow: "My money style" },
+    { id: "blueprint",  name: "What’s your money style?", tagline: "Walk 8 blocks. See what’s driving your money choices — free, no email needed.", accent: "#9c5b3c", eyebrow: "The Money Blueprint" },
+  ];
+  const mount = document.getElementById("mount");
+  for (const c of CARDS) {
+    const node = document.getElementById("tpl").content.cloneNode(true);
+    const card = node.querySelector(".card");
+    card.dataset.id = c.id;
+    node.querySelector(".accentbar").style.background = c.accent;
+    node.querySelector(".eyebrow .dot").style.background = c.accent;
+    node.querySelector(".eyebrow-text").textContent = c.eyebrow;
+    node.querySelector("h1").textContent = c.name;
+    if (c.id === "blueprint") node.querySelector("h1").style.fontSize = "92px";
+    node.querySelector(".tagline").textContent = c.tagline;
+    mount.appendChild(node);
+  }
+</script>
+</body>
+</html>

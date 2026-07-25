@@ -414,10 +414,12 @@ function ShareCard({
 
   async function share() {
     const shareText = `Right now, I'm leading with ${archetype.name}: ${archetype.shareLine} — @12thandgood`;
+    // ?style= makes the link unfurl with this style's share card (see
+    // app/blueprint generateMetadata + public/og/).
     const shareUrl =
       typeof window !== "undefined"
-        ? `${window.location.origin}/blueprint`
-        : "https://12thandgood.com/blueprint";
+        ? `${window.location.origin}/blueprint?style=${archetype.id}`
+        : `https://12thandgood.com/blueprint?style=${archetype.id}`;
     if (typeof navigator !== "undefined" && "share" in navigator) {
       try {
         await (navigator as Navigator).share({
