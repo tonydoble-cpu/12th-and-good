@@ -27,11 +27,11 @@ export default function StickyBookBar({ nextIso }: Props) {
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-50 transition-transform duration-300 md:bottom-auto md:top-[64px]"
+      className="fixed inset-x-0 bottom-0 z-50 px-0 pb-0 transition-transform duration-300 md:px-6 md:pb-5"
       style={{ transform: visible ? "translateY(0)" : "translateY(140%)" }}
       aria-hidden={!visible}
     >
-      <div className="mx-auto flex max-w-[720px] items-center justify-between gap-3 border border-line bg-white/95 px-[18px] py-[11px] shadow-[0_18px_44px_-18px_rgba(20,30,45,0.45)] backdrop-blur-md max-md:border-x-0 md:mx-auto md:rounded-full">
+      <div className="mx-auto flex max-w-[720px] items-center justify-between gap-3 border border-line bg-white/95 px-[18px] py-[11px] shadow-[0_18px_44px_-18px_rgba(20,30,45,0.45)] backdrop-blur-md max-md:border-x-0 md:rounded-full">
         <div className="min-w-0">
           <p className="truncate text-[13.5px] font-semibold text-ink">
             Talk to Tony{nextLabel ? ` — next opening ${nextLabel}` : ""}
