@@ -78,7 +78,7 @@ const HOW = [
   {
     n: "02",
     title: "Your team books privately",
-    body: "Employees choose a coach and book on their own time. The cost is covered by you, and nobody has to ask permission or explain why.",
+    body: "Employees book time with their coach privately, on their own schedule. The cost is covered by you, and nobody has to ask permission or explain why.",
   },
   {
     n: "03",

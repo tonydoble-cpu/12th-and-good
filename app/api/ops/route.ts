@@ -11,14 +11,14 @@ import { createServiceRoleClient } from "@/lib/supabase/server";
 //     free intro)
 //   - cleanup-e2e: remove e2e-*@example.com test data
 //
-// Security: prefers OPS_TOKEN from the environment; the hardcoded fallback
-// exists only until that env var is set (private repo, service-role scope
-// is read-bookings/write-notes/slots — no payment surface). Rotate by
-// setting OPS_TOKEN in Vercel.
-const FALLBACK_TOKEN = "007b178ca1bdca3eebc88f661ecd2dc0df1a97796c77fbb0";
-
+// Security: requires OPS_TOKEN from the environment. No fallback — a
+// hardcoded secret in source is a burned secret the moment it's committed,
+// full stop. If OPS_TOKEN isn't set, this endpoint is unreachable (fails
+// closed) rather than falling back to a known value. Set OPS_TOKEN in
+// Vercel before relying on this endpoint again.
 function authorized(token: unknown) {
-  const expected = process.env.OPS_TOKEN ?? FALLBACK_TOKEN;
+  const expected = process.env.OPS_TOKEN;
+  if (!expected) return false;
   return typeof token === "string" && token === expected;
 }
 

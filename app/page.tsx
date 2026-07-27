@@ -28,8 +28,8 @@ const STATS = [
 const HOW = [
   {
     n: "01",
-    title: "We scope the program together",
-    body: "Headcount, locations, shift patterns. There's no standard package — we figure out the right size.",
+    title: "See your price, no call required",
+    body: "Your price is set by headcount, not negotiated — see it below. Then we get your coach ready and set a launch date.",
   },
   {
     n: "02",

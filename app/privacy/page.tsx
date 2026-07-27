@@ -29,7 +29,7 @@ const SECTIONS = [
   {
     h: "What we never do",
     body: [
-      "We never sell your data. Not to advertisers, not to lead brokers, not to financial product companies. This is the business model, not a marketing line — see How we make money.",
+      "We never sell your data. Not to advertisers, not to lead brokers, not to financial product companies. This is the business model, not a marketing line — see our Pricing page.",
       "We never share your individual quiz answers with an employer. If your company brings 12th & Good Street to your workplace, your employer sees participation in aggregate only — never who said what, never who booked.",
       "We never use your information to sell you financial products. We don't have any.",
     ],

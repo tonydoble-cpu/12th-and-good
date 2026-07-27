@@ -58,16 +58,16 @@ export default function AboutPage() {
 
         <div className="mt-12 flex flex-wrap gap-4">
           <a
-            href="/blueprint"
+            href="/employers#contact"
             className="inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[22px] py-[13px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
           >
-            Get your free Money Blueprint
+            Talk to us about your team
           </a>
           <a
-            href="/employers#pricing"
+            href="/blueprint"
             className="inline-flex items-center gap-[6px] px-2 py-[13px] text-[15px] font-semibold text-accent"
           >
-            How we make money &rarr;
+            Try the free Money Blueprint &rarr;
           </a>
         </div>
       </Container>
