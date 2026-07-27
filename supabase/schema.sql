@@ -37,6 +37,25 @@ create table if not exists blueprint_leads (
 alter table blueprint_leads enable row level security;
 
 -- ---------------------------------------------------------------------------
+-- employer_inquiries: submissions from the /employers "Talk to us" contact
+-- form — the primary conversion point for the annual-program business.
+-- Written by /api/employer-inquiry using the service-role key. Same RLS
+-- posture as blueprint_leads: enabled, no public policies, server-only
+-- access. This table has no relationship to coaches/bookings — it's
+-- pre-contract sales pipeline, not program delivery.
+-- ---------------------------------------------------------------------------
+create table if not exists employer_inquiries (
+  id uuid primary key default gen_random_uuid(),
+  name text,
+  company text,
+  email text not null,
+  team_size text,
+  message text,
+  created_at timestamptz not null default now()
+);
+alter table employer_inquiries enable row level security;
+
+-- ---------------------------------------------------------------------------
 -- coaches: public profile. `user_id` links to the Supabase auth user that's
 -- allowed to log into /coach for this row.
 -- ---------------------------------------------------------------------------

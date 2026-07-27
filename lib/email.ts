@@ -62,10 +62,13 @@ export async function sendEmail({
   }
 }
 
-/** Fire-and-forget note to the founder. Never blocks the caller's response. */
-export function notifyFounder(subject: string, html: string) {
+/** Fire-and-forget note to the founder. Never blocks the caller's response.
+ * Pass replyTo when the notification promises "just reply to this email" —
+ * e.g. employerInquiryFounderEmail's copy claims exactly that, so its caller
+ * must pass the submitter's address here or the promise is a lie. */
+export function notifyFounder(subject: string, html: string, replyTo?: string) {
   if (!isEmailConfigured) return;
-  void sendEmail({ to: NOTIFY_TO, subject, html });
+  void sendEmail({ to: NOTIFY_TO, subject, html, replyTo });
 }
 
 // ---------------------------------------------------------------------------
@@ -120,6 +123,45 @@ ${
     : "<p><b>To do:</b> send the video link before the call.</p>"
 }
 <p>Your AI prep brief for this session will follow.</p>`,
+  };
+}
+
+/** Notifies Tony the moment an employer submits the /employers contact form.
+ * This is the top of the entire B2B sales funnel — send it plainly, with
+ * everything needed to reply without opening a dashboard. */
+export function employerInquiryFounderEmail(opts: {
+  name: string | null;
+  company: string | null;
+  email: string;
+  teamSize: string | null;
+  message: string | null;
+}) {
+  return {
+    subject: `New employer inquiry${opts.company ? `: ${opts.company}` : ""}`,
+    html: `
+<p><b>${opts.name ?? "(no name given)"}</b>${opts.company ? ` · ${opts.company}` : ""}<br/>
+${opts.email}${opts.teamSize ? ` · team size: ${opts.teamSize}` : ""}</p>
+${opts.message ? `<p><b>What they're hoping to offer:</b><br/>${opts.message.replace(/\n/g, "<br/>")}</p>` : "<p>(No message — just the basics.)</p>"}
+<p><b>Reply directly to this email</b> — it's set to reply-to their address.</p>`,
+  };
+}
+
+/** Sent back to the employer contact immediately, so "we'll be in touch"
+ * is a promise that's actually kept the moment they submit, not just UI copy. */
+export function employerInquiryConfirmationEmail(opts: {
+  name: string | null;
+  company: string | null;
+}) {
+  const name = opts.name ? `Hi ${opts.name}` : "Hi";
+  return {
+    subject: "Got it — we'll be in touch",
+    html: `
+<p>${name},</p>
+<p>Thanks for reaching out${opts.company ? ` about ${opts.company}` : ""} — this
+went straight to Tony, and a real person will reply, not a sequence.</p>
+<p>No pitch deck queued up on our end — just expect a note back to set up a
+real conversation about your team.</p>
+<p>— 12th &amp; Good Street</p>`,
   };
 }
 
