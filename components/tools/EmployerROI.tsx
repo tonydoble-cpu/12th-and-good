@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import EmailCapture from "@/components/EmailCapture";
+import { estimatedAnnualProgramCost } from "@/lib/program-pricing";
 
 /* ------------------------------------------------------------------ */
 /* Formatting helpers                                                  */
@@ -28,7 +29,6 @@ const ASSUMPTIONS = {
   dailyCostMultiple: 1 / 260, // salary / 260 working days
   healthcareSavingsPerPerson: 271, // Financial Finesse/Fortune 100 study: $271.50/employee/year
   stressedTurnoverMultiple: 2, // PwC: financially stressed employees are 2x as likely to job search
-  programCostPerEmployee: 10, // Mid-range: $3-$20/employee/month → $10 median
   // Only count a quarter of modeled savings as realized. Un-haircut models
   // in this category produce 15-20x ROI numbers that experienced HR buyers
   // read as fantasy (the biggest incumbent publicly claims ~3x). A number a
@@ -71,8 +71,9 @@ export default function EmployerROI() {
     // --- Healthcare cost reduction ---
     const healthcareSavings = stressedCount * A.healthcareSavingsPerPerson;
 
-    // --- Program cost ---
-    const annualProgramCost = employees * A.programCostPerEmployee * 12;
+    // --- Program cost --- real firm-tier annual pricing, not a flat
+    // per-employee-per-month assumption (see lib/program-pricing.ts).
+    const annualProgramCost = estimatedAnnualProgramCost(employees);
 
     // --- Totals (with conservatism haircut) ---
     const modeledSavings =
@@ -373,10 +374,13 @@ export default function EmployerROI() {
               we&rsquo;re wrong, we&rsquo;d rather be wrong low.
             </p>
             <p>
-              <strong className="text-ink">Program cost ($10/employee/month):</strong>{" "}
-              The market midpoint for programs like this
-              ($3&ndash;$20/employee/month) — a modeling assumption, not a
-              quote. Pilot pricing is set in one call.
+              <strong className="text-ink">Program cost:</strong> Our actual
+              published annual pricing for your size — a firm tier, not a
+              per-employee-per-month estimate. See the calculator on our{" "}
+              <a href="/employers#pricing" className="text-accent hover:underline">
+                pricing page
+              </a>{" "}
+              for the exact number and what it includes.
             </p>
             <p className="text-muted italic">
               All estimates are directional. Actual results depend on participation

@@ -30,7 +30,7 @@ export default function SearchBar({
       </div>
       <div className="flex items-center pr-[9px]">
         <Link
-          href="/coaches"
+          href="/employers"
           aria-label="Search coaches"
           style={{ width: height, height }}
           className="flex items-center justify-center rounded-full bg-accent text-[21px] text-white transition-colors hover:bg-accent-hover"

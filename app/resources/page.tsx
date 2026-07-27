@@ -100,17 +100,18 @@ export default function ResourcesPage() {
       <section className="border-t border-line bg-surface py-16">
         <Container width="narrow" className="text-center">
           <h2 className="font-display text-[24px] md:text-[30px] font-medium text-ink">
-            Want to go deeper?
+            Want this for your whole team?
           </h2>
           <p className="mx-auto mt-3 max-w-[480px] text-[16px] text-ink-2">
-            These tools can get you started. A coach can help you figure out
-            the specifics — and And the promise stands: if your first session isn't worth it, you don't pay.
+            These tools can get anyone started on their own. A coach in the
+            building — grounded in your actual plan documents — is what gets
+            people the rest of the way.
           </p>
           <Link
-            href="/coaches"
+            href="/employers"
             className="mt-6 inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
           >
-            Book a session <span aria-hidden>&rarr;</span>
+            See the employer program <span aria-hidden>&rarr;</span>
           </Link>
         </Container>
       </section>

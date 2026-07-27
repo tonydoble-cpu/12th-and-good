@@ -22,7 +22,7 @@ export default function CoachAIPage() {
               Money Coach
             </span>
             <Link
-              href="/coaches"
+              href="/employers"
               className="inline-flex items-center gap-[6px] rounded-lg bg-accent px-4 py-2 text-[13px] font-semibold text-white shadow-[0_4px_12px_-4px_rgba(58,90,125,0.5)] transition-all hover:-translate-y-px hover:bg-accent-hover"
             >
               Talk to a human <span aria-hidden>&rarr;</span>

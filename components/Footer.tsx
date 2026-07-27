@@ -14,7 +14,7 @@ const wordmark = (
 );
 
 const tagline =
-  "© 2026 12th & Good Street. The marketplace for better money conversations.";
+  "© 2026 12th & Good Street. Financial wellness that people actually use.";
 
 export default function Footer({
   variant = "full",
@@ -38,20 +38,20 @@ export default function Footer({
         <div className="max-w-[290px]">
           {wordmark}
           <p className="mt-[15px] text-[13px] leading-[1.6]">
-            The marketplace for better money conversations.
+            Financial wellness that people actually use.
           </p>
         </div>
         <div className="flex gap-[60px] text-[13.5px]">
           <div className="flex flex-col gap-3">
-            <span className="mb-[3px] font-semibold text-white">Platform</span>
-            <Link href="/coaches" className="text-[#aab0b9] hover:text-white">
-              Browse coaches
-            </Link>
+            <span className="mb-[3px] font-semibold text-white">Program</span>
             <Link href="/employers" className="text-[#aab0b9] hover:text-white">
               For employers
             </Link>
-            <Link href="/become-a-coach" className="text-[#aab0b9] hover:text-white">
-              Become a coach
+            <Link href="/employers#pricing" className="text-[#aab0b9] hover:text-white">
+              Pricing
+            </Link>
+            <Link href="/employers/roi-calculator" className="text-[#aab0b9] hover:text-white">
+              ROI calculator
             </Link>
           </div>
           <div className="flex flex-col gap-3">
@@ -61,9 +61,6 @@ export default function Footer({
             </Link>
             <Link href="/blog" className="text-[#aab0b9] hover:text-white">
               Blog
-            </Link>
-            <Link href="/how-we-make-money" className="text-[#aab0b9] hover:text-white">
-              How we make money
             </Link>
             <Link href="/about" className="text-[#aab0b9] hover:text-white">
               About

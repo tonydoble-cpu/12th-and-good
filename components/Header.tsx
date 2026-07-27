@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default function Header({
-  cta = { label: "Get your Blueprint", href: "/blueprint" },
+  cta = { label: "Talk to us", href: "/employers#contact" },
 }: Props) {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-[rgba(245,244,241,0.82)] backdrop-blur-md">
@@ -24,22 +24,16 @@ export default function Header({
 
         <nav className="hidden md:flex items-center gap-[30px]">
           <Link
-            href="/coaches"
-            className="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
-          >
-            Browse coaches
-          </Link>
-          <Link
-            href="/#how"
-            className="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
-          >
-            How it works
-          </Link>
-          <Link
             href="/employers"
             className="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
           >
             For employers
+          </Link>
+          <Link
+            href="/employers#program"
+            className="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
+          >
+            How it works
           </Link>
           <Link
             href="/resources"
@@ -48,19 +42,22 @@ export default function Header({
             Resources
           </Link>
           <Link
-            href="/coach-ai"
+            href="/employers#pricing"
             className="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
           >
-            Money Coach
+            Pricing
+          </Link>
+          <Link
+            href="/about"
+            className="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
+          >
+            About
           </Link>
           <Link
             href="/blog"
             className="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
           >
             Blog
-          </Link>
-          <Link href="/become-a-coach" className="text-sm font-semibold text-ink">
-            Become a coach
           </Link>
           {cta && (
             <Link

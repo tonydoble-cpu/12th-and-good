@@ -48,7 +48,7 @@ export default async function CoachProfilePage() {
       <Container width="wide" className="pt-[26px] pb-[88px]">
         {/* breadcrumb */}
         <div className="mb-[26px] text-[13px] text-muted">
-          <a href="/coaches" className="text-muted no-underline">
+          <a href="/employers" className="text-muted no-underline">
             Browse coaches
           </a>
           &nbsp;/&nbsp;
@@ -262,7 +262,7 @@ export default async function CoachProfilePage() {
             not by a product company. That changes the conversation.
           </p>
           <a
-            href="/coaches"
+            href="/employers"
             className="mt-5 inline-flex items-center gap-[6px] text-[15px] font-semibold text-white"
           >
             Browse all coaches <span aria-hidden>&rarr;</span>

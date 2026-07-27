@@ -151,7 +151,7 @@ export default function WaitingRoom({
           {/* Quick links */}
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href="/coach-ai"
+              href="/resources"
               className="inline-flex items-center gap-2 rounded-xl border border-[#2a3d52] px-4 py-2.5 text-[13px] font-medium text-[#8fb0d0] transition-all hover:border-[#3a5a7d] hover:text-white"
             >
               <svg

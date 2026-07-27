@@ -113,7 +113,7 @@ export default async function Home() {
               email needed
             </p>
             <a
-              href="/coaches"
+              href="/employers"
               className="text-[14.5px] font-semibold text-accent hover:text-accent-hover"
             >
               or browse coaches <span aria-hidden>&rarr;</span>
@@ -324,7 +324,7 @@ export default async function Home() {
                 ))}
               </ul>
               <a
-                href="/coaches"
+                href="/employers"
                 className="mt-4 inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
               >
                 Browse coaches <span aria-hidden>&rarr;</span>
@@ -445,7 +445,7 @@ export default async function Home() {
               Get your free Money Blueprint <span aria-hidden>&rarr;</span>
             </a>
             <a
-              href="/coaches"
+              href="/employers"
               className="inline-flex items-center gap-[9px] rounded-[9px] border border-white/30 bg-transparent px-[25px] py-[14px] text-[15px] font-semibold text-white transition-all hover:border-white hover:bg-white/10"
             >
               Browse coaches

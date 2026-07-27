@@ -8,19 +8,19 @@ import { useState } from "react";
 const FAQS = [
   {
     q: "Is this financial advice?",
-    a: "It's coaching — guidance, education, and a written plan you act on yourself. Your coach never takes control of your money, never sells you an investment, and never earns a commission from anything you decide. That's the whole point.",
+    a: "It's coaching and education — plain-language guidance and a written plan your people act on themselves. We never take control of anyone's money, never sell an investment, and never earn a commission from anything they decide. That's the whole point.",
   },
   {
-    q: "How does 12th & Good Street make money?",
-    a: "You pay your coach for the session — that's 100% of how they're paid. Any platform fee is flat and disclosed, shown as its own line — never hidden in the price. We never earn from products, referrals, or your data. The full model is on our How We Make Money page.",
+    q: "What does it cost us, exactly?",
+    a: "One flat annual fee, sized to your headcount — not a per-employee meter that grows as people use it. Pricing is published, not quoted behind a form: see the calculator on our employers page.",
   },
   {
-    q: "What actually happens in a session?",
-    a: "You tell us what you're working on when you book, so Tony shows up prepared. Sixty minutes over video with your real numbers and real questions, and you leave with a short written plan in plain language — steps you can start the same week.",
+    q: "What do you need from our HR or IT team to start?",
+    a: "Nothing to integrate, no employee data file, no system connection, no IT review. We show up — on site and on video — inside meetings you're already holding.",
   },
   {
-    q: "What if it's not worth it?",
-    a: "Then you don't pay. That's the 12th & Good promise, in writing: if your first session isn't worth every dollar, say so and we tear up the bill.",
+    q: "What do we see on our end?",
+    a: "Aggregate participation and themes, reported quarterly. Never a name, a number, or a situation — and no theme is reported unless at least five people raised it.",
   },
 ];
 

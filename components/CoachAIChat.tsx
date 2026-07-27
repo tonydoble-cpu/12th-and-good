@@ -258,7 +258,7 @@ export default function CoachAIChat() {
         <p className="mx-auto mt-2.5 max-w-[680px] text-center text-[11.5px] text-muted">
           AI assistant, not a financial advisor. For specific decisions about
           your money, talk to a{" "}
-          <a href="/coaches" className="text-accent hover:underline">
+          <a href="/employers" className="text-accent hover:underline">
             12th & Good Street coach
           </a>{" "}
           or your own licensed professional.

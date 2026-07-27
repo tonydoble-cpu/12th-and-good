@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import EmployerContactForm from "@/components/EmployerContactForm";
+import ProgramPricingCalculator from "@/components/tools/ProgramPricingCalculator";
 
 const STATS = [
   {
@@ -317,79 +318,48 @@ export default function EmployersPage() {
         </Container>
       </section>
 
-      {/* plans */}
-      <section className="reveal py-24">
+      {/* pricing — firm annual tiers, published, not quoted behind a form */}
+      <section className="reveal py-24" id="pricing">
         <Container>
           <div className="mb-5 text-center">
             <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
               Pricing
             </p>
             <h2 className="mt-4 font-display text-[28px] md:text-[40px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
-              Two ways to fund the program.
+              A flat annual fee, sized to your team.
             </h2>
           </div>
-          <p className="mx-auto mb-8 max-w-[560px] text-center text-[15px] text-ink-2">
-            Start with a pilot you can approve without a committee — then
-            scale what works.
+          <p className="mx-auto mb-8 max-w-[620px] text-center text-[15px] text-ink-2">
+            One annual fee. Every employee can use it. No per-user meter, and
+            no surprise bill when engagement grows. Firm tiers, not
+            ranges — the number below is the number for your size.
           </p>
 
-          {/* Founding pilot — a concrete, decidable offer. HR buyers can't
-              take "flexible and negotiable" into a budget meeting. */}
-          <div className="mx-auto mb-12 max-w-[820px] rounded-2xl border-2 border-accent bg-accent-tint p-8">
-            <div className="flex flex-wrap items-baseline justify-between gap-3">
-              <h3 className="font-display text-[24px] font-medium text-ink">
-                Founding Employer Pilot
-              </h3>
-              <p className="font-display text-[22px] text-ink">
-                Flat per-employee rate
-                <span className="text-[15px] text-ink-2"> · quoted in one call</span>
+          <div className="mx-auto grid max-w-[960px] grid-cols-1 gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
+            <div>
+              <ProgramPricingCalculator />
+              <p className="mt-4 text-[12.5px] leading-[1.6] text-ink-2">
+                Under 50 people, most teams start with the{" "}
+                <b className="text-ink">Founding Partner Pilot</b> — $9,500
+                for 90 days, with $5,000 credited toward year one if you
+                continue within 30 days ($12,000 for a larger team or a
+                second location).
               </p>
             </div>
-            <ul className="mt-4 grid grid-cols-1 gap-x-8 sm:grid-cols-2 text-sm text-ink-2">
-              {[
-                "One team or department — up to 50 people",
-                "90 days, cancel anytime, no long contract",
-                "Money Blueprint access for every employee",
-                "A pool of 1:1 sessions with a fee-only coach",
-                "Aggregate participation reporting (never individual data)",
-                "Founding-partner rate locked for year one if you continue",
-              ].map((item) => (
-                <li key={item} className="flex gap-[10px] py-[5px]">
-                  <span className="dot mt-[7px]" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <a
-              href="#contact"
-              className="mt-6 inline-flex w-full items-center justify-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover sm:w-auto"
-            >
-              Start the pilot conversation
-            </a>
-          </div>
-          <div className="mx-auto grid max-w-[820px] grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-line bg-surface p-9 transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.7,0.3,1)] hover:-translate-y-[5px] hover:border-[#dcd8cf] hover:shadow-[0_26px_54px_-30px_rgba(20,30,45,0.42)]">
-              <h3 className="font-display text-[22px] font-medium text-ink">
-                Session pool
+            <div className="rounded-2xl border border-line bg-surface p-8">
+              <h3 className="font-display text-[18px] font-medium text-ink mb-5">
+                Every tier includes
               </h3>
-              <p className="mt-[10px] min-h-[52px] text-[14.5px] text-muted">
-                Fund a block of sessions your whole team can draw from.
-                A good way to start and see how people use it.
-              </p>
-              <div className="mt-4 mb-1 font-display text-[30px] text-ink">
-                Per session
-              </div>
-              <p className="text-[13px] text-muted">
-                You fund a pool &middot; team books as needed
-              </p>
-              <ul className="my-[22px] space-y-0 text-sm text-ink-2">
+              <ul className="space-y-0 text-sm text-ink-2">
                 {[
-                  "No per-employee commitment",
-                  "Top up anytime",
-                  "Includes group sessions",
-                  "Aggregate usage reporting",
+                  "Private 1:1 sessions with the same coach every time — a spouse or partner is always welcome",
+                  "On-site presence, not a login — inside meetings you already hold, plus a table at lunch",
+                  "Answers grounded in your own plan documents — your real match, deductible, and vesting schedule",
+                  "A written plan after every conversation, theirs to keep — we don't keep a copy",
+                  "Quarterly reporting on participation and themes — never a name, a number, or a situation",
+                  "Nothing on file — no employee data stored, nothing to integrate, nothing to breach",
                 ].map((item) => (
-                  <li key={item} className="flex gap-[10px] py-[6px]">
+                  <li key={item} className="flex gap-[10px] py-[8px] border-t border-[#f1efe9] first:border-t-0">
                     <span className="dot mt-[7px]" />
                     {item}
                   </li>
@@ -397,49 +367,9 @@ export default function EmployersPage() {
               </ul>
               <a
                 href="#contact"
-                className="flex w-full items-center justify-center gap-[9px] rounded-[9px] border border-line px-[25px] py-[14px] text-[15px] font-semibold text-ink transition-all hover:border-ink hover:bg-white"
+                className="mt-6 flex w-full items-center justify-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
               >
-                Scope a pool
-              </a>
-            </div>
-            <div className="rounded-2xl border border-accent bg-surface p-9 shadow-[0_24px_54px_-32px_rgba(58,90,125,0.5)]">
-              <div className="flex items-center justify-between">
-                <h3 className="font-display text-[22px] font-medium text-ink">
-                  Per-seat
-                </h3>
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#dde5ec] bg-accent-tint px-[14px] py-[7px] text-[12.5px] font-medium text-ink-2">
-                  <span className="dot" />
-                  Full program
-                </span>
-              </div>
-              <p className="mt-[10px] min-h-[52px] text-[14.5px] text-muted">
-                Give every employee standing access to the full financial
-                wellness program as an ongoing benefit.
-              </p>
-              <div className="mt-4 mb-1 font-display text-[30px] text-ink">
-                Per employee / mo
-              </div>
-              <p className="text-[13px] text-muted">
-                Ongoing access &middot; predictable budgeting
-              </p>
-              <ul className="my-[22px] space-y-0 text-sm text-ink-2">
-                {[
-                  "Every employee covered",
-                  "Money Blueprint for everyone",
-                  "Group sessions & lunch-and-learns",
-                  "Onboarding & comms support",
-                ].map((item) => (
-                  <li key={item} className="flex gap-[10px] py-[6px]">
-                    <span className="dot mt-[7px]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#contact"
-                className="flex w-full items-center justify-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
-              >
-                Scope per-seat <span aria-hidden>&rarr;</span>
+                Talk to us <span aria-hidden>&rarr;</span>
               </a>
             </div>
           </div>

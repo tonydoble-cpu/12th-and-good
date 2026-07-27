@@ -59,7 +59,7 @@ export default async function AccountPage() {
             <p className="text-sm text-foreground-secondary mb-4">
               Nothing on the calendar yet.
             </p>
-            <ButtonLink href="/tony">Book a Session</ButtonLink>
+            <ButtonLink href="/about">Book a Session</ButtonLink>
           </div>
         ) : (
           <div className="space-y-3">

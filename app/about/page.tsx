@@ -64,7 +64,7 @@ export default function AboutPage() {
             Get your free Money Blueprint
           </a>
           <a
-            href="/how-we-make-money"
+            href="/employers#pricing"
             className="inline-flex items-center gap-[6px] px-2 py-[13px] text-[15px] font-semibold text-accent"
           >
             How we make money &rarr;
