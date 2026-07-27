@@ -72,8 +72,8 @@ const PROGRAM = [
 const HOW = [
   {
     n: "01",
-    title: "We scope the program together",
-    body: "We'll talk about your team's size, what you're already offering, and what would actually be useful. There's no standard package — we figure out the right fit.",
+    title: "See your price, no call required",
+    body: "Your tier is set by headcount, not negotiated — check the calculator above. When you're ready, we get your coach up to speed on your actual benefits and plan documents, and set a launch date.",
   },
   {
     n: "02",
