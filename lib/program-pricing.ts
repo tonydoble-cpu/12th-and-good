@@ -13,7 +13,6 @@ export type TierResult =
       isPilot?: boolean;
       price: number;
       label: string;
-      onsiteDays: number;
       pool: number;
       clinics: string;
       locations: number;
@@ -42,7 +41,6 @@ export function priceForHeadcount(n: number): TierResult {
       isPilot: true,
       price: 9500,
       label: "Founding Partner Pilot · 90 days",
-      onsiteDays: 3,
       pool: 25,
       clinics: "1",
       locations: 1,
@@ -57,7 +55,6 @@ export function priceForHeadcount(n: number): TierResult {
       soft: false,
       price: 18000,
       label: "Annual Program — Starter",
-      onsiteDays: 4,
       pool: 25,
       clinics: "4/yr",
       locations: 1,
@@ -71,7 +68,6 @@ export function priceForHeadcount(n: number): TierResult {
       soft: false,
       price: 24000,
       label: "Annual Program — Core",
-      onsiteDays: 6,
       pool: 50,
       clinics: "4/yr",
       locations: 1,
@@ -85,7 +81,6 @@ export function priceForHeadcount(n: number): TierResult {
       soft: false,
       price: 32000,
       label: "Annual Program — Growth",
-      onsiteDays: 8,
       pool: 88,
       clinics: "4/yr",
       locations: 2,
@@ -99,7 +94,6 @@ export function priceForHeadcount(n: number): TierResult {
       soft: false,
       price: 40000,
       label: "Annual Program — Scale",
-      onsiteDays: 10,
       pool: 125,
       clinics: "4/yr",
       locations: 3,
@@ -113,7 +107,7 @@ export function priceForHeadcount(n: number): TierResult {
       soft: true,
       band: "Custom — Enterprise tier",
       note:
-        "Programs above 500 people are scoped together, not banded — usually starting above $40,000/year depending on shifts, locations, and on-site days.",
+        "Programs above 500 people are scoped together, not banded — usually starting above $40,000/year depending on shifts, locations, and rollout logistics.",
     };
   }
   return {

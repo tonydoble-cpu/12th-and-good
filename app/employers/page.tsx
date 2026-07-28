@@ -345,6 +345,11 @@ export default function EmployersPage() {
                 continue within 30 days ($12,000 for a larger team or a
                 second location).
               </p>
+              <p className="mt-3 text-[12.5px] leading-[1.6] text-ink-2">
+                Many programs start with us in the room, not a login — happy
+                to talk through what makes sense for your team on our first
+                call.
+              </p>
             </div>
             <div className="rounded-2xl border border-line bg-surface p-8">
               <h3 className="font-display text-[18px] font-medium text-ink mb-5">
@@ -353,7 +358,6 @@ export default function EmployersPage() {
               <ul className="space-y-0 text-sm text-ink-2">
                 {[
                   "Private 1:1 sessions with the same coach every time — a spouse or partner is always welcome",
-                  "On-site presence, not a login — inside meetings you already hold, plus a table at lunch",
                   "Answers grounded in your own plan documents — your real match, deductible, and vesting schedule",
                   "A written plan after every conversation, theirs to keep — we don't keep a copy",
                   "Quarterly reporting on participation and themes — never a name, a number, or a situation",

@@ -63,7 +63,6 @@ export default function ProgramPricingCalculator() {
             )}
             <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2">
               {[
-                [`${result.onsiteDays} days`, "on site / year"],
                 [`${result.pool}`, "one-on-one sessions"],
                 [`${result.clinics}`, "virtual office hours"],
                 [
