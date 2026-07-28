@@ -1,7 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  /* Design system per Marketplace_POC design handoff (July 2026). */
+  /* Design system — July 2026 rebrand. Terracotta/clay replaces slate blue
+     as the site-wide accent; a dedicated dark-green "hero" system (matching
+     the Brand Handoff and the /401k-questions tool) is layered on top for
+     the nav and hero band. Everything below the hero stays on the light
+     paper field — this is a deliberate two-tone system, not an all-dark
+     site: dark green bookends (nav, hero, footer), light paper in between. */
   --bg: #f5f4f1;
   --surface: #ffffff;
   --ink: #191a1c;
@@ -9,18 +14,29 @@
   --muted: #71757c;
   --line: #e7e4dd;
 
-  /* Slate blue — CTAs, links, active states, numerals */
-  --accent: #3a5a7d;
-  --accent-hover: #2f4a68;
-  --accent-tint: #eef1f4;
+  /* Terracotta/clay — the site-wide accent on light backgrounds. Same color
+     family as the tool's --qg-terra, deepened for legibility on paper. */
+  --accent: #b8502b;
+  --accent-hover: #96431f;
+  --accent-tint: #f7ece1;
 
-  /* Clay — secondary accent from the brand mark: warmth, the person's side of the road.
-     Use sparingly (mark, small accents); --clay-soft is the legible variant for dark surfaces. */
-  --clay: #9c5b3c;
-  --clay-soft: #c98a63;
+  --clay: #b8502b;
+  --clay-hover: #96431f;
+  --clay-soft: #e08b56;
 
-  --footer-bg: #101215;
+  --footer-bg: #142218;
   --dark-section: #15171b;
+
+  /* Dark-green hero/nav system — matches the homepage mockup + the 401(k)
+     Q&A tool's qtool.css exactly, so the two never look like different
+     products. */
+  --hero-green: #16291d;
+  --hero-panel: #1f3527;
+  --hero-border: #33503b;
+  --hero-border-hi: #4e7259;
+  --hero-cream: #eceadb;
+  --hero-cream-muted: #a8b8a8;
+  --hero-terra: #e08b56;
 
   /* legacy aliases kept so existing components referencing these still work */
   --background: var(--bg);
@@ -53,9 +69,17 @@
   --color-accent-hover: var(--accent-hover);
   --color-accent-tint: var(--accent-tint);
   --color-clay: var(--clay);
+  --color-clay-hover: var(--clay-hover);
   --color-clay-soft: var(--clay-soft);
   --color-footer-bg: var(--footer-bg);
   --color-dark-section: var(--dark-section);
+  --color-hero-green: var(--hero-green);
+  --color-hero-panel: var(--hero-panel);
+  --color-hero-border: var(--hero-border);
+  --color-hero-border-hi: var(--hero-border-hi);
+  --color-hero-cream: var(--hero-cream);
+  --color-hero-cream-muted: var(--hero-cream-muted);
+  --color-hero-terra: var(--hero-terra);
   --font-display: "Newsreader";
   --font-body: "Instrument Sans";
 }
@@ -84,13 +108,24 @@ h1, h2, h3, h4 {
   display: inline-block;
 }
 
+/* Same dot, recolored for use on the dark-green hero/nav. */
+.dot-on-dark {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--hero-terra);
+  transform: rotate(45deg);
+  flex: none;
+  display: inline-block;
+}
+
 /* Striped placeholder swatch for un-shot imagery */
 .placeholder-swatch {
   background-color: #ecebe5;
   background-image: repeating-linear-gradient(
     -45deg,
-    rgba(58, 90, 125, 0.055) 0,
-    rgba(58, 90, 125, 0.055) 1px,
+    rgba(184, 80, 43, 0.07) 0,
+    rgba(184, 80, 43, 0.07) 1px,
     transparent 1px,
     transparent 10px
   );
@@ -144,6 +179,40 @@ h1, h2, h3, h4 {
 }
 .prose-brand a:hover {
   color: var(--accent-hover);
+}
+
+/* ---- Dark-green hero band: eyebrow + question-card pattern, shared by
+   the homepage hero and (in spirit) the /401k-questions tool. ---- */
+.hero-eyebrow {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.hero-q-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--hero-border-hi);
+  background: var(--hero-panel);
+  padding: 18px 22px;
+  color: var(--hero-cream);
+  font-size: 17px;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+.hero-q-card:hover {
+  background: var(--hero-terra);
+  border-color: var(--hero-terra);
+  color: #2c1608;
+}
+.hero-q-card:hover span {
+  color: #2c1608 !important;
 }
 
 /* Scroll-reveal, matching the design handoff's motion spec. Respects

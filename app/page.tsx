@@ -2,26 +2,29 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import HomeFaq from "@/components/homeb/HomeFaq";
+import HeroQuestionStack from "@/components/HeroQuestionStack";
 import { priceForHeadcount } from "@/lib/program-pricing";
+import { getQuestionBySlug } from "@/lib/questions";
 
-// THE HOMEPAGE — rebuilt for the employer annual-program pivot (July 2026).
-// Retired: the consumer book-a-coach homepage (per-session Stripe checkout,
-// quiz-first funnel). This is a B2B sale to one buyer (HR/benefits leader),
-// not a marketplace a consumer browses. See onepager/the-program.md and
-// onepager/founder-context.md for the source content this mirrors.
+// THE HOMEPAGE — rebuilt for the employer annual-program pivot (July 2026),
+// re-skinned July 28 2026 (Phase 1 of the homepage rebuild) to match the
+// approved dark-green/terracotta system: the hero and stats band now use
+// the same --hero-* tokens as the /401k-questions tool, so the free tool
+// and the marketing site read as one product. Everything from "How it
+// works" down is unchanged this phase — that's Phase 2/3.
 
 const STATS = [
   {
     n: "$0",
-    l: "commissions, product fees, or kickbacks — ever",
+    l: "commissions, product fees, or kickbacks — ever.",
   },
   {
     n: "1",
-    l: "flat annual fee, sized to your team — no per-user meter, no surprise bill when engagement grows",
+    l: "flat annual fee, sized to your team. No per-user meter, no surprise bill when engagement grows.",
   },
   {
     n: "0",
-    l: "data files, system integrations, or IT reviews required to start",
+    l: "data files, system integrations, or IT reviews required to start.",
   },
 ];
 
@@ -45,56 +48,113 @@ const HOW = [
 
 const TIER_PREVIEW = [100, 200, 350];
 
+// The rotating hero question stack — real slugs from the 401(k) library, in
+// the order they appear on the approved homepage mockup. getQuestionBySlug
+// is the single source of truth, so if wording ever changes in
+// lib/questions-data.json, the hero updates automatically instead of
+// silently drifting out of sync.
+const HERO_QUESTION_SLUGS = [
+  "what-is-a-401k-employer-match",
+  "is-my-401k-match-actually-good",
+  "how-do-i-even-start-with-401k",
+  "pay-off-debt-or-invest-first",
+  "am-i-too-late-to-catch-up-on-retirement",
+  "what-happens-to-401k-match-when-i-leave-job",
+  "how-much-will-i-actually-need-in-retirement",
+  "am-i-saving-enough-401k",
+];
+
 export default function Home() {
+  const heroCards = HERO_QUESTION_SLUGS.map((slug) => {
+    const q = getQuestionBySlug(slug);
+    return q ? { question: q.question, slug: q.slug } : null;
+  }).filter((c): c is { question: string; slug: string } => c !== null);
+
   return (
     <div className="flex min-h-full flex-col">
-      <Header cta={{ label: "Talk to us", href: "/employers#contact" }} />
+      {/* DARK-GREEN BAND — nav + hero, matching the approved mockup */}
+      <div className="bg-hero-green">
+        <Header cta={{ label: "Talk to us", href: "/employers#contact" }} />
 
-      {/* HERO */}
-      <header className="border-b border-line bg-surface">
-        <Container width="wide" className="py-16 md:py-20">
-          <div className="mx-auto max-w-[760px] text-center">
-            <div className="chip mx-auto inline-flex items-center gap-2 rounded-full border border-[#dde5ec] bg-accent-tint px-[14px] py-[7px] text-[12.5px] font-medium text-ink-2">
-              <span className="dot" />
-              Employer-sponsored financial wellness
-            </div>
-            <h1 className="mx-auto mt-6 font-display text-[36px] font-normal leading-[1.08] tracking-[-0.021em] text-ink md:text-[54px]">
-              Everyone on your payroll has money questions{" "}
-              <span className="text-accent">they&rsquo;ve never asked anyone.</span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-[560px] text-[17px] leading-[1.6] text-ink-2 md:text-[19px]">
-              A named coach, on site and on call all year — for your newest
-              hire and your leadership team alike. Not a portal. Not a
-              per-employee meter running in the background.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-[14px]">
-              <a
-                href="/employers#contact"
-                className="inline-flex items-center gap-[10px] rounded-[11px] bg-accent px-[28px] py-[15px] text-[16px] font-semibold text-white shadow-[0_14px_34px_-14px_rgba(58,90,125,0.85)] transition-all hover:-translate-y-px hover:bg-accent-hover"
+        <header>
+          <Container
+            width="wide"
+            className="grid grid-cols-1 gap-12 py-16 md:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-start"
+          >
+            <div>
+              <div
+                className="inline-flex items-center gap-2 rounded-full border px-[14px] py-[7px] text-[12.5px] font-medium"
+                style={{
+                  borderColor: "var(--hero-border)",
+                  color: "var(--hero-cream-muted)",
+                }}
               >
-                Talk to us <span aria-hidden>&rarr;</span>
-              </a>
-              <a
-                href="/employers#pricing"
-                className="inline-flex items-center gap-[9px] rounded-[9px] border border-line px-[25px] py-[14px] text-[15px] font-semibold text-ink transition-all hover:border-ink hover:bg-white"
+                <span className="dot-on-dark" />
+                Employer-sponsored financial wellness
+              </div>
+              <h1
+                className="mt-6 max-w-[620px] font-display text-[38px] font-normal leading-[1.1] tracking-[-0.021em] md:text-[54px]"
+                style={{ color: "var(--hero-cream)" }}
               >
-                See pricing for your team
-              </a>
+                Everyone on your payroll has money questions{" "}
+                <span className="italic" style={{ color: "var(--hero-terra)" }}>
+                  they&rsquo;ve never asked anyone.
+                </span>
+              </h1>
+              <p
+                className="mt-6 max-w-[520px] text-[17px] leading-[1.6] md:text-[19px]"
+                style={{ color: "var(--hero-cream-muted)" }}
+              >
+                A named coach, on site and on call all year — for your newest
+                hire and your leadership team alike. Not a portal. Not a
+                per-employee meter running in the background.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-[14px]">
+                <a
+                  href="/employers#contact"
+                  className="inline-flex items-center gap-[10px] rounded-full px-[28px] py-[15px] text-[16px] font-semibold transition-all hover:-translate-y-px"
+                  style={{ background: "var(--hero-terra)", color: "#2c1608" }}
+                >
+                  Talk to us <span aria-hidden>&rarr;</span>
+                </a>
+                <a
+                  href="#pricing-preview"
+                  className="inline-flex items-center gap-[9px] rounded-full border px-[25px] py-[14px] text-[15px] font-semibold transition-all hover:bg-white/5"
+                  style={{
+                    borderColor: "var(--hero-border-hi)",
+                    color: "var(--hero-cream)",
+                  }}
+                >
+                  See pricing <span aria-hidden>&darr;</span>
+                </a>
+                <a
+                  href="/401k-questions"
+                  className="inline-flex items-center gap-[9px] rounded-full border px-[25px] py-[14px] text-[15px] font-semibold transition-all hover:bg-white/5"
+                  style={{
+                    borderColor: "var(--hero-border-hi)",
+                    color: "var(--hero-cream)",
+                  }}
+                >
+                  Free 401(k) answers <span aria-hidden>&rarr;</span>
+                </a>
+              </div>
             </div>
-          </div>
-        </Container>
-      </header>
 
-      {/* HONEST NUMBERS BAND */}
-      <section className="border-b border-line py-12">
+            <HeroQuestionStack cards={heroCards} />
+          </Container>
+        </header>
+      </div>
+
+      {/* STATS BAND — solid clay, three equal columns (matches mockup) */}
+      <section style={{ background: "var(--clay)" }}>
         <Container width="wide">
-          <div className="grid grid-cols-1 gap-8 text-center sm:grid-cols-3">
+          <div className="grid grid-cols-1 divide-y divide-white/15 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
             {STATS.map((s) => (
-              <div key={s.l}>
-                <p className="font-display text-[38px] leading-none text-accent md:text-[44px]">
+              <div key={s.l} className="py-8 first:pl-0 sm:px-8 sm:py-10">
+                <p className="font-display text-[40px] font-normal leading-none text-hero-cream md:text-[48px]">
                   {s.n}
                 </p>
-                <p className="mx-auto mt-2 max-w-[280px] text-[14.5px] text-ink-2">
+                <p className="mt-3 max-w-[280px] text-[14.5px] leading-[1.5] text-hero-cream">
                   {s.l}
                 </p>
               </div>
@@ -257,7 +317,7 @@ export default function Home() {
           </p>
           <a
             href="/employers#contact"
-            className="mt-7 inline-flex items-center gap-[10px] rounded-[11px] bg-accent px-[30px] py-[15px] text-[16px] font-semibold text-white shadow-[0_14px_34px_-14px_rgba(58,90,125,0.85)] transition-all hover:-translate-y-px hover:bg-accent-hover"
+            className="mt-7 inline-flex items-center gap-[10px] rounded-[11px] bg-accent px-[30px] py-[15px] text-[16px] font-semibold text-white shadow-[0_14px_34px_-14px_rgba(184,80,43,0.55)] transition-all hover:-translate-y-px hover:bg-accent-hover"
           >
             Talk to us <span aria-hidden>&rarr;</span>
           </a>
