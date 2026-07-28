@@ -16,7 +16,7 @@ const FAQS = [
   },
   {
     q: "What do you need from our HR or IT team to start?",
-    a: "Nothing to integrate, no employee data file, no system connection, no IT review. We show up — on site and on video — inside meetings you're already holding.",
+    a: "Nothing to integrate, no employee data file, no system connection, no IT review. We reach out directly — by phone, email, and Zoom — and keep reaching out.",
   },
   {
     q: "What do we see on our end?",

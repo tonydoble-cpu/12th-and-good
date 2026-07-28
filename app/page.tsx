@@ -3,6 +3,8 @@ import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import HomeFaq from "@/components/homeb/HomeFaq";
 import HeroQuestionStack from "@/components/HeroQuestionStack";
+import WhatPeopleBring from "@/components/WhatPeopleBring";
+import SessionExcerpt from "@/components/SessionExcerpt";
 import { priceForHeadcount } from "@/lib/program-pricing";
 import { getQuestionBySlug } from "@/lib/questions";
 
@@ -47,6 +49,74 @@ const HOW = [
 ];
 
 const TIER_PREVIEW = [100, 200, 350];
+
+// "What people bring" — illustrative openers from the approved mockup,
+// written in-voice to show the actual range "anything counts" covers.
+// Not real client quotes — nobody's session is ever recorded, by design.
+const OPENERS = [
+  {
+    q: "I'm juggling credit cards, a car loan, and a payday loan. I don't know what to tackle first.",
+    affect: "Focus, stress, and the ability to feel present at work.",
+    a: "The payday loan first — and not because it's the biggest. It's the one compounding fastest against you.",
+  },
+  {
+    q: "My mom needs help with rent, but I'm already stretched thin.",
+    affect: "Mental bandwidth, family stress, and difficult financial decisions.",
+    a: "First we separate “I can't say no” from “I can afford this.” Right now those two sentences are doing the same job.",
+  },
+  {
+    q: "I got a bonus. Should I save it, invest it, or pay down debt?",
+    affect: "Whether an important financial opportunity becomes progress or disappears into everyday spending.",
+    a: "Before we allocate a dollar: is anything you owe above 18%? That's arithmetic, not investing.",
+  },
+  {
+    q: "We want to start a family in the next few years. How do we prepare financially?",
+    affect: "Benefits decisions, savings priorities, and confidence about the future.",
+    a: "Bring your partner. Then we rehearse — you live on the post-baby number now and bank the difference.",
+  },
+  {
+    q: "Am I doing enough with my 401(k), or am I just guessing?",
+    affect: "Retirement confidence and whether employees understand the benefits already available to them.",
+    a: "Let's read your actual plan document together. Most people have never once seen theirs.",
+  },
+  {
+    q: "I earn a good living. Why do I still feel like I'm falling behind?",
+    affect: "Financial confidence, stress, and the feeling that earning more should have solved everything.",
+    a: "Then the problem was never income. We find where the money goes before we judge a single line of it.",
+  },
+];
+
+// "What a session sounds like" — same source as OPENERS: illustrative,
+// written in-voice, not a real transcript. Kept short (2 scenarios) rather
+// than the mockup's full 6 — enough to make the format land without turning
+// the homepage into a content library.
+const CONVOS = [
+  {
+    q: "My mom needs help with rent and I can't say no.",
+    beats: [
+      { who: "them" as const, text: "My mom needs help with rent and I can't say no. Is that going to wreck me?" },
+      { who: "coach" as const, text: "No. But “I can't say no” and “I can afford this” are two different sentences, and right now they're doing the same job. Let's separate them." },
+      { who: "coach" as const, text: "How much, how often, and since when?" },
+      { who: "them" as const, text: "About $600. Every month. Since March." },
+      { who: "coach" as const, text: "So $5,400 this year. That's not a leak, it's a line item. Let's name it, fund it on purpose, and find out what it's actually displacing." },
+      { who: "them" as const, text: "…my emergency fund, probably." },
+      { who: "coach" as const, text: "Then that's the real problem, and it's fixable. Next month we build the number you can give without borrowing from future-you — and we practice the conversation with your mom. That's the harder half." },
+      { who: "end" as const, text: "Nothing was recommended. Nothing was sold." },
+    ],
+  },
+  {
+    q: "I have $9,000 in credit card debt my partner doesn't know about.",
+    beats: [
+      { who: "them" as const, text: "I have about $9,000 in credit card debt my partner doesn't know about. I've been paying the minimum for two years." },
+      { who: "coach" as const, text: "Okay. Two problems here, and the money one is by far the easier of the two. We'll do that one first, so you have something to walk in with." },
+      { who: "coach" as const, text: "Two years of minimums on $9,000 — do you know what you've paid in interest?" },
+      { who: "them" as const, text: "No. I've never looked." },
+      { who: "coach" as const, text: "We're going to look. Not to make you feel worse — because the number is the argument. It's what makes “I need help with this” land as a plan instead of a confession." },
+      { who: "coach" as const, text: "Then we write the first sentence together. Not the whole conversation. Just the first sentence, because that's the one nobody can get out." },
+      { who: "end" as const, text: "The plan is yours. The conversation is yours. We just made both survivable." },
+    ],
+  },
+];
 
 // The rotating hero question stack — real slugs from the 401(k) library, in
 // the order they appear on the approved homepage mockup. getQuestionBySlug
@@ -274,6 +344,48 @@ export default function Home() {
                 medical bill. Nobody has a 401(k) question in June.
               </p>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* WHAT PEOPLE BRING */}
+      <section className="reveal border-b border-line bg-surface py-20">
+        <Container width="wide">
+          <div className="mb-[46px] max-w-[640px]">
+            <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
+              What people bring
+            </p>
+            <h2 className="mt-4 font-display text-[28px] md:text-[36px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
+              &ldquo;Anything counts&rdquo; means what it says.
+            </h2>
+            <p className="mt-4 text-[15.5px] leading-[1.65] text-ink-2">
+              Six real openers, and how a coach actually starts each one.
+              Tap any of them.
+            </p>
+          </div>
+          <div className="mx-auto max-w-[760px]">
+            <WhatPeopleBring openers={OPENERS} />
+          </div>
+        </Container>
+      </section>
+
+      {/* SESSION EXCERPT */}
+      <section className="reveal border-b border-line py-20">
+        <Container width="wide">
+          <div className="mb-[46px] max-w-[640px]">
+            <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
+              What it sounds like
+            </p>
+            <h2 className="mt-4 font-display text-[28px] md:text-[36px] font-normal leading-[1.08] tracking-[-0.019em] text-ink">
+              Not a portal. An actual conversation.
+            </h2>
+            <p className="mt-4 text-[15.5px] leading-[1.65] text-ink-2">
+              Pick a scenario and step through it beat by beat — the same
+              pace an actual session moves at.
+            </p>
+          </div>
+          <div className="mx-auto max-w-[760px]">
+            <SessionExcerpt convos={CONVOS} />
           </div>
         </Container>
       </section>

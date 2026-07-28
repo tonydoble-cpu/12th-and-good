@@ -103,64 +103,106 @@ const HOW = [
 export default function EmployersPage() {
   return (
     <div className="flex min-h-full flex-col">
-      <Header cta={{ label: "Talk to us", href: "#contact" }} />
+      {/* dark-green hero band — matches the homepage and /401k-questions
+          system exactly, so this landing page doesn't read as a different
+          product from the rest of the site. Right column uses the real
+          market-research stats instead of a stock "team photo" placeholder —
+          concrete numbers do more work than decorative art, and it matches
+          the homepage hero's pattern of a real, functional right column. */}
+      <div className="bg-hero-green">
+        <Header cta={{ label: "Talk to us", href: "#contact" }} />
 
-      {/* hero */}
-      <header className="py-24 md:py-28">
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-14 items-center">
+        <header>
+          <Container
+            width="wide"
+            className="grid grid-cols-1 gap-12 py-16 md:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center"
+          >
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#dde5ec] bg-accent-tint px-[14px] py-[7px] text-[12.5px] font-medium text-ink-2">
-                <span className="dot" />
+              <div
+                className="inline-flex items-center gap-2 rounded-full border px-[14px] py-[7px] text-[12.5px] font-medium"
+                style={{
+                  borderColor: "var(--hero-border)",
+                  color: "var(--hero-cream-muted)",
+                }}
+              >
+                <span className="dot-on-dark" />
                 Financial wellness for your team
               </div>
-              <h1 className="mt-[22px] font-display text-[38px] md:text-[58px] font-normal leading-[1.04] tracking-[-0.021em] text-ink">
-                Your team&rsquo;s money stress is already costing you.
+              <h1
+                className="mt-6 max-w-[560px] font-display text-[38px] font-normal leading-[1.1] tracking-[-0.021em] md:text-[50px]"
+                style={{ color: "var(--hero-cream)" }}
+              >
+                Your team&rsquo;s money stress{" "}
+                <span className="italic" style={{ color: "var(--hero-terra)" }}>
+                  is already costing you.
+                </span>
               </h1>
-              <p className="mt-6 max-w-[480px] text-[18px] md:text-[20px] leading-[1.55] tracking-[-0.008em] text-ink-2">
+              <p
+                className="mt-6 max-w-[480px] text-[17px] leading-[1.6] md:text-[19px]"
+                style={{ color: "var(--hero-cream-muted)" }}
+              >
                 12th & Good Street is a financial wellness program built around
                 something most programs skip — an actual conversation with
                 someone who has nothing to sell.
               </p>
-              <div className="mt-[34px] flex flex-wrap gap-[14px]">
+              <div className="mt-8 flex flex-wrap items-center gap-[14px]">
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-[9px] rounded-[9px] bg-accent px-[25px] py-[14px] text-[15px] font-semibold text-white shadow-[0_8px_22px_-12px_rgba(58,90,125,0.75)] transition-all hover:-translate-y-px hover:bg-accent-hover"
+                  className="inline-flex items-center gap-[10px] rounded-full px-[28px] py-[15px] text-[16px] font-semibold transition-all hover:-translate-y-px"
+                  style={{ background: "var(--hero-terra)", color: "#2c1608" }}
                 >
                   Let&rsquo;s talk about your team{" "}
                   <span aria-hidden>&rarr;</span>
                 </a>
                 <Link
                   href="/employers/roi-calculator"
-                  className="inline-flex items-center gap-[9px] rounded-[9px] border border-line px-[25px] py-[14px] text-[15px] font-semibold text-ink transition-all hover:border-ink hover:bg-white"
+                  className="inline-flex items-center gap-[9px] rounded-full border px-[25px] py-[14px] text-[15px] font-semibold transition-all hover:bg-white/5"
+                  style={{
+                    borderColor: "var(--hero-border-hi)",
+                    color: "var(--hero-cream)",
+                  }}
                 >
                   Calculate your ROI
                 </Link>
               </div>
             </div>
-            <div className="placeholder-swatch flex h-[260px] md:h-[340px] items-center justify-center rounded-[18px]">
-              team / workplace image
-            </div>
-          </div>
-        </Container>
-      </header>
 
-      {/* stats band */}
-      <section className="border-y border-line bg-surface py-14">
-        <Container>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center">
-            {STATS.map((s) => (
-              <div key={s.number}>
-                <div className="font-display text-[40px] md:text-[48px] font-normal leading-none tracking-[-0.02em] text-accent">
-                  {s.number}
+            <div className="flex flex-col gap-3">
+              {STATS.map((s) => (
+                <div
+                  key={s.number}
+                  className="flex items-center gap-4 rounded-[14px] border px-[22px] py-[16px]"
+                  style={{
+                    borderColor: "var(--hero-border-hi)",
+                    background: "var(--hero-panel)",
+                  }}
+                >
+                  <div
+                    className="font-display text-[30px] leading-none"
+                    style={{ color: "var(--hero-terra)" }}
+                  >
+                    {s.number}
+                  </div>
+                  <div>
+                    <div
+                      className="text-[13.5px] leading-[1.4]"
+                      style={{ color: "var(--hero-cream)" }}
+                    >
+                      {s.label}
+                    </div>
+                    <div
+                      className="mt-[2px] text-[11px]"
+                      style={{ color: "var(--hero-cream-muted)" }}
+                    >
+                      {s.source}
+                    </div>
+                  </div>
                 </div>
-                <p className="mt-3 text-[15px] text-ink-2">{s.label}</p>
-                <p className="mt-1 text-[12px] text-muted">{s.source}</p>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
+              ))}
+            </div>
+          </Container>
+        </header>
+      </div>
 
       {/* the problem */}
       <section className="reveal py-24">
