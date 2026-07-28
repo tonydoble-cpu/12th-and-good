@@ -1,32 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 type Card = { question: string; slug: string };
 
 /**
  * The hero's "kinds of questions we hear" stack — real questions from the
- * 401(k) library, each linking straight to its answer. Cycles by rotating
- * the array every few seconds rather than a full carousel library; five
- * cards visible at a time, oldest fades out the top as a new one settles
- * in at the bottom. Matches the homepage mockup's right-column pattern.
+ * 401(k) library, each linking straight to its answer.
+ *
+ * Previous version swapped all 5 visible cards at once on a setInterval —
+ * a hard jump-cut, no transition. This is a continuous CSS marquee instead:
+ * the full list is rendered twice back-to-back and the track translates by
+ * exactly one copy's height on an infinite linear loop, so it reads as one
+ * smooth, unbroken scroll rather than a series of jumps. Pure CSS transform
+ * — no JS timers, no layout thrash. Pauses on hover/focus so a question can
+ * actually be read and clicked, and respects prefers-reduced-motion.
  */
 export default function HeroQuestionStack({ cards }: { cards: Card[] }) {
-  const [offset, setOffset] = useState(0);
+  if (cards.length === 0) return null;
 
-  useEffect(() => {
-    if (cards.length <= 5) return;
-    const id = setInterval(() => {
-      setOffset((o) => (o + 1) % cards.length);
-    }, 3200);
-    return () => clearInterval(id);
-  }, [cards.length]);
-
-  const visible = Array.from({ length: Math.min(5, cards.length) }, (_, i) => {
-    const card = cards[(offset + i) % cards.length];
-    return { ...card, key: `${offset}-${i}` };
-  });
+  // Duplicate the list so translating by -50% of the doubled track lands
+  // exactly back on frame 1 — the loop point is invisible.
+  const track = [...cards, ...cards];
+  // Slower with more questions in the library, but never sluggish or rushed.
+  const durationSeconds = Math.max(24, cards.length * 4.5);
 
   return (
     <div>
@@ -41,24 +38,31 @@ export default function HeroQuestionStack({ cards }: { cards: Card[] }) {
         <span aria-hidden>&rarr;</span>
       </p>
 
-      <div className="mt-5 flex flex-col gap-3">
-        {visible.map((c) => (
-          <Link
-            key={c.key}
-            href={`/401k-questions/${c.slug}`}
-            className="hero-q-card"
-          >
-            <span
-              className="italic"
-              style={{ fontFamily: "var(--font-display), Georgia, serif" }}
+      <div
+        className="hero-q-scroll mt-5"
+        style={{ ["--hero-q-duration" as string]: `${durationSeconds}s` }}
+      >
+        <div className="hero-q-track">
+          {track.map((c, i) => (
+            <Link
+              key={`${c.slug}-${i}`}
+              href={`/401k-questions/${c.slug}`}
+              className="hero-q-card"
+              tabIndex={i < cards.length ? 0 : -1}
+              aria-hidden={i >= cards.length}
             >
-              &ldquo;{c.question}&rdquo;
-            </span>
-            <span aria-hidden style={{ color: "var(--hero-cream-muted)" }}>
-              &rarr;
-            </span>
-          </Link>
-        ))}
+              <span
+                className="italic"
+                style={{ fontFamily: "var(--font-display), Georgia, serif" }}
+              >
+                &ldquo;{c.question}&rdquo;
+              </span>
+              <span aria-hidden style={{ color: "var(--hero-cream-muted)" }}>
+                &rarr;
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

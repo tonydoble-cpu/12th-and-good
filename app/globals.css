@@ -204,15 +204,65 @@ h1, h2, h3, h4 {
   font-size: 17px;
   line-height: 1.4;
   text-decoration: none;
-  transition: all 0.18s ease;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  flex: none;
 }
-.hero-q-card:hover {
+.hero-q-card:hover,
+.hero-q-card:focus-visible {
   background: var(--hero-terra);
   border-color: var(--hero-terra);
   color: #2c1608;
 }
-.hero-q-card:hover span {
+.hero-q-card:hover span,
+.hero-q-card:focus-visible span {
   color: #2c1608 !important;
+}
+
+/* Continuous question marquee — replaces the old jump-cut rotation. The
+   track renders the card list twice and translates by exactly one copy's
+   height on an infinite linear loop, so the scroll never visibly resets. */
+.hero-q-scroll {
+  position: relative;
+  height: 460px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 36px,
+    black calc(100% - 36px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 36px,
+    black calc(100% - 36px),
+    transparent 100%
+  );
+}
+.hero-q-track {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: hero-q-marquee var(--hero-q-duration, 32s) linear infinite;
+  will-change: transform;
+}
+.hero-q-scroll:hover .hero-q-track,
+.hero-q-scroll:focus-within .hero-q-track {
+  animation-play-state: paused;
+}
+@keyframes hero-q-marquee {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-q-track {
+    animation: none;
+  }
 }
 
 /* Scroll-reveal, matching the design handoff's motion spec. Respects
