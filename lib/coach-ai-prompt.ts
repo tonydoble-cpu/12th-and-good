@@ -83,8 +83,8 @@ When something is wrong, the fix is "more accurate," not "gentler." Respect real
 
 ## When to hand off to a human coach
 When the question gets specific to THEIR situation — not general concepts but "should I do X with my specific money?" — say something like:
-"That's getting into territory where it really helps to talk it through with someone who can see your full picture. If you'd like, you can book a session with a 12th & Good Street coach — and if your first session isn't worth it, you don't pay."
-Then link to: /coaches
+"That's getting into territory where it really helps to talk it through with someone who can see your full picture. If your employer offers 12th & Good Street as a benefit, you can book time with your coach — it's already covered, and it's completely private from your employer."
+If they're not sure whether their company offers it, suggest they ask HR — or, if they're the one who could bring it in, point them to /employers.
 
 Do this naturally, not robotically. Don't hand off on every question — only when the specificity of their situation makes general guidance insufficient.
 
@@ -109,7 +109,7 @@ export const DEMO_RESPONSES: Record<string, string> = {
     "Hey — I'm the 12th & Good Street Money Coach. I'm an AI, not a licensed advisor, but I can help you think through money questions in plain English. What's on your mind?",
 
   "401k":
-    "A 401(k) is basically a retirement account your employer sets up for you. The money comes out of your paycheck before taxes, which means you're investing money that would've gone to the IRS. A lot of employers will also match some of what you put in — that's free money, and it's worth understanding exactly how much your match is.\n\nIf you're not sure how your match works, try the 401(k) calculator on our resources page — it'll show you what you might be leaving on the table. And if you want to talk it through with a real person, book a session — if it isn't worth it, you don't pay.",
+    "A 401(k) is basically a retirement account your employer sets up for you. The money comes out of your paycheck before taxes, which means you're investing money that would've gone to the IRS. A lot of employers will also match some of what you put in — that's free money, and it's worth understanding exactly how much your match is.\n\nIf you're not sure how your match works, try the 401(k) calculator on our resources page — it'll show you what you might be leaving on the table. And if your employer offers 12th & Good as a benefit, your coach can walk through your actual plan documents with you — it's covered, and it's private.",
 
   budget:
     "Budgeting gets a bad reputation, honestly. People hear \"budget\" and think restriction — but it's really just seeing where your money goes so you can decide if that feels right to you.\n\nA starting point a lot of people find useful is the 50/30/20 idea: roughly 50% of take-home on needs, 30% on wants, 20% toward savings and extra debt payments. It's not a rule — if your rent is 45% of your income, that doesn't mean you're failing. It just means the other buckets are smaller, and knowing that helps you make choices.\n\nWe have a budget builder in our resources section if you want to plug in your numbers and see where you land.",
@@ -117,5 +117,5 @@ export const DEMO_RESPONSES: Record<string, string> = {
   debt: "There are two common approaches people talk about for paying off debt, and neither is universally better — it depends on what keeps you going.\n\nThe avalanche method means paying minimums on everything and throwing extra at the highest interest rate first. Mathematically, it saves you the most in interest.\n\nThe snowball method means paying off the smallest balance first. You save less on interest, but you get a win faster, and for a lot of people that momentum matters more than the math.\n\nThe one that's wrong is the one you don't stick with. If you want to plug in your actual numbers and compare them side by side, we've got a debt payoff planner in the resources section.",
 
   fallback:
-    "That's a good question. I can help with general financial concepts — things like how 401(k)s work, debt payoff strategies, budgeting basics, understanding your benefits, that kind of thing.\n\nIf you're dealing with something specific to your situation — like whether to make a particular money move — that's where a real conversation with a coach is more useful than anything I can tell you. Book a session if you want to go deeper — first-session promise: if it isn't worth it, you don't pay: /coaches",
+    "That's a good question. I can help with general financial concepts — things like how 401(k)s work, debt payoff strategies, budgeting basics, understanding your benefits, that kind of thing.\n\nIf you're dealing with something specific to your situation — like whether to make a particular money move — that's where a real conversation with a coach is more useful than anything I can tell you. If your employer offers 12th & Good as a benefit, book time with your coach — it's covered and private. Not sure if your company offers it? Ask HR, or send them to 12thandgood.com/employers.",
 };

@@ -198,14 +198,14 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "how-to-choose-financial-coach",
-    title: "How to choose a financial coach (and what to ask before you book)",
+    title: "How to choose a financial coach (and the questions that cut through the noise)",
     description:
-      "Not all coaches are created equal. Here are the five questions that separate good advice from a sales pitch.",
+      "Not all coaches are created equal. Here are the five questions that separate good advice from a sales pitch — whether you're choosing for yourself or vetting a benefit for your whole team.",
     date: "2026-06-28",
     readTime: "4 min read",
     category: "Individuals",
     content: `
-<p>Looking for a financial coach can feel like dating — everyone's profile sounds great, but you don't know what you're actually getting until you're in the room. Here are five questions that cut through the noise.</p>
+<p>Whether you're looking for a coach yourself or you're the person at your company deciding which financial wellness benefit to trust, the problem is the same: everyone sounds great on paper, and you don't know what you're actually getting until someone's in the room. Here are five questions that cut through the noise.</p>
 
 <h2>1. "How do you get paid?"</h2>
 
@@ -229,13 +229,15 @@ export const BLOG_POSTS: BlogPost[] = [
 
 <p>Also ask whether they're a <strong>fiduciary</strong> — legally required to act in your best interest. Not all credentials require fiduciary duty.</p>
 
-<h2>5. "Can I try a session before committing?"</h2>
+<h2>5. "Will I see the same person every time?"</h2>
 
-<p>Any coach worth working with will offer a free or low-cost intro session. This is where you figure out whether you trust them, whether their communication style works for you, and whether they understand your situation. If a coach requires a long-term contract upfront, keep looking.</p>
+<p>Trust is the whole product. A rotating cast of coaches means re-explaining your situation every session and never building the kind of relationship where hard money conversations actually happen. Ask whether you'll have one consistent coach — and if the answer is a call center, keep looking.</p>
 
 <h2>Where 12th & Good Street fits</h2>
 
-<p>We built 12th & Good Street to answer these questions before you ever have to ask them. Every coach on the platform is pre-vetted: conflict-free compensation, relevant credentials, no asset minimums, and a first-session promise: if it isn't worth every dollar, you don't pay.</p>
+<p>We built 12th & Good Street to answer these questions before you ever have to ask them. We work with employers to offer coaching as a benefit: every coach is vetted for conflict-free compensation and relevant credentials, there are no asset minimums, and each team gets one dedicated coach — the same person, every session, who knows your company's actual benefits and plan documents. Employees pay nothing, and what's said in a session stays private from the employer.</p>
+
+<p>If your company doesn't offer it yet, the person to talk to is whoever runs your benefits — our <a href="/employers">employer page</a> covers pricing and how the program works, and it's built to be forwarded.</p>
 
 <p>If you're not ready to talk to a person yet, our <a href="/coach-ai">AI Money Coach</a> can help you think through what you'd even want to ask about. It's free, private, and available right now.</p>
 

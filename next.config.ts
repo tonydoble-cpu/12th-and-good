@@ -20,7 +20,9 @@ const nextConfig: NextConfig = {
       { source: "/account", destination: "/employers", permanent: false },
       { source: "/login", destination: "/employers", permanent: false },
       { source: "/how-we-make-money", destination: "/employers#pricing", permanent: false },
-      { source: "/coach-ai", destination: "/resources", permanent: false },
+      // NOTE: /coach-ai is intentionally NOT retired — it's a live feature
+      // sold on /employers ("AI Money Coach — 24/7 access") and linked from
+      // /resources and the blog. It was briefly redirected here by mistake.
       { source: "/home-a", destination: "/", permanent: false },
       { source: "/home-b", destination: "/", permanent: false },
     ];

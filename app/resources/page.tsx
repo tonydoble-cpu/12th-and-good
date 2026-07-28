@@ -3,7 +3,20 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 
-const TOOLS = [
+const TOOLS: {
+  slug: string;
+  kind: string;
+  title: string;
+  body: string;
+  href?: string;
+}[] = [
+  {
+    slug: "coach-ai",
+    href: "/coach-ai",
+    kind: "AI chat",
+    title: "AI Money Coach",
+    body: "Ask any money question in plain English, anytime. An AI trained in our coaching approach — not an advisor, and it never pitches you anything.",
+  },
   {
     slug: "401k-calculator",
     kind: "Calculator",
@@ -70,7 +83,7 @@ export default function ResourcesPage() {
             {TOOLS.map((t) => (
               <Link
                 key={t.slug}
-                href={`/resources/${t.slug}`}
+                href={t.href ?? `/resources/${t.slug}`}
                 className="group block overflow-hidden rounded-2xl border border-line bg-surface text-inherit no-underline transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.7,0.3,1)] hover:-translate-y-[5px] hover:border-[#dcd8cf] hover:shadow-[0_26px_54px_-30px_rgba(20,30,45,0.42)]"
               >
                 <div className="placeholder-swatch flex h-[140px] items-center justify-center border-0 border-b border-line text-[14px]">
