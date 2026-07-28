@@ -1,0 +1,101 @@
+{
+  "_note": "SAMPLE CONTENT — 10 seed questions written to establish the format and voice. Tony's full 175-question library replaces/extends this via scripts/import-questions.mjs (CSV in, this JSON out). Do not treat this file as the finished library.",
+  "questions": [
+    {
+      "slug": "what-is-a-401k-employer-match",
+      "category": "Employer Match",
+      "question": "What's a 401(k) match, really?",
+      "answer": "It's money your employer adds to your retirement account when you put money in yourself — a matching contribution. A common setup is something like \"50% of the first 6% you contribute,\" which means if you put in 6% of your paycheck, your employer adds another 3% on top.\n\nThe part worth sitting with: this is part of your compensation. It's not a bonus or a favor — it's pay you only receive if you contribute enough to collect it. If you're not contributing up to the full match, you're leaving part of your paycheck at the office.\n\nEvery plan's formula is different, and it lives in a document called the Summary Plan Description (or you can just ask HR: \"what's our match formula?\"). That one question is worth asking this week."
+    },
+    {
+      "slug": "what-happens-to-401k-match-when-i-leave-job",
+      "category": "Leaving a Job",
+      "question": "What happens to my 401(k) if I leave?",
+      "answer": "Your own contributions are always yours — 100%, from day one, no matter when or why you leave. The employer match is where it gets more nuanced, because of something called vesting.\n\nVesting is a schedule that determines how much of the employer's contributions you keep if you leave. Some companies vest immediately (you keep everything right away). Others use a schedule — for example, 20% per year over five years. Leave in year two of a schedule like that, and you might keep only a portion of what your employer put in.\n\nBefore you give notice anywhere, it's worth checking your vesting date. People have left weeks before a vesting milestone without knowing, and that timing can be worth real money. Your plan's website or HR can tell you exactly where you stand."
+    },
+    {
+      "slug": "is-401k-contribution-pre-tax-or-post-tax",
+      "category": "Contributions",
+      "question": "Is my 401(k) contribution pre-tax or post-tax?",
+      "answer": "It can be either — and many plans now offer both, which is where the confusion usually starts.\n\nA *traditional* 401(k) contribution comes out of your paycheck before income tax is calculated. You pay less tax today, and instead pay tax later, when you withdraw in retirement.\n\nA *Roth* 401(k) contribution is the reverse: taxed now, then generally tax-free when you withdraw it in retirement (subject to the plan's rules).\n\nNeither is universally better — it mostly turns on whether you'd rather pay tax at today's rate or your future rate, and no one knows future rates for certain. Your paystub will show which type you're currently making; if the line says \"Roth,\" it's post-tax. If you're not sure which you picked when you enrolled, that's a normal thing not to remember — your plan portal shows it."
+    },
+    {
+      "slug": "what-is-vesting-401k",
+      "category": "Vesting",
+      "question": "What does \"vesting\" mean in my 401(k)?",
+      "answer": "Vesting is the schedule that determines when your employer's contributions become permanently yours.\n\nYour own money — the amount taken from your paycheck — is always fully yours immediately. Vesting only ever applies to what the *employer* adds: matching contributions, profit-sharing, and the like.\n\nSchedules come in a few shapes. \"Immediate\" means everything is yours right away. \"Cliff\" means you get nothing until a set date (say, three years), then everything at once. \"Graded\" means it phases in — 20% a year for five years is common.\n\nWhy it matters: if you're weighing a job change, your vesting status is part of the math. It's listed in your plan portal, usually labeled \"vested balance\" next to your total balance. If those two numbers are different, the gap is what's still on the schedule."
+    },
+    {
+      "slug": "can-i-take-money-out-of-401k-early",
+      "category": "Withdrawals & Loans",
+      "question": "Can I take money out of my 401(k) early?",
+      "answer": "Usually yes, mechanically — but it tends to be expensive, and it's worth understanding exactly how before deciding.\n\nA withdrawal before age 59½ generally means income tax on the amount plus, in many cases, an additional 10% early-withdrawal penalty. There are real exceptions (certain hardships, some medical costs, leaving your employer at 55 or later, and others), and the rules have specifics that depend on your situation.\n\nSome plans also offer *loans* — borrowing from your own balance and paying yourself back with interest — which is a different mechanism with different tradeoffs, including what happens to the loan if you leave the job.\n\nIf you're looking at this question because money is tight right now, that's exactly the kind of situation where talking it through with someone who can see your whole picture helps more than any single rule of thumb. There may be a better door than the retirement account — and sometimes the retirement account genuinely is the right door. The point is to choose it, not fall through it."
+    },
+    {
+      "slug": "what-happens-to-old-401k-when-i-change-jobs",
+      "category": "Rollovers",
+      "question": "I have an old 401(k) from a previous job. What are my options?",
+      "answer": "You generally have four, and none of them expire quickly — so you have time to choose rather than rush.\n\nOne: leave it where it is. Often allowed if the balance is above a threshold, and sometimes perfectly fine.\n\nTwo: roll it into your new employer's plan. Keeps everything in one place.\n\nThree: roll it into an IRA. An individual account you control, with typically broader investment choices.\n\nFour: cash it out. This one has real costs — taxes and possibly penalties — and is the option most worth slowing down on.\n\nThe honest answer to \"which one?\" depends on the fees in each account, the investment options, and how much you value simplicity. One practical caution: if you do roll it over, ask for a *direct* rollover, where the money moves institution-to-institution without touching your hands — it avoids a common and expensive tax pitfall."
+    },
+    {
+      "slug": "how-much-should-i-contribute-to-401k",
+      "category": "Contributions",
+      "question": "How much should I contribute to my 401(k)?",
+      "answer": "There's no single right number, and anyone who gives you one without knowing your situation is guessing.\n\nWhat we can say: if your employer offers a match, contributing at least enough to collect all of it is the closest thing to a free lunch in personal finance — it's part of your pay. Below the match, you're declining compensation.\n\nBeyond the match, it becomes a real tradeoff against everything else in your life: high-interest debt, an emergency cushion, a home you're saving for, a family member you help. Retirement math matters, but so does this month's reality — a contribution rate you can't sustain isn't a plan, it's a cycle.\n\nA gentle starting frame many people use: capture the full match, then revisit the number once a year or whenever pay changes. Give yourself permission to start where you are."
+    },
+    {
+      "slug": "what-are-401k-fees-and-do-i-pay-them",
+      "category": "Fees",
+      "question": "What fees am I paying in my 401(k)?",
+      "answer": "Almost certainly some — most people just never see them, because they're taken out of returns rather than billed to you.\n\nThere are usually two layers. Fund fees (the \"expense ratio\") are charged by each investment you hold, expressed as a percentage — the difference between 0.05% and 1% compounds into serious money over a career. Plan administration fees cover running the plan itself; sometimes the employer pays them, sometimes participants do.\n\nWhere to look: your plan is required to disclose fees in a document (often called a 404(a)(5) fee disclosure or just the fee disclosure notice), and each fund's expense ratio is listed right in your plan's investment menu.\n\nYou usually can't change what the plan charges — but you often *can* choose lower-cost funds within the same menu, and knowing the number is the first step to caring about it."
+    },
+    {
+      "slug": "what-should-i-invest-my-401k-in",
+      "category": "Investment Choices",
+      "question": "How do I choose what my 401(k) is invested in?",
+      "answer": "First, a reframe: contributing to a 401(k) and investing it are two separate steps, and it's surprisingly common for money to sit in the plan's default option without anyone actively choosing it.\n\nMost plan menus include target-date funds — a single fund labeled with a year near when you might retire (a \"2055 fund\"), which spreads your money across stocks and bonds and adjusts the mix as the date approaches. They exist precisely so that not wanting to think about this is a valid strategy.\n\nBeyond that, menus typically offer index funds and other options, each with its own fee and mix.\n\nWhat we won't do here is tell you which fund to pick — that's a decision that deserves your full picture, not a webpage. What's worth doing today: log in and simply *look* at what your money is currently in. Knowing is the whole first step."
+    },
+    {
+      "slug": "does-401k-match-count-toward-contribution-limit",
+      "category": "Employer Match",
+      "question": "Does my employer's match count toward my contribution limit?",
+      "answer": "Not toward the limit most people mean, no.\n\nThe IRS sets an annual limit on what *you* can contribute from your paycheck — the employee deferral limit. Your employer's match does not eat into that number. So if you're able to contribute up to the employee limit, the match lands on top of it.\n\nThere is a second, much higher combined limit covering everything going into the account — your money plus employer money together — but most people never brush against it.\n\nThe practical takeaway: you never need to contribute less to \"leave room\" for the match. The match is additional. The current year's limits are published by the IRS and typically adjust annually — your plan portal or HR will have this year's numbers."
+    },
+    {
+      "slug": "am-i-saving-enough-401k",
+      "category": "Contributions",
+      "question": "Am I saving enough?",
+      "answer": "Nobody can answer that for you from a percentage alone — but there are a few honest checkpoints instead of one magic number.\n\nFirst checkpoint: are you getting the full employer match? If not, that's the first move, before anything else, because it's compensation you're otherwise declining.\n\nSecond: a commonly cited rule of thumb is aiming toward saving somewhere around 15% of pay for retirement over your working life, counting both your contribution and the match together. That's a benchmark to notice, not a requirement to hit this year — especially if this year has other real priorities competing for the same dollar.\n\nThird, and the one most tools skip: \"enough\" depends on what retirement looks like for you, which nobody can template. If the question is keeping you up at night, that's exactly the kind of thing worth working through with a person who can see your whole picture, not just your contribution rate."
+    },
+    {
+      "slug": "is-my-401k-match-actually-good",
+      "category": "Employer Match",
+      "question": "Is my 401(k) match actually good, or am I just guessing?",
+      "answer": "Most people genuinely don't know, because there's rarely anything to compare it to — you only ever see your own plan.\n\nAs a rough sense of the landscape: many employer matches land somewhere around 50% of the first 6% an employee contributes (effectively a bonus of about 3% of pay), though matches vary widely by company and industry, and some are considerably more or less generous than that.\n\nWhat actually matters more than comparing to a benchmark: are you contributing enough to get all of what's offered, whatever the formula is? That's the number worth knowing cold. Your Summary Plan Description (or a two-line email to HR: \"what's our match formula?\") will tell you exactly where you stand — and once you know it, a coach can help you think through whether it changes anything else in your plan."
+    },
+    {
+      "slug": "how-do-i-even-start-with-401k",
+      "category": "Contributions",
+      "question": "How do I even start?",
+      "answer": "Smaller than you'd think. You don't need a strategy on day one — you need three things, in order.\n\nFirst: log into your plan portal (or ask HR how) and confirm you're actually enrolled and contributing something. Some plans auto-enroll at a low default rate; some don't enroll you at all until you act.\n\nSecond: find your match formula and set your contribution rate to at least capture all of it. This is the single highest-leverage move available to almost anyone.\n\nThird: notice what your money is invested in — plans often default to something reasonable (a target-date fund), which means \"I haven't decided\" and \"I'm invested sensibly\" can quietly be the same thing, but it's worth confirming rather than assuming.\n\nThat's genuinely the whole starting move. Everything else — how much to increase later, Roth versus traditional, what to do with old accounts — is a real conversation, not a checklist item, and there's no rush to have it alone."
+    },
+    {
+      "slug": "pay-off-debt-or-invest-first",
+      "category": "Contributions",
+      "question": "Should I pay off debt or invest first?",
+      "answer": "There's a genuine order of operations here, though the exact line moves depending on your situation.\n\nFirst, almost always: contribute enough to capture your full employer match, if you have one. Turning down free money to pay down debt faster rarely wins the math, even against fairly high interest rates.\n\nSecond: high-interest debt — credit cards, and anything else in that range — is usually worth prioritizing aggressively after the match, because that interest rate is a guaranteed cost working against you every month, in a way market returns aren't guaranteed to beat.\n\nBeyond that, it gets genuinely personal: a lower-rate loan (some auto loans, some student loans) sits in a grayer zone where either choice can be reasonable, and things like your emergency cushion and your stress tolerance matter as much as the interest-rate math. There isn't a universal answer past the match and the high-interest debt — that's exactly the kind of tradeoff worth talking through with someone who can see the whole picture, not just one rate."
+    },
+    {
+      "slug": "am-i-too-late-to-catch-up-on-retirement",
+      "category": "Contributions",
+      "question": "Am I too late to catch up on retirement?",
+      "answer": "Almost never as late as it feels in the moment — the math is more forgiving than the worry is.\n\nA few real levers exist specifically for this: once you turn 50, the IRS allows \"catch-up\" contributions — an additional amount on top of the normal annual limit — built exactly for people who want to add more later in their career. Working a few extra years, or delaying when you start withdrawing, also does more for the math than most people expect, because both extend how long the money has to grow and shorten how long it needs to last.\n\nWhat tends to make \"too late\" feel true is comparing yourself to a generic timeline that was never actually yours. The honest next step isn't a bigger contribution rate typed into a calculator — it's sitting down with your real numbers and your real timeline with someone who can tell you, specifically, where you actually stand and what's still fully in your control."
+    },
+    {
+      "slug": "how-much-will-i-actually-need-in-retirement",
+      "category": "Contributions",
+      "question": "How much will I actually need?",
+      "answer": "Less satisfying answer first: there's no single number, and any calculator that hands you one precise figure is hiding its assumptions, not removing them.\n\nA commonly used rough starting frame: many people aim to replace somewhere around 70–80% of their pre-retirement income each year in retirement, since some costs (commuting, saving itself) drop away while others (healthcare, time to travel) can rise. That's a starting frame to sanity-check against, not a target to chase exactly.\n\nWhat actually drives the real number for you: when you plan to stop working, what you expect retirement to look like day to day, where you'll live, and what you're counting on beyond the 401(k) — Social Security, a pension, other savings. Those are personal inputs no generic rule can supply. That's the conversation worth having directly, with your real numbers on the table instead of a stranger's averages."
+    }
+  ]
+}

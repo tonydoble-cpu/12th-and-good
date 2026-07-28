@@ -36,6 +36,12 @@ export default function Header({
             How it works
           </Link>
           <Link
+            href="/401k-questions"
+            className="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
+          >
+            401(k) Guide
+          </Link>
+          <Link
             href="/resources"
             className="text-sm font-medium text-ink-2 transition-colors hover:text-ink"
           >

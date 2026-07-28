@@ -11,6 +11,13 @@ const TOOLS: {
   href?: string;
 }[] = [
   {
+    slug: "401k-questions",
+    href: "/401k-questions",
+    kind: "Guide",
+    title: "401(k) questions, answered",
+    body: "A free, searchable library of plain-English answers — employer match, vesting, rollovers, fees, leaving a job. No signup, no pitch.",
+  },
+  {
     slug: "coach-ai",
     href: "/coach-ai",
     kind: "AI chat",

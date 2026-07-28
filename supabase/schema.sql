@@ -56,6 +56,58 @@ create table if not exists employer_inquiries (
 alter table employer_inquiries enable row level security;
 
 -- ---------------------------------------------------------------------------
+-- 401(k) Q&A tool (funnel build brief, July 2026).
+--
+-- questions: mirror of the content library. v1 serves content from the repo's
+-- lib/questions-data.json (statically generated pages — the SEO play); this
+-- table exists so the white-label/licensing path has a home for per-tenant
+-- dynamic content later. scripts/import-questions.mjs can upsert into it.
+--
+-- question_views: instrumentation — every row is a signal for the future HR
+-- dashboard and the SEO/content strategy. No PII: slug, referrer, and a
+-- random per-browser-session id only. Server-only writes (service role via
+-- /api/question-view); RLS enabled with no public policies.
+--
+-- tenant_config: the licensing seed. Exactly one row today.
+-- ---------------------------------------------------------------------------
+create table if not exists questions (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  category text not null,
+  question_text text not null,
+  answer_text text not null,
+  created_at timestamptz not null default now()
+);
+alter table questions enable row level security;
+
+create table if not exists question_views (
+  id uuid primary key default gen_random_uuid(),
+  question_slug text not null,
+  referrer text,
+  session_id text,
+  viewed_at timestamptz not null default now()
+);
+alter table question_views enable row level security;
+create index if not exists question_views_slug_idx on question_views (question_slug);
+create index if not exists question_views_viewed_at_idx on question_views (viewed_at);
+
+create table if not exists tenant_config (
+  tenant_id text primary key,
+  org_name text not null,
+  logo_url text,
+  primary_color text,
+  accent_color text,
+  powered_by boolean not null default false,
+  contact_cta_url text not null,
+  created_at timestamptz not null default now()
+);
+alter table tenant_config enable row level security;
+
+insert into tenant_config (tenant_id, org_name, powered_by, contact_cta_url)
+values ('12th-and-good', '12th & Good Street', false, '/employers')
+on conflict (tenant_id) do nothing;
+
+-- ---------------------------------------------------------------------------
 -- coaches: public profile. `user_id` links to the Supabase auth user that's
 -- allowed to log into /coach for this row.
 -- ---------------------------------------------------------------------------

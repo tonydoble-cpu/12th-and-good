@@ -1,0 +1,211 @@
+/* 401(k) Answer Tool — scoped skin, built verbatim from the Brand Handoff
+   (28 July 2026, "values lifted directly from the live homepage").
+   Deliberately self-contained: the tool reads as the same product as the
+   redesigned homepage without depending on the site's global tokens.
+   The eight rules are encoded here:
+     one accent (terracotta) · hairlines not shadows · pill buttons (99px)
+     vs. 14–18px cards · questions in Newsreader italic quotes · mono labels
+     only · off-white never white · big type tightly tracked · air. */
+
+.qtool {
+  /* the twenty colors */
+  --qg-green: #16291d;        /* page bg, nav, footer band */
+  --qg-panel: #24462f;        /* raised sections/cards on deep green */
+  --qg-inset: #1f3527;        /* cards inside a green section; outline hover fill */
+  --qg-border: #33503b;       /* hairline on inset cards */
+  --qg-border-hi: #4e7259;    /* border on interactive cards — signals tappable */
+  --qg-btn-outline: #4a6650;  /* secondary button border on green */
+  --qg-cream: #eceadb;        /* headings/primary text on green; never pure white */
+  --qg-cream-muted: #a8b8a8;  /* body copy on green */
+  --qg-cream-link: #b6c7b6;   /* nav links / low-emphasis labels on green */
+  --qg-terra: #e08b56;        /* the sole accent on dark */
+  --qg-clay: #b8502b;         /* the same accent on light backgrounds */
+  --qg-on-terra: #2c1608;     /* text sitting on a terracotta fill */
+  --qg-paper: #f4f3ec;        /* light page background */
+  --qg-paper-alt: #eef0e4;    /* alternating light section */
+  --qg-paper-card: #fffef8;   /* cards/panels on paper */
+  --qg-paper-border: #dcdecd; /* hairline on light cards — 1px, never a shadow */
+  --qg-ink: #1b2a20;          /* headings on light */
+  --qg-ink-body: #4c584d;     /* body copy on light */
+  --qg-ink-muted: #8b9488;    /* labels/captions on light */
+  --qg-footer: #142218;       /* footer only */
+
+  font-family: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+.qtool.qt-dark {
+  background: var(--qg-green);
+  color: var(--qg-cream);
+}
+.qtool.qt-paper {
+  background: var(--qg-paper);
+  color: var(--qg-ink);
+}
+
+/* — type jobs — */
+.qt-eyebrow {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.qt-display {
+  font-family: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+.qt-h {
+  font-family: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+.qt-question {
+  /* every human voice is Newsreader 400 italic in quotes */
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.qt-body {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* — buttons: always pills — */
+.qt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 99px;
+  padding: 15px 30px;
+  font-size: 15.5px;
+  font-weight: 600;
+  transition: all 0.18s ease;
+  border: 1px solid transparent;
+}
+.qt-btn-primary {
+  background: var(--qg-terra);
+  color: var(--qg-on-terra);
+}
+.qt-btn-primary:hover {
+  background: var(--qg-cream);
+  color: var(--qg-green);
+}
+.qt-btn-outline {
+  border-color: var(--qg-btn-outline);
+  color: var(--qg-cream);
+  background: transparent;
+}
+.qt-btn-outline:hover {
+  background: var(--qg-inset);
+  border-color: var(--qg-cream);
+}
+
+/* — the tool's core unit: question card (radius 14, hover terracotta) — */
+.qt-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-radius: 14px;
+  border: 1px solid var(--qg-border-hi);
+  background: var(--qg-inset);
+  padding: 20px 24px;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+.qt-card .qt-q {
+  color: var(--qg-cream);
+  font-size: 19px;
+  transition: color 0.18s ease;
+}
+.qt-card .qt-snippet {
+  color: var(--qg-cream-muted);
+  transition: color 0.18s ease;
+}
+.qt-card .qt-cat {
+  color: var(--qg-terra);
+  transition: color 0.18s ease;
+}
+.qt-card .qt-arrow {
+  color: var(--qg-cream-muted);
+  flex: none;
+  transition: color 0.18s ease;
+}
+.qt-card:hover {
+  background: var(--qg-terra);
+  border-color: var(--qg-terra);
+}
+.qt-card:hover .qt-q,
+.qt-card:hover .qt-snippet,
+.qt-card:hover .qt-cat,
+.qt-card:hover .qt-arrow {
+  color: var(--qg-on-terra);
+}
+
+/* — chips — */
+.qt-chip {
+  border-radius: 99px;
+  border: 1px solid var(--qg-btn-outline);
+  background: transparent;
+  color: var(--qg-cream-link);
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.qt-chip:hover {
+  background: var(--qg-inset);
+  border-color: var(--qg-cream);
+  color: var(--qg-cream);
+}
+.qt-chip.on {
+  background: var(--qg-terra);
+  border-color: var(--qg-terra);
+  color: var(--qg-on-terra);
+  font-weight: 600;
+}
+
+/* — search — */
+.qt-search {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--qg-border);
+  background: var(--qg-inset);
+  color: var(--qg-cream);
+  padding: 18px 24px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+}
+.qt-search::placeholder { color: var(--qg-cream-muted); }
+.qt-search:focus {
+  outline: none;
+  border-color: var(--qg-terra);
+}
+
+/* — answer panel on paper: radius 18, hairline, no shadow — */
+.qt-panel {
+  border-radius: 18px;
+  border: 1px solid var(--qg-paper-border);
+  background: var(--qg-paper-card);
+}
+
+/* — related/light cards — */
+.qt-card-light {
+  display: block;
+  border-radius: 14px;
+  border: 1px solid var(--qg-paper-border);
+  background: var(--qg-paper-card);
+  padding: 18px 20px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.qt-card-light:hover {
+  border-color: var(--qg-clay);
+}
