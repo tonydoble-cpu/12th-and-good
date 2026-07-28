@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { priceForHeadcount } from "@/lib/program-pricing";
+import { priceForHeadcount, TIER_LADDER } from "@/lib/program-pricing";
 
 function money(n: number) {
   return "$" + Math.round(n).toLocaleString("en-US");
@@ -10,6 +10,9 @@ function money(n: number) {
 export default function ProgramPricingCalculator() {
   const [headcount, setHeadcount] = useState(300);
   const result = priceForHeadcount(headcount);
+  const activeTierName = !result.soft
+    ? result.label.replace("Annual Program — ", "")
+    : null;
 
   return (
     <div className="mt-5 rounded-xl border border-line bg-white p-5">
@@ -28,7 +31,7 @@ export default function ProgramPricingCalculator() {
           value={headcount}
           onChange={(e) => setHeadcount(Number(e.target.value))}
           className="h-1 flex-1 cursor-pointer appearance-none rounded-full bg-gray-200"
-          style={{ accentColor: "#3a5a7d" }}
+          style={{ accentColor: "var(--accent)" }}
         />
         <input
           id="hcNumber"
@@ -40,6 +43,43 @@ export default function ProgramPricingCalculator() {
           }
           className="w-[84px] rounded-lg border border-line bg-[#fcfbf9] px-2.5 py-2 text-center text-[13px] text-ink focus:border-accent focus:outline-none"
         />
+      </div>
+
+      {/* Full price ladder — shows where this headcount lands relative to
+          every tier, not just its own number, so moving the slider reads as
+          "climbing a ladder" rather than "looking up one answer." */}
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {TIER_LADDER.map((t) => {
+          const active = t.name === activeTierName;
+          return (
+            <div
+              key={t.name}
+              className={
+                "rounded-lg border px-2.5 py-2 text-center transition-colors duration-150 " +
+                (active
+                  ? "border-accent bg-accent-tint"
+                  : "border-line bg-[#fcfbf9]")
+              }
+            >
+              <div
+                className={
+                  "text-[10px] font-semibold uppercase tracking-[0.06em] " +
+                  (active ? "text-accent" : "text-muted")
+                }
+              >
+                {t.name}
+              </div>
+              <div
+                className={
+                  "font-display text-[15px] leading-tight " +
+                  (active ? "text-ink" : "text-ink-2")
+                }
+              >
+                {money(t.price)}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-4 border-t border-line pt-4">

@@ -38,6 +38,19 @@ const DIFFERENT = [
   },
 ];
 
+// The concrete version of "$0 commissions, product fees, or kickbacks" —
+// naming the actual product categories a coach never earns from makes the
+// abstract stat verifiable instead of just a slogan.
+const NOT_SOLD = [
+  "Mutual funds",
+  "Annuities",
+  "Life insurance",
+  "Managed accounts",
+  "Referral fees to advisors",
+  "Lead generation",
+  "Your people's data",
+];
+
 const PROGRAM = [
   {
     title: "1:1 coaching sessions",
@@ -376,6 +389,37 @@ export default function EmployersPage() {
                 Talk to us <span aria-hidden>&rarr;</span>
               </a>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* what we never sell — the concrete version of the $0 stat */}
+      <section className="reveal py-20">
+        <Container width="narrow" className="text-center">
+          <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
+            $0 commissions
+          </p>
+          <h2 className="mt-4 font-display text-[26px] md:text-[34px] font-normal leading-[1.1] tracking-[-0.019em] text-ink">
+            We don&rsquo;t get paid to sell any of this.
+          </h2>
+          <p className="mx-auto mt-4 max-w-[540px] text-[15px] leading-[1.6] text-ink-2">
+            Fee-only means fee-only. If a coach ever recommends something,
+            it&rsquo;s because it&rsquo;s right for your employee — never
+            because it pays a commission. Here&rsquo;s exactly what that rules
+            out:
+          </p>
+          <div className="mx-auto mt-8 flex max-w-[640px] flex-wrap justify-center gap-[10px]">
+            {NOT_SOLD.map((item) => (
+              <span
+                key={item}
+                className="inline-flex items-center gap-[7px] rounded-full border border-line bg-white px-4 py-2 text-[13.5px] text-ink-2"
+              >
+                <span aria-hidden className="text-[12px] text-clay">
+                  &times;
+                </span>
+                {item}
+              </span>
+            ))}
           </div>
         </Container>
       </section>

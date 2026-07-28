@@ -7,6 +7,18 @@
  * mirrors — keep both in sync if a tier ever changes.
  */
 
+/** The four standing annual tiers, for rendering a full price ladder (e.g.
+ * next to the calculator) so a buyer can see where their size lands relative
+ * to every other tier, not just their own number. Kept in sync with the
+ * thresholds in priceForHeadcount below by hand — there are only four, and
+ * duplicating the boundary logic here isn't worth the indirection. */
+export const TIER_LADDER = [
+  { name: "Starter", price: 18000, maxHeadcount: 100 },
+  { name: "Core", price: 24000, maxHeadcount: 200 },
+  { name: "Growth", price: 32000, maxHeadcount: 350 },
+  { name: "Scale", price: 40000, maxHeadcount: 500 },
+] as const;
+
 export type TierResult =
   | {
       soft: false;
