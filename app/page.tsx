@@ -37,7 +37,7 @@ const HOW = [
   {
     n: "02",
     title: "Everyone on payroll gets access",
-    body: "Private sessions with the same coach every time, on site and on video. A spouse or partner is always welcome.",
+    body: "Private sessions with the same coach every time, by phone, email, or Zoom. A spouse or partner is always welcome.",
   },
   {
     n: "03",
@@ -79,7 +79,7 @@ export default function Home() {
         <header>
           <Container
             width="wide"
-            className="grid grid-cols-1 gap-12 py-16 md:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-start"
+            className="grid grid-cols-1 gap-12 py-16 md:py-20 lg:grid-cols-[1.25fr_0.75fr] lg:items-start"
           >
             <div>
               <div
@@ -93,11 +93,17 @@ export default function Home() {
                 Employer-sponsored financial wellness
               </div>
               <h1
-                className="mt-6 max-w-[620px] font-display text-[38px] font-normal leading-[1.1] tracking-[-0.021em] md:text-[54px]"
+                className="mt-6 max-w-[660px] font-display text-[38px] font-normal leading-[1.1] tracking-[-0.021em] md:text-[50px]"
                 style={{ color: "var(--hero-cream)" }}
               >
-                Everyone on your payroll has money questions{" "}
-                <span className="italic" style={{ color: "var(--hero-terra)" }}>
+                Everyone on your
+                <br />
+                payroll has money questions
+                <br />
+                <span
+                  className="italic"
+                  style={{ color: "var(--hero-terra)", fontSize: "0.9em" }}
+                >
                   they&rsquo;ve never asked anyone.
                 </span>
               </h1>
@@ -105,9 +111,9 @@ export default function Home() {
                 className="mt-6 max-w-[520px] text-[17px] leading-[1.6] md:text-[19px]"
                 style={{ color: "var(--hero-cream-muted)" }}
               >
-                A named coach, on site and on call all year — for your newest
-                hire and your leadership team alike. Not a portal. Not a
-                per-employee meter running in the background.
+                Help employees feel less alone with money. One trusted
+                financial coach, available by phone, email, or Zoom all
+                year&mdash;for everyday questions and life-changing decisions.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-[14px]">
                 <a
@@ -245,8 +251,8 @@ export default function Home() {
               </p>
               <p className="mt-2 text-[14.5px] leading-[1.6] text-ink-2">
                 Most financial wellness waits for someone to log in — which is
-                why most of it sits unused. We show up, on site and on video,
-                and reach out first.
+                why most of it sits unused. We show up by phone, email, and
+                Zoom, and reach out first.
               </p>
             </div>
             <div>

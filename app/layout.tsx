@@ -10,9 +10,9 @@ import ScrollReveal from "@/components/ScrollReveal";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "12th & Good Street — The Marketplace for Better Money Conversations",
+  title: "12th & Good Street — Financial wellness your team will actually use",
   description:
-    "Fee-only financial coaching from people who've lived what you're living. No products, no commissions — book a vetted coach who works only for you.",
+    "A named financial coach for every employee — by phone, email, and Zoom, all year. One flat annual fee, no commissions, no per-user meter. Employer-sponsored, employee-private.",
 };
 
 export default function RootLayout({
