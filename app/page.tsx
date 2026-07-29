@@ -5,6 +5,7 @@ import HomeFaq from "@/components/homeb/HomeFaq";
 import HeroQuestionStack from "@/components/HeroQuestionStack";
 import WhatPeopleBring from "@/components/WhatPeopleBring";
 import SessionExcerpt from "@/components/SessionExcerpt";
+import TestimonialCarousel from "@/components/TestimonialCarousel";
 import { priceForHeadcount } from "@/lib/program-pricing";
 import { getQuestionBySlug } from "@/lib/questions";
 
@@ -115,6 +116,35 @@ const CONVOS = [
       { who: "coach" as const, text: "Then we write the first sentence together. Not the whole conversation. Just the first sentence, because that's the one nobody can get out." },
       { who: "end" as const, text: "The plan is yours. The conversation is yours. We just made both survivable." },
     ],
+  },
+];
+
+// Real quotes from real clients and workshop participants — supplied
+// directly, lightly cleaned up for punctuation/capitalization only (no
+// wording or meaning changed).
+const TESTIMONIALS = [
+  {
+    quote:
+      "Tony, you are an incredible gift to this community. Thank you for your continued partnership.",
+    name: "Tacoma Public Schools",
+    role: "",
+  },
+  {
+    quote:
+      "The kids really enjoyed your talk. I had four students stay after class to confirm information and talk further on the subject.",
+    name: "Kerry",
+    role: "9th–12th grade teacher",
+  },
+  {
+    quote:
+      "A great presentation! Tony's voice was calming; he was confident and knowledgeable.",
+    name: "Wes Miller",
+    role: "Construction, Business Development",
+  },
+  {
+    quote: "Tony was extremely helpful. I felt heard and understood.",
+    name: "Francisco M.",
+    role: "Seattle non-profit",
   },
 ];
 
@@ -386,6 +416,18 @@ export default function Home() {
           </div>
           <div className="mx-auto max-w-[760px]">
             <SessionExcerpt convos={CONVOS} />
+          </div>
+        </Container>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="reveal border-b border-line bg-surface py-20">
+        <Container width="wide">
+          <p className="text-center text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
+            From the people who&rsquo;ve been in the room
+          </p>
+          <div className="mt-8">
+            <TestimonialCarousel items={TESTIMONIALS} />
           </div>
         </Container>
       </section>
