@@ -1,5 +1,14 @@
 import { NextResponse } from "next/server";
+import { readFileSync } from "fs";
+import { join } from "path";
 import { createServiceRoleClient } from "@/lib/supabase/server";
+import {
+  onboardingAgreementEmail,
+  onboardingSentFounderEmail,
+  notifyFounder,
+  sendEmail,
+  isEmailConfigured,
+} from "@/lib/email";
 
 // Standing operations endpoint for the project's AI lead. Token-gated;
 // used same-origin from an authenticated operator session to run the
@@ -10,6 +19,10 @@ import { createServiceRoleClient } from "@/lib/supabase/server";
 //   - set-session-active: turn a session type on/off (e.g. retire the
 //     free intro)
 //   - cleanup-e2e: remove e2e-*@example.com test data
+//   - send-onboarding: the "yes → paperwork" moment. Emails a new employer
+//     client their services agreement + kickoff next steps the instant
+//     Tony decides a deal is real. See the action's own comment below for
+//     the guardrail around sending an unfinished contract by accident.
 //
 // Security: requires OPS_TOKEN from the environment. No fallback — a
 // hardcoded secret in source is a burned secret the moment it's committed,
@@ -29,6 +42,98 @@ export async function POST(request: Request) {
   if (!body || !authorized(body.token)) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
+
+  // ---- Send a new employer client their agreement + onboarding email ----
+  // This is the automation for "someone says yes" — it does NOT fire off
+  // any website form; it only runs when explicitly triggered (from
+  // /ops/send-agreement or a direct call) after a real conversation. Handled
+  // before the Supabase-required gate below because, unlike every other
+  // action on this route, this one must work even if Supabase isn't
+  // configured — the email send is the whole point, and the pipeline-status
+  // update is best-effort on top of it, not a prerequisite. Two deliberate
+  // guardrails:
+  //   1. confirmFinal must be true — a conscious "yes, this PDF is the
+  //      attorney-reviewed final, not the working draft" checkbox, not a
+  //      default. Sending a client a contract with [PLACEHOLDER] text
+  //      still in it is worse than sending nothing.
+  //   2. The PDF is read from legal/employer-services-agreement.pdf in
+  //      the repo, which does NOT ship pre-filled — Tony has to
+  //      deliberately place the finished agreement there first. See
+  //      legal/README.md.
+  if (body.action === "send-onboarding") {
+    const required = ["email", "company", "tierLabel", "annualFeeText", "headcountText", "effectiveDateText"];
+    const missing = required.filter((k) => typeof body[k] !== "string" || !body[k].trim());
+    if (missing.length) {
+      return NextResponse.json({ error: `Missing required field(s): ${missing.join(", ")}` }, { status: 400 });
+    }
+    if (body.confirmFinal !== true) {
+      return NextResponse.json(
+        { error: "confirmFinal must be true — confirm the attached agreement is the attorney-reviewed final (no [PLACEHOLDER] text) before this can send." },
+        { status: 400 }
+      );
+    }
+    if (!isEmailConfigured) {
+      return NextResponse.json({ error: "Email not configured (RESEND_API_KEY unset) — nothing was sent." }, { status: 500 });
+    }
+
+    let pdfBase64: string;
+    try {
+      const pdfPath = join(process.cwd(), "legal", "employer-services-agreement.pdf");
+      pdfBase64 = readFileSync(pdfPath).toString("base64");
+    } catch {
+      return NextResponse.json(
+        { error: "legal/employer-services-agreement.pdf not found. Add the finalized (attorney-reviewed, entity details filled in) agreement PDF at that path before sending — see legal/README.md." },
+        { status: 500 }
+      );
+    }
+
+    const email = String(body.email).toLowerCase().trim();
+    const name = typeof body.name === "string" && body.name.trim() ? body.name.trim() : null;
+    const company = String(body.company).trim();
+    const tierLabel = String(body.tierLabel).trim();
+    const annualFeeText = String(body.annualFeeText).trim();
+    const headcountText = String(body.headcountText).trim();
+    const effectiveDateText = String(body.effectiveDateText).trim();
+    const isPilot = Boolean(body.isPilot);
+
+    const client = onboardingAgreementEmail({
+      name,
+      company,
+      tierLabel,
+      annualFeeText,
+      headcountText,
+      effectiveDateText,
+      isPilot,
+    });
+    const sent = await sendEmail({
+      to: email,
+      subject: client.subject,
+      html: client.html,
+      replyTo: process.env.NOTIFY_EMAIL ?? "tonydoble@gmail.com",
+      attachments: [{ filename: "12th-and-good-employer-services-agreement.pdf", content: pdfBase64 }],
+    });
+    if (!sent) {
+      return NextResponse.json({ error: "Resend rejected the send — check server logs." }, { status: 502 });
+    }
+
+    const founderNote = onboardingSentFounderEmail({ company, email, tierLabel, annualFeeText });
+    notifyFounder(founderNote.subject, founderNote.html, email);
+
+    // Best-effort pipeline tracking — non-blocking, and fine if Supabase
+    // isn't configured or the `status` column hasn't been added yet (see
+    // supabase/schema.sql).
+    const opsSupabase = createServiceRoleClient();
+    if (opsSupabase) {
+      try {
+        await opsSupabase.from("employer_inquiries").update({ status: "sent_agreement" }).eq("email", email);
+      } catch {
+        // Harmless — the email already sent, which is what matters.
+      }
+    }
+
+    return NextResponse.json({ ok: true, sentTo: email });
+  }
+
   const supabase = createServiceRoleClient();
   if (!supabase) {
     return NextResponse.json({ error: "Service role not configured" }, { status: 500 });

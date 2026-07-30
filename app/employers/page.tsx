@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 import EmployerContactForm from "@/components/EmployerContactForm";
 import ProgramPricingCalculator from "@/components/tools/ProgramPricingCalculator";
+import EmployerFaq from "@/components/EmployerFaq";
 
 const STATS = [
   {
@@ -481,6 +482,20 @@ export default function EmployersPage() {
             waiting inside the session. That&rsquo;s what makes people
             willing to actually talk.
           </p>
+        </Container>
+      </section>
+
+      {/* FAQ — the procurement-style questions a benefits/HR buyer needs
+          answered before this can go to a committee, not just the
+          consumer-facing questions on the homepage. */}
+      <section className="reveal py-24" id="faq">
+        <Container width="wide">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+            <h2 className="font-display text-[28px] font-normal leading-[1.1] tracking-[-0.019em] text-ink md:text-[36px]">
+              The questions worth asking before this goes to your committee.
+            </h2>
+            <EmployerFaq />
+          </div>
         </Container>
       </section>
 

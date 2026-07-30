@@ -55,6 +55,14 @@ create table if not exists employer_inquiries (
 );
 alter table employer_inquiries enable row level security;
 
+-- Added Jul 2026 for the onboarding-automation action (/api/ops
+-- send-onboarding): tracks where an inquiry sits in the sales pipeline
+-- once it moves past "just talking." Not required for the endpoint to
+-- work — it's a best-effort update wrapped in a try/catch — but running
+-- this once means Tony can filter "who's been sent an agreement" in the
+-- Supabase table view instead of relying on his inbox.
+alter table employer_inquiries add column if not exists status text not null default 'new';
+
 -- ---------------------------------------------------------------------------
 -- 401(k) Q&A tool (funnel build brief, July 2026).
 --

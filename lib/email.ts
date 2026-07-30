@@ -21,11 +21,18 @@ const FROM =
 // Where operational notifications (new booking, new waitlist join) go.
 const NOTIFY_TO = process.env.NOTIFY_EMAIL ?? "tonydoble@gmail.com";
 
+type Attachment = {
+  filename: string;
+  /** Base64-encoded file content — Resend's attachment format. */
+  content: string;
+};
+
 type SendArgs = {
   to: string;
   subject: string;
   html: string;
   replyTo?: string;
+  attachments?: Attachment[];
 };
 
 export async function sendEmail({
@@ -33,6 +40,7 @@ export async function sendEmail({
   subject,
   html,
   replyTo,
+  attachments,
 }: SendArgs): Promise<boolean> {
   if (!isEmailConfigured) return false;
 
@@ -49,6 +57,7 @@ export async function sendEmail({
         subject,
         html,
         ...(replyTo ? { reply_to: replyTo } : {}),
+        ...(attachments && attachments.length ? { attachments } : {}),
       }),
     });
     if (!res.ok) {
@@ -195,5 +204,63 @@ who has nothing to sell you, book a session with Tony:<br/>
 <a href="https://12thandgood.com/tony">12thandgood.com/tony</a> — if your
 first session isn't worth every dollar, you don't pay.</p>
 <p>— 12th &amp; Good Street. You live here now.</p>`,
+  };
+}
+
+/** Sent the moment a verbal/email "yes" gets turned into paperwork — the
+ * onboarding kickoff for a new employer client. Deliberately restates the
+ * commercial terms as plain text in the email body (tier, fee, headcount,
+ * effective date), not just inside the attached PDF, so there's a second,
+ * independently-readable record of what was agreed even if a mail client
+ * mangles the attachment. See app/api/ops/route.ts's send-onboarding
+ * action — this is not wired to any public form; it only fires when Tony
+ * (or whoever holds OPS_TOKEN) explicitly triggers it after a real deal. */
+export function onboardingAgreementEmail(opts: {
+  name: string | null;
+  company: string;
+  tierLabel: string;
+  annualFeeText: string;
+  headcountText: string;
+  effectiveDateText: string;
+  isPilot: boolean;
+}) {
+  const name = opts.name ? `Hi ${opts.name}` : "Hi";
+  return {
+    subject: `Welcome to 12th & Good Street — ${opts.company}'s agreement is attached`,
+    html: `
+<p>${name},</p>
+<p>Glad this is happening. Here's what we're setting up for ${opts.company}, and the agreement is attached so you can read the whole thing before anyone signs anything.</p>
+<p>
+  <b>Plan:</b> ${opts.tierLabel}${opts.isPilot ? " (90-day Founding Partner Pilot)" : ""}<br/>
+  <b>${opts.isPilot ? "Pilot fee" : "Annual fee"}:</b> ${opts.annualFeeText}<br/>
+  <b>Employees covered:</b> ${opts.headcountText}<br/>
+  <b>Start date:</b> ${opts.effectiveDateText}
+</p>
+<p><b>Next steps:</b></p>
+<p>
+  1. Read the attached agreement — the commercial terms above are filled into Exhibit A at the back.<br/>
+  2. Sign and send it back (reply to this email with a scan or a photo, or countersign electronically if that's easier on your end — whatever's simplest for you).<br/>
+  3. Once we have it back, we'll set up a short kickoff call and get your coach started.
+</p>
+<p>No long-term lock-in, and no penalty if you ever need to pause or exit — that's in the agreement itself, not just on our website.</p>
+<p>Questions on anything in it — just reply here, it comes straight to Tony.</p>
+<p>— 12th &amp; Good Street</p>`,
+  };
+}
+
+/** Confirmation copy to the founder every time onboarding paperwork goes
+ * out — a lightweight paper trail without needing a CRM. */
+export function onboardingSentFounderEmail(opts: {
+  company: string;
+  email: string;
+  tierLabel: string;
+  annualFeeText: string;
+}) {
+  return {
+    subject: `Sent: onboarding agreement to ${opts.company}`,
+    html: `
+<p>Onboarding email + agreement PDF just went out to <b>${opts.email}</b> at <b>${opts.company}</b>.</p>
+<p><b>Plan:</b> ${opts.tierLabel} · ${opts.annualFeeText}</p>
+<p>Waiting on a signed copy back. Nothing else to do right now.</p>`,
   };
 }
