@@ -54,15 +54,15 @@ const NOT_SOLD = [
 const PROGRAM = [
   {
     title: "1:1 coaching sessions",
-    body: "Over video, with a vetted, fee-only coach. This is the core — a real conversation about whatever's on their mind.",
+    body: "By phone, email, or Zoom, with a vetted, fee-only coach. This is the core — a real conversation about whatever's on their mind.",
   },
   {
     title: "The Money Blueprint for every employee",
     body: "Their money style, their blind spot, and a 90-day plan — free to them, private from you. The door into coaching.",
   },
   {
-    title: "Group sessions & lunch-and-learns",
-    body: "A coach presents on a topic your team cares about — debt, investing basics, homebuying — and takes real questions afterward.",
+    title: "Group sessions & webinars",
+    body: "A coach presents live over video on a topic your team cares about — debt, investing basics, homebuying — and takes real questions afterward.",
   },
   {
     title: "Written plans & next steps",
@@ -397,8 +397,7 @@ export default function EmployersPage() {
                 Under 50 people, most teams start with the{" "}
                 <b className="text-ink">Founding Partner Pilot</b> — $9,500
                 for 90 days, with $5,000 credited toward year one if you
-                continue within 30 days ($12,000 for a larger team or a
-                second location).
+                continue within 30 days ($12,000 for a larger team).
               </p>
               <p className="mt-3 text-[12.5px] leading-[1.6] text-ink-2">
                 Many programs start with us in the room, not a login — happy

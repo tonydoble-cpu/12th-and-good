@@ -130,7 +130,7 @@ export default function ArchetypeReveal({
               className="w-full max-w-[420px] rounded-[11px] px-6 py-[15px] text-[15.5px] font-semibold text-white shadow-[0_10px_28px_-14px_rgba(0,0,0,0.55)] transition-all hover:-translate-y-px active:translate-y-0"
               style={{ background: archetype.accent }}
             >
-              Unlock your full Blueprint →
+              See your full Blueprint →
             </button>
             <p className="max-w-[340px] text-center text-[12px] leading-[1.45] text-muted">
               Five blocks left on the walk: what shaped it, what you need

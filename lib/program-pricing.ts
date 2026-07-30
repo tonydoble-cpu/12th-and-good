@@ -27,7 +27,6 @@ export type TierResult =
       label: string;
       pool: number;
       clinics: string;
-      locations: number;
       reporting: string;
       comms: string;
       note: string;
@@ -55,11 +54,10 @@ export function priceForHeadcount(n: number): TierResult {
       label: "Founding Partner Pilot · 90 days",
       pool: 25,
       clinics: "1",
-      locations: 1,
       reporting: "Day 45 & 90",
       comms: "—",
       note:
-        "At this size, most teams start with the 90-day pilot rather than the full annual program. $5,000 of it credits toward your first year if you continue within 30 days. ($12,000 for a larger team or a second location.)",
+        "At this size, most teams start with the 90-day pilot rather than the full annual program. $5,000 of it credits toward your first year if you continue within 30 days. ($12,000 for a larger team.)",
     };
   }
   if (n <= 100) {
@@ -69,7 +67,6 @@ export function priceForHeadcount(n: number): TierResult {
       label: "Annual Program — Starter",
       pool: 25,
       clinics: "4/yr",
-      locations: 1,
       reporting: "Quarterly",
       comms: "2/yr",
       note: "",
@@ -82,7 +79,6 @@ export function priceForHeadcount(n: number): TierResult {
       label: "Annual Program — Core",
       pool: 50,
       clinics: "4/yr",
-      locations: 1,
       reporting: "Quarterly",
       comms: "2/yr",
       note: "",
@@ -95,7 +91,6 @@ export function priceForHeadcount(n: number): TierResult {
       label: "Annual Program — Growth",
       pool: 88,
       clinics: "4/yr",
-      locations: 2,
       reporting: "Quarterly",
       comms: "4/yr",
       note: "",
@@ -108,7 +103,6 @@ export function priceForHeadcount(n: number): TierResult {
       label: "Annual Program — Scale",
       pool: 125,
       clinics: "4/yr",
-      locations: 3,
       reporting: "Quarterly",
       comms: "4/yr",
       note: "",
@@ -119,7 +113,7 @@ export function priceForHeadcount(n: number): TierResult {
       soft: true,
       band: "Custom — Enterprise tier",
       note:
-        "Programs above 500 people are scoped together, not banded — usually starting above $40,000/year depending on shifts, locations, and rollout logistics.",
+        "Programs above 500 people are scoped together, not banded — usually starting above $40,000/year depending on shifts and rollout logistics.",
     };
   }
   return {

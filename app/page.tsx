@@ -49,7 +49,7 @@ const HOW = [
   },
 ];
 
-const TIER_PREVIEW = [100, 200, 350];
+const TIER_PREVIEW = [100, 200, 350, 500];
 
 // "What people bring" — illustrative openers from the approved mockup,
 // written in-voice to show the actual range "anything counts" covers.
@@ -309,7 +309,7 @@ export default function Home() {
               and no surprise bill when engagement grows.
             </p>
           </div>
-          <div className="mx-auto mt-10 grid max-w-[820px] grid-cols-1 gap-5 sm:grid-cols-3">
+          <div className="mx-auto mt-10 grid max-w-[980px] grid-cols-2 gap-5 sm:grid-cols-4">
             {TIER_PREVIEW.map((n) => {
               const r = priceForHeadcount(n);
               if (r.soft) return null;

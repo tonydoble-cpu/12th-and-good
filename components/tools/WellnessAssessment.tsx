@@ -262,7 +262,7 @@ export default function WellnessAssessment() {
 
             <EmailCapture
               heading="See your full breakdown"
-              valueProp="Enter your email to unlock your detailed results — which areas need attention, where you're doing well, and what a coach would focus on first."
+              valueProp="Enter your email to see your detailed results — which areas need attention, where you're doing well, and what a coach would focus on first."
               source="wellness-assessment"
               onCapture={() => setEmailCaptured(true)}
             />

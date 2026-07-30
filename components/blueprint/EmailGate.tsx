@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { Archetype, QuizAnswer } from "@/lib/archetypes";
 
 // Gate 2 — the email trade. Framing is critical: they're not paying with
-// their email to see their "score." They're paying to unlock the next
+// their email to see their "score." They're paying to see the next
 // chapter of a story they're already in.
 
 export default function EmailGate({

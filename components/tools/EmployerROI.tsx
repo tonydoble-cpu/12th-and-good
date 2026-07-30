@@ -12,7 +12,6 @@ const usd = new Intl.NumberFormat("en-US", {
   currency: "USD",
   maximumFractionDigits: 0,
 });
-const pct = (n: number) => `${n.toFixed(1)}%`;
 const commas = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
 
 /* ------------------------------------------------------------------ */
@@ -84,6 +83,8 @@ export default function EmployerROI() {
 
     return {
       stressedCount,
+      hourlyRate,
+      hoursRecoveredPerPerson,
       productivitySavings: productivitySavings * A.realizationRate,
       annualTurnover,
       turnoversAvoided,
@@ -222,7 +223,7 @@ export default function EmployerROI() {
             <SavingsCard
               label="Productivity recovered"
               value={usd.format(results.productivitySavings)}
-              detail={`${commas.format(results.stressedCount)} stressed employees × 1 hr/wk recovered × ${pct(0)} hourly cost`}
+              detail={`${commas.format(results.stressedCount)} stressed employees × ${results.hoursRecoveredPerPerson.toFixed(1)} hr/wk recovered × ${usd.format(results.hourlyRate)}/hr`}
               explanation="Financially stressed employees lose 3.3 hours per week to personal money issues at work. Coaching recovers a portion of that time."
               color="blue"
             />

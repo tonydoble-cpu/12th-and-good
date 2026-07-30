@@ -105,10 +105,6 @@ export default function ProgramPricingCalculator() {
               {[
                 [`${result.pool}`, "one-on-one sessions"],
                 [`${result.clinics}`, "virtual office hours"],
-                [
-                  `${result.locations} location${result.locations > 1 ? "s" : ""}`,
-                  "included",
-                ],
                 [`${result.reporting}`, "HR reporting"],
                 [`${result.comms}`, "employee reminders"],
               ].map(([n, l]) => (

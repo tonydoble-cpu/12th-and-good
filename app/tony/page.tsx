@@ -97,27 +97,17 @@ export default async function CoachProfilePage() {
         </div>
 
         {/* media */}
-        <div className="mt-[34px] grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-[14px]">
-          <div className="relative h-[280px] md:h-[400px] overflow-hidden rounded-2xl">
+        <div className="mt-[34px]">
+          <div className="relative h-[320px] md:h-[440px] overflow-hidden rounded-2xl">
             <Image
               src={coach.photo_url ?? "/tony-doble.png"}
               alt={coach.full_name}
               fill
-              sizes="(min-width: 768px) 66vw, 100vw"
+              sizes="100vw"
               style={{ objectPosition: "50% 16%" }}
               className="object-cover"
               priority
             />
-          </div>
-          <div className="grid grid-rows-2 gap-[14px]">
-            <div className="placeholder-swatch flex items-center justify-center rounded-2xl text-center leading-[1.6]">
-              &#9654;&nbsp; video intro
-              <br />
-              coming soon
-            </div>
-            <div className="placeholder-swatch flex items-center justify-center rounded-2xl">
-              coaching / candid
-            </div>
           </div>
         </div>
 
