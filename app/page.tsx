@@ -425,11 +425,15 @@ export default function Home() {
       <section className="reveal border-b border-line bg-surface py-20">
         <Container width="wide">
           <p className="text-center text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
-            From the people who&rsquo;ve been in the room
+            From the schools, teams, and communities Tony&rsquo;s worked with
           </p>
           <div className="mt-8">
             <TestimonialCarousel items={TESTIMONIALS} />
           </div>
+          <p className="mx-auto mt-8 max-w-[520px] text-center text-[12px] italic leading-[1.5] text-muted">
+            These are about talks, trainings, and partnerships — not private
+            1:1 coaching sessions, which are never recorded and never shared.
+          </p>
         </Container>
       </section>
 
