@@ -395,7 +395,7 @@ export default function EmployersPage() {
             <div>
               <ProgramPricingCalculator />
               <p className="mt-4 text-[12.5px] leading-[1.6] text-ink-2">
-                Under 50 people, most teams start with the{" "}
+                Under 100 people, most teams start with the{" "}
                 <b className="text-ink">Founding Partner Pilot</b> — $9,500
                 for 90 days, with $5,000 credited toward year one if you
                 continue within 30 days ($12,000 for a larger team).

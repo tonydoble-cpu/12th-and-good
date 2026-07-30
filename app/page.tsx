@@ -213,7 +213,8 @@ export default function Home() {
               >
                 Help employees feel less alone with money. One trusted
                 financial coach, available by phone, email, or Zoom all
-                year&mdash;for everyday questions and life-changing decisions.
+                year&mdash;for everyday questions and the decisions that
+                actually matter.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-[14px]">
                 <a

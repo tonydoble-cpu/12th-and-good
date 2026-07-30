@@ -333,7 +333,7 @@ export default function EmployerROI() {
           onClick={() => setShowSources(!showSources)}
           className="text-[13px] font-medium text-accent hover:underline"
         >
-          {showSources ? "Hide" : "Show"} methodology &amp; sources
+          {`${showSources ? "Hide" : "Show"} methodology & sources`}
         </button>
         {showSources && (
           <div className="mt-4 rounded-xl border border-line bg-white p-6 text-[13px] leading-relaxed text-ink-2 space-y-3">
