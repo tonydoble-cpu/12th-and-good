@@ -10,6 +10,31 @@ import {
   isEmailConfigured,
 } from "@/lib/email";
 
+const VALID_OUTREACH_STATUSES = [
+  "researched",
+  "needs_verification",
+  "sent",
+  "replied",
+  "meeting_booked",
+  "not_a_fit",
+  "dead",
+] as const;
+
+/** Adds N business days (skipping Sat/Sun) to a start date. Used to compute
+ * outreach_targets.follow_up_due_at the moment a target flips to 'sent' —
+ * kept as a plain function here (not a DB trigger) so the "what counts as
+ * overdue" logic lives in one readable place, not split across SQL and JS. */
+function addBusinessDays(start: Date, days: number): Date {
+  const d = new Date(start);
+  let added = 0;
+  while (added < days) {
+    d.setDate(d.getDate() + 1);
+    const dow = d.getDay();
+    if (dow !== 0 && dow !== 6) added++;
+  }
+  return d;
+}
+
 // Standing operations endpoint for the project's AI lead. Token-gated;
 // used same-origin from an authenticated operator session to run the
 // jobs a founding-stage platform needs daily:
@@ -23,6 +48,12 @@ import {
 //     client their services agreement + kickoff next steps the instant
 //     Tony decides a deal is real. See the action's own comment below for
 //     the guardrail around sending an unfinished contract by accident.
+//   - list-outreach-targets / update-outreach-status: the outbound
+//     prospecting tracker behind /ops/outreach. Tony sends every email
+//     himself from his own inbox — this endpoint only tracks status and
+//     computes follow-up timing; it never sends anything to a prospect.
+//     See app/api/cron/outreach-digest/route.ts for the weekly reminder
+//     that reads this same table.
 //
 // Security: requires OPS_TOKEN from the environment. No fallback — a
 // hardcoded secret in source is a burned secret the moment it's committed,
@@ -137,6 +168,56 @@ export async function POST(request: Request) {
   const supabase = createServiceRoleClient();
   if (!supabase) {
     return NextResponse.json({ error: "Service role not configured" }, { status: 500 });
+  }
+
+  // ---- Outbound prospecting: list targets (for the /ops/outreach dashboard) ----
+  if (body.action === "list-outreach-targets") {
+    let query = supabase
+      .from("outreach_targets")
+      .select("*")
+      .order("follow_up_due_at", { ascending: true, nullsFirst: false })
+      .order("created_at", { ascending: false });
+    if (typeof body.status === "string" && VALID_OUTREACH_STATUSES.includes(body.status)) {
+      query = query.eq("status", body.status);
+    }
+    const { data, error } = await query;
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true, targets: data ?? [] });
+  }
+
+  // ---- Outbound prospecting: update a target's status ----
+  // Flipping to 'sent' auto-stamps sent_at + computes follow_up_due_at (5
+  // business days out) so the weekly digest has something to query on
+  // without every caller having to know that rule.
+  if (body.action === "update-outreach-status") {
+    if (typeof body.id !== "string" || !body.id) {
+      return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    }
+    if (typeof body.status !== "string" || !VALID_OUTREACH_STATUSES.includes(body.status as any)) {
+      return NextResponse.json({ error: `status must be one of: ${VALID_OUTREACH_STATUSES.join(", ")}` }, { status: 400 });
+    }
+    const update: Record<string, unknown> = { status: body.status, updated_at: new Date().toISOString() };
+    if (body.status === "sent") {
+      const { data: existing } = await supabase
+        .from("outreach_targets")
+        .select("sent_at")
+        .eq("id", body.id)
+        .maybeSingle();
+      if (!existing?.sent_at) {
+        const now = new Date();
+        update.sent_at = now.toISOString();
+        update.follow_up_due_at = addBusinessDays(now, 5).toISOString();
+      }
+    }
+    if (typeof body.notes === "string") update.notes = body.notes;
+    const { data, error } = await supabase
+      .from("outreach_targets")
+      .update(update)
+      .eq("id", body.id)
+      .select("*")
+      .maybeSingle();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true, target: data });
   }
 
   // ---- New bookings with intake + quiz context, for AI session prep ----

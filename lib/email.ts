@@ -264,3 +264,50 @@ export function onboardingSentFounderEmail(opts: {
 <p>Waiting on a signed copy back. Nothing else to do right now.</p>`,
   };
 }
+
+/** The weekly outbound-prospecting digest — sent to the founder only, never
+ * to a prospect. Lists every outreach_targets row that's overdue for a
+ * follow-up (sent 5+ business days ago, no reply logged yet) so nothing
+ * quietly drops. Deliberately does NOT send anything to the prospect itself
+ * — Tony reviews and sends the follow-up himself from his own inbox, same
+ * boundary as the initial outreach. See app/api/cron/outreach-digest/route.ts. */
+export function outreachFollowUpDigestEmail(opts: {
+  overdue: Array<{
+    organization: string;
+    contactName: string | null;
+    contactEmail: string | null;
+    sentAt: string | null;
+    followUpDraft: string;
+  }>;
+}) {
+  const count = opts.overdue.length;
+  const items = opts.overdue
+    .map(
+      (o) => `
+<div style="margin:0 0 20px;padding:14px 16px;border:1px solid #e4e2dc;border-radius:8px;">
+  <p style="margin:0 0 6px"><b>${o.organization}</b>${o.contactName ? ` — ${o.contactName}` : ""}${o.contactEmail ? ` (${o.contactEmail})` : ""}</p>
+  <p style="margin:0 0 8px;color:#888;font-size:12px">Sent ${o.sentAt ? new Date(o.sentAt).toLocaleDateString() : "an unknown date"} — no reply logged yet.</p>
+  <p style="margin:0;white-space:pre-wrap;font-size:13.5px;background:#f7f6f3;padding:10px;border-radius:6px">${o.followUpDraft}</p>
+</div>`
+    )
+    .join("");
+  return {
+    subject: count
+      ? `${count} follow-up${count === 1 ? "" : "s"} due this week`
+      : "No follow-ups due this week",
+    html: count
+      ? `
+<p>${count} target${count === 1 ? "" : "s"} from your outreach tracker ${count === 1 ? "hasn't" : "haven't"} heard back in 5+ business days. A follow-up draft is below each one — review, tweak, and send from your own inbox. Nothing here has been sent automatically.</p>
+${items}
+<p style="color:#888;font-size:12px">Once you've followed up (or decided not to), update the status in the outreach dashboard so this stops resurfacing.</p>`
+      : `<p>Nothing overdue this week — every sent target has either replied, been marked resolved, or isn't due for a follow-up yet.</p>`,
+  };
+}
+
+/** A short, low-pressure second-touch draft — genuinely just a bump, not a
+ * repeat of the full pitch. Used to seed the follow-up draft shown in the
+ * weekly digest; Tony can and should edit before sending. */
+export function genericFollowUpDraft(organization: string, contactFirstName: string | null) {
+  const name = contactFirstName ? contactFirstName : "there";
+  return `Hi ${name},\n\nJust floating this back up in case it got buried — no worries if now's not the right time. Happy to talk whenever it's useful, or let me know if this isn't a fit and I won't follow up again.\n\nTony`;
+}

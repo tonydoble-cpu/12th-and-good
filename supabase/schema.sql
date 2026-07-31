@@ -64,6 +64,52 @@ alter table employer_inquiries enable row level security;
 alter table employer_inquiries add column if not exists status text not null default 'new';
 
 -- ---------------------------------------------------------------------------
+-- outreach_targets: the outbound prospecting pipeline (Jul 2026 build). This
+-- is the opposite direction from employer_inquiries — those are inbound
+-- ("someone found us"), this is outbound ("we found them"). One row per
+-- researched target organization/contact, seeded from manual research
+-- batches and updated as Tony sends emails and gets replies. Server-only
+-- access (service role) — same RLS posture as blueprint_leads and
+-- employer_inquiries: enabled, no public policies, this is sales pipeline
+-- data that should never be browser-readable.
+-- ---------------------------------------------------------------------------
+create table if not exists outreach_targets (
+  id uuid primary key default gen_random_uuid(),
+  region text,
+  segment text not null,
+  organization text not null,
+  est_size text,
+  contact_name text,
+  contact_title text,
+  -- 'Verified' | 'Unverified' | 'Conflict' — surfaced in the dashboard so a
+  -- shaky contact never gets sent to without a second look first.
+  contact_confidence text,
+  contact_email text,
+  contact_phone text,
+  source_urls text,
+  hook text,
+  draft_email text,
+  status text not null default 'researched'
+    check (status in (
+      'researched', 'needs_verification', 'sent', 'replied',
+      'meeting_booked', 'not_a_fit', 'dead'
+    )),
+  sent_at timestamptz,
+  -- Set automatically (sent_at + 5 business days) whenever status flips to
+  -- 'sent' — see the set-outreach-status ops action. The weekly digest
+  -- queries on this column, not on raw elapsed time, so "business days"
+  -- logic lives in one place.
+  follow_up_due_at timestamptz,
+  follow_up_sent_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+alter table outreach_targets enable row level security;
+create index if not exists outreach_targets_status_idx on outreach_targets (status);
+create index if not exists outreach_targets_follow_up_due_idx on outreach_targets (follow_up_due_at);
+
+-- ---------------------------------------------------------------------------
 -- 401(k) Q&A tool (funnel build brief, July 2026).
 --
 -- questions: mirror of the content library. v1 serves content from the repo's
