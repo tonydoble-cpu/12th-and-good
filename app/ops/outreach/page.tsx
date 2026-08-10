@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Internal-only dashboard for the outbound-prospecting tracker — same
 // posture as /ops/send-agreement: unlinked, token-gated, single-operator
@@ -58,7 +58,21 @@ export default function OutreachDashboard() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
 
-  async function load() {
+  // Lets the daily send-queue email link straight in with the token already
+  // filled — one tap from the email instead of copy-pasting the token by
+  // hand every morning. The token still never touches anything but this
+  // same-origin request; it's just pre-filled instead of retyped.
+  useEffect(() => {
+    const fromUrl = new URLSearchParams(window.location.search).get("token");
+    if (fromUrl) {
+      setToken(fromUrl);
+      load(fromUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function load(tokenOverride?: string) {
+    const useToken = tokenOverride ?? token;
     setLoading(true);
     setError(null);
     try {
@@ -66,7 +80,7 @@ export default function OutreachDashboard() {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          token,
+          token: useToken,
           action: "list-outreach-targets",
           ...(statusFilter ? { status: statusFilter } : {}),
         }),
@@ -143,7 +157,7 @@ export default function OutreachDashboard() {
           </select>
         </label>
         <button
-          onClick={load}
+          onClick={() => load()}
           disabled={loading || !token}
           className="rounded-lg bg-accent px-5 py-2.5 text-[14px] font-semibold text-white transition-all hover:-translate-y-px hover:bg-accent-hover disabled:opacity-50"
         >

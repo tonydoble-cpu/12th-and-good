@@ -311,3 +311,85 @@ export function genericFollowUpDraft(organization: string, contactFirstName: str
   const name = contactFirstName ? contactFirstName : "there";
   return `Hi ${name},\n\nJust floating this back up in case it got buried — no worries if now's not the right time. Happy to talk whenever it's useful, or let me know if this isn't a fit and I won't follow up again.\n\nTony`;
 }
+
+/** Every draft_email in outreach_targets is generated as a "Subject: ..."
+ * line, a blank line, then the body (see the prospecting seed scripts).
+ * Splits it back into the two pieces so the send-queue digest can put the
+ * subject in a mailto link and the body in a copy-paste box. Falls back
+ * gracefully if a row was ever hand-edited into a different shape. */
+function parseDraftSubjectBody(draftEmail: string): { subject: string; body: string } {
+  const idx = draftEmail.indexOf("\n\n");
+  const firstLine = idx === -1 ? draftEmail : draftEmail.slice(0, idx);
+  const subjectMatch = firstLine.match(/^Subject:\s*(.+)$/i);
+  if (!subjectMatch || idx === -1) {
+    return { subject: "", body: draftEmail };
+  }
+  return { subject: subjectMatch[1].trim(), body: draftEmail.slice(idx + 2) };
+}
+
+/** The daily "send these today" digest — the actual fix for "I haven't had
+ * time to send any of these." Instead of Tony having to remember to open
+ * /ops/outreach, paste the token, and hunt for what's next, a fixed-size
+ * batch of the oldest not-yet-sent targets lands in his inbox every weekday
+ * morning, fully drafted, with a one-click "open in Mail" link for the
+ * subject/to line and the full body ready to copy underneath. Still never
+ * sends anything itself — same boundary as every other email in this file.
+ * See app/api/cron/outreach-digest/route.ts. */
+export function sendQueueDigestEmail(opts: {
+  queue: Array<{
+    id: string;
+    organization: string;
+    contactName: string | null;
+    contactEmail: string | null;
+    draftEmail: string;
+  }>;
+  heldForVerification: Array<{ organization: string; notes: string | null }>;
+  opsUrl: string;
+}) {
+  const count = opts.queue.length;
+  const items = opts.queue
+    .map((t) => {
+      const { subject, body } = parseDraftSubjectBody(t.draftEmail);
+      const mailtoParams = new URLSearchParams();
+      if (subject) mailtoParams.set("subject", subject);
+      const mailto = t.contactEmail
+        ? `mailto:${encodeURIComponent(t.contactEmail)}${mailtoParams.toString() ? `?${mailtoParams.toString()}` : ""}`
+        : null;
+      return `
+<div style="margin:0 0 20px;padding:14px 16px;border:1px solid #e4e2dc;border-radius:8px;">
+  <p style="margin:0 0 6px"><b>${t.organization}</b>${t.contactName ? ` — ${t.contactName}` : ""}${t.contactEmail ? ` (${t.contactEmail})` : ""}</p>
+  ${subject ? `<p style="margin:0 0 6px;font-size:13px"><b>Subject:</b> ${subject}</p>` : ""}
+  <p style="margin:0;white-space:pre-wrap;font-size:13.5px;background:#f7f6f3;padding:10px;border-radius:6px">${body}</p>
+  ${
+    mailto
+      ? `<p style="margin:10px 0 0"><a href="${mailto}" style="display:inline-block;background:#b8502b;color:#fff;text-decoration:none;font-size:13px;font-weight:600;padding:8px 14px;border-radius:6px">Open in Mail →</a></p>`
+      : ""
+  }
+</div>`;
+    })
+    .join("");
+
+  const held = opts.heldForVerification;
+  const heldBlock = held.length
+    ? `
+<p style="margin:24px 0 4px;color:#888;font-size:12px">Held — need a quick verify before these can go (see notes in the dashboard), not counted above:</p>
+<ul style="margin:0;padding-left:18px;font-size:13px;color:#3d4147">
+${held.map((h) => `<li>${h.organization}${h.notes ? ` — ${h.notes}` : ""}</li>`).join("")}
+</ul>`
+    : "";
+
+  return {
+    subject: count
+      ? `Send these ${count} today`
+      : "Nothing queued to send today",
+    html: `
+<p>${
+      count
+        ? `${count} ready to go — subject and body are below each one, or tap "Open in Mail" to start a draft in your own mail app with the subject and address filled in. Paste the body in, review, send it yourself. Nothing here has been sent automatically.`
+        : "Nothing left in the ready-to-send queue right now — everything's either sent or waiting on verification."
+    }</p>
+${items}
+${heldBlock}
+<p style="margin-top:20px;color:#888;font-size:12px">After you send one, mark it <b>Sent</b> at <a href="${opts.opsUrl}">${opts.opsUrl}</a> so it drops out of tomorrow's batch and the follow-up timer starts.</p>`,
+  };
+}
