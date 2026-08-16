@@ -2,6 +2,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
+import ToolArt from "@/components/ToolArt";
 
 const TOOLS: {
   slug: string;
@@ -93,8 +94,8 @@ export default function ResourcesPage() {
                 href={t.href ?? `/resources/${t.slug}`}
                 className="group block overflow-hidden rounded-2xl border border-line bg-surface text-inherit no-underline transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.7,0.3,1)] hover:-translate-y-[5px] hover:border-[#dcd8cf] hover:shadow-[0_26px_54px_-30px_rgba(20,30,45,0.42)]"
               >
-                <div className="placeholder-swatch flex h-[140px] items-center justify-center border-0 border-b border-line text-[14px]">
-                  {t.kind}
+                <div className="h-[150px] overflow-hidden border-b border-line">
+                  <ToolArt slug={t.slug} />
                 </div>
                 <div className="p-7">
                   <div className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">

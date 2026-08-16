@@ -6,6 +6,8 @@ import HeroQuestionStack from "@/components/HeroQuestionStack";
 import WhatPeopleBring from "@/components/WhatPeopleBring";
 import SessionExcerpt from "@/components/SessionExcerpt";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
+import ToolArt from "@/components/ToolArt";
+import Link from "next/link";
 import { priceForHeadcount } from "@/lib/program-pricing";
 import { getQuestionBySlug } from "@/lib/questions";
 
@@ -417,6 +419,113 @@ export default function Home() {
           </div>
           <div className="mx-auto max-w-[760px]">
             <SessionExcerpt convos={CONVOS} />
+          </div>
+        </Container>
+      </section>
+
+      {/* THE FREE SHELF — dark-green band, the deliberate mid-page bookend.
+          Everything here is live, free, and open to everyone; this section
+          exists so the breadth of what's actually built is visible on first
+          landing instead of buried behind the nav. */}
+      <section className="reveal border-b border-line bg-hero-green py-20">
+        <Container width="wide">
+          <div className="mb-12 max-w-[640px]">
+            <div
+              className="inline-flex items-center gap-2 rounded-full border px-[14px] py-[7px] text-[12.5px] font-medium"
+              style={{ borderColor: "var(--hero-border)", color: "var(--hero-cream-muted)" }}
+            >
+              <span className="dot-on-dark" />
+              Free &amp; open to everyone — no signup, no pitch
+            </div>
+            <h2
+              className="mt-6 font-display text-[28px] font-normal leading-[1.08] tracking-[-0.019em] md:text-[36px]"
+              style={{ color: "var(--hero-cream)" }}
+            >
+              Most of what we built,
+              <br />
+              <span className="italic" style={{ color: "var(--hero-terra)" }}>
+                you don&rsquo;t have to pay for.
+              </span>
+            </h2>
+            <p className="mt-5 text-[16px] leading-[1.65]" style={{ color: "var(--hero-cream-muted)" }}>
+              Real tools, usable today, whether your employer works with us or
+              not. If they&rsquo;re useful, that tells you something about how
+              we&rsquo;d treat your team.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {[
+              {
+                slug: "coach-ai",
+                href: "/coach-ai",
+                kind: "AI chat",
+                title: "AI Money Coach",
+                body: "Ask any money question in plain English, anytime. Trained in our coaching approach — it never pitches you anything.",
+              },
+              {
+                slug: "401k-questions",
+                href: "/401k-questions",
+                kind: "Guide",
+                title: "401(k) questions, answered",
+                body: "A searchable library of plain-English answers — match, vesting, rollovers, fees, leaving a job.",
+              },
+              {
+                slug: "plan-benchmark",
+                href: "/employers/plan-benchmark",
+                kind: "For employers",
+                title: "Free 401(k) plan benchmark",
+                body: "Answer a few questions about your match and vesting, see how your plan compares to published industry data.",
+              },
+            ].map((t) => (
+              <Link
+                key={t.slug}
+                href={t.href}
+                className="group block overflow-hidden rounded-2xl transition-all duration-[240ms] ease-[cubic-bezier(0.2,0.7,0.3,1)] hover:-translate-y-[5px]"
+                style={{ background: "var(--hero-panel)", border: "1px solid var(--hero-border)" }}
+              >
+                <div className="h-[150px] overflow-hidden border-b" style={{ borderColor: "var(--hero-border)" }}>
+                  <ToolArt slug={t.slug} />
+                </div>
+                <div className="p-6">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.17em]" style={{ color: "var(--hero-terra)" }}>
+                    {t.kind}
+                  </div>
+                  <h3 className="mt-2.5 font-display text-[19px] font-medium" style={{ color: "var(--hero-cream)" }}>
+                    {t.title}
+                  </h3>
+                  <p className="mt-2 text-[13.5px] leading-[1.6]" style={{ color: "var(--hero-cream-muted)" }}>
+                    {t.body}
+                  </p>
+                  <span
+                    className="mt-4 inline-flex items-center gap-[6px] text-[13.5px] font-semibold"
+                    style={{ color: "var(--hero-terra)" }}
+                  >
+                    Open it <span aria-hidden>&rarr;</span>
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-[14px]" style={{ color: "var(--hero-cream-muted)" }}>
+            <span className="font-medium" style={{ color: "var(--hero-cream)" }}>
+              Also free:
+            </span>
+            {[
+              { href: "/employers/roi-calculator", label: "Employer ROI calculator" },
+              { href: "/resources/debt-payoff", label: "Debt payoff planner" },
+              { href: "/resources/emergency-fund", label: "Emergency fund calculator" },
+              { href: "/resources/budget-builder", label: "Budget builder" },
+              { href: "/resources/benefits-checkup", label: "Benefits checkup" },
+            ].map((l) => (
+              <Link key={l.href} href={l.href} className="underline-offset-4 transition-colors hover:underline" style={{ color: "var(--hero-cream-muted)" }}>
+                {l.label}
+              </Link>
+            ))}
+            <Link href="/resources" className="font-semibold" style={{ color: "var(--hero-terra)" }}>
+              Everything free &rarr;
+            </Link>
           </div>
         </Container>
       </section>
