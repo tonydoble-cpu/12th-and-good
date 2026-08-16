@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 type Beat = { who: "them" | "coach" | "end"; text: string };
 type Convo = { q: string; beats: Beat[] };
@@ -84,19 +85,30 @@ export default function SessionExcerpt({ convos }: { convos: Convo[] }) {
           </button>
         )}
         {atEnd && (
-          <button
-            onClick={() => setStep(0)}
-            className="mt-6 inline-flex items-center gap-[9px] text-[13.5px] font-semibold text-accent hover:text-accent-hover"
-          >
-            Replay this one <span aria-hidden>&#8635;</span>
-          </button>
+          <div className="mt-6 flex flex-wrap items-center gap-[18px]">
+            <Link
+              href="/coach-ai"
+              className="inline-flex items-center gap-[9px] rounded-full bg-ink px-5 py-2.5 text-[13.5px] font-semibold text-white transition-all hover:-translate-y-px"
+            >
+              Try it with your own question <span aria-hidden>&rarr;</span>
+            </Link>
+            <button
+              onClick={() => setStep(0)}
+              className="text-[13.5px] font-semibold text-accent hover:text-accent-hover"
+            >
+              Replay this one <span aria-hidden>&#8635;</span>
+            </button>
+          </div>
         )}
       </div>
 
       <p className="mt-4 text-[12px] italic leading-[1.5] text-muted">
-        An illustrative example, written in the voice we actually use — not a
-        real transcript. Real sessions are never recorded, and nothing said
-        in one ever leaves the conversation.
+        This example is illustrative, written in the voice we actually use —
+        not a real transcript. Real sessions are never recorded, and nothing
+        said in one ever leaves the conversation. &ldquo;Try it with your own
+        question&rdquo; opens our AI money coach, a separate live tool — not
+        a substitute for a real session, but a real, unscripted way to see
+        how it thinks.
       </p>
     </div>
   );
