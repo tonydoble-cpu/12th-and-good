@@ -9,6 +9,15 @@ import { isStripeConfigured } from "@/lib/stripe";
 // Legacy multi-step booking flow. The coach profile page now hosts booking
 // inline via components/BookingCard.tsx (see the design handoff), but this
 // route is kept working for anyone with an old link.
+
+// Note: "/book" is the booking flow, NOT a page about Tony's books — the
+// books live on /about. Metadata here is booking-intent so a search
+// snippet for this URL reads correctly.
+export const metadata = {
+  title: "Book a Session with Tony Doble | 12th & Good Street",
+  description:
+    "Schedule a one-on-one financial coaching session with Tony Doble. Fee-only — you pay for the session and that's 100% of how he's paid. No commissions, no products, ever.",
+};
 export default async function BookPage({
   searchParams,
 }: {

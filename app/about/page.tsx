@@ -4,10 +4,11 @@ import Footer from "@/components/Footer";
 import Container from "@/components/Container";
 
 export const metadata = {
-  title: "About | 12th & Good Street",
+  title: "About Tony Doble & 12th & Good Street",
   description:
-    "Why 12th & Good Street exists: the corner where the street you're from meets the guidance you deserve.",
+    "Why 12th & Good Street exists: the corner where the street you're from meets the guidance you deserve. Meet founder Tony Doble — financial coach and author of four books on money and purpose.",
 };
+
 
 // Rewritten Aug 2026 to match the employer-program pivot. The previous
 // version still described the consumer marketplace ("coaches paid by you,
@@ -36,9 +37,52 @@ const BOOKS = [
   },
 ];
 
+// Structured data: this page is the canonical "who is Tony Doble" surface,
+// so Person + Book schema live here (not on /tony, to avoid duplicate
+// Person entities). Google uses this to associate the name with the books
+// and the site — the raw material for a knowledge panel. No ISBNs are
+// included because we haven't verified them; don't add identifiers
+// without checking the actual Amazon listings.
+const PERSON_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Tony Doble",
+  jobTitle: "Founder & Financial Coach",
+  description:
+    "Financial coach and author of four books on money and purpose. Two decades of money conversations with schools, teams, and community organizations, including years of financial-wellness work with Tacoma Public Schools.",
+  image: "https://12thandgood.com/tony-doble.png",
+  url: "https://12thandgood.com/about",
+  worksFor: {
+    "@type": "Organization",
+    name: "12th & Good Street",
+    url: "https://12thandgood.com",
+  },
+  sameAs: ["https://www.linkedin.com/in/tonydoble", "https://tonydoble.com"],
+  knowsAbout: [
+    "financial coaching",
+    "financial literacy",
+    "401(k) plans",
+    "financial wellness programs",
+  ],
+};
+
+const BOOK_SCHEMA = BOOKS.map((b) => ({
+  "@context": "https://schema.org",
+  "@type": "Book",
+  name: b.title,
+  author: { "@type": "Person", name: "Tony Doble" },
+  description: b.note,
+}));
+
 export default function AboutPage() {
   return (
     <div className="flex min-h-full flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([PERSON_SCHEMA, ...BOOK_SCHEMA]),
+        }}
+      />
       <Header />
       <Container width="narrow" className="flex-1 pt-16 pb-24">
         <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">

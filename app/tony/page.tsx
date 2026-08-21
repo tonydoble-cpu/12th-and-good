@@ -4,6 +4,16 @@ import Image from "next/image";
 // Availability must be live — a static snapshot of the calendar means new
 // slots never appear and booked ones look open. Render on every request.
 export const dynamic = "force-dynamic";
+
+// Without this export the page inherits the homepage's employer-pitch
+// metadata — so a Google search for "Tony Doble" showed a B2B tagline
+// instead of the person. This page is a primary landing surface for
+// name searches; keep title/description person-first.
+export const metadata = {
+  title: "Tony Doble — Financial Coach & Author | 12th & Good Street",
+  description:
+    "Tony Doble is a financial coach and the author of four books on money and purpose, including Zella's Money Choices and Charlie's Money Choices. Two decades of money conversations with schools, teams, and families — now coaching through 12th & Good Street.",
+};
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Container from "@/components/Container";
