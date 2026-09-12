@@ -33,22 +33,10 @@ export default function Header({
             How it works
           </Link>
           <Link
-            href="/401k-questions"
-            className="text-sm font-medium text-hero-cream-muted transition-colors hover:text-hero-cream"
-          >
-            401(k) Guide
-          </Link>
-          <Link
             href="/employers"
             className="text-sm font-medium text-hero-cream-muted transition-colors hover:text-hero-cream"
           >
             For employers
-          </Link>
-          <Link
-            href="/resources"
-            className="text-sm font-medium text-hero-cream-muted transition-colors hover:text-hero-cream"
-          >
-            Resources
           </Link>
           <Link
             href="/employers#pricing"
@@ -63,10 +51,10 @@ export default function Header({
             About
           </Link>
           <Link
-            href="/blog"
+            href="/resources"
             className="text-sm font-medium text-hero-cream-muted transition-colors hover:text-hero-cream"
           >
-            Blog
+            Resources
           </Link>
           {cta && (
             <Link

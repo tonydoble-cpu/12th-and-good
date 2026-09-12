@@ -21,15 +21,15 @@ import { getQuestionBySlug } from "@/lib/questions";
 const STATS = [
   {
     n: "$0",
-    l: "commissions, product fees, or kickbacks — ever.",
+    l: "products, commissions, or sales agenda. Ever.",
   },
   {
     n: "1",
-    l: "flat annual fee, sized to your team. No per-user meter, no surprise bill when engagement grows.",
+    l: "flat annual fee, sized to your team — every employee is eligible, with a pool of private coaching sessions built in and no per-session billing.",
   },
   {
     n: "0",
-    l: "data files, system integrations, or IT reviews required to start.",
+    l: "payroll integrations or employee financial data required to start.",
   },
 ];
 
@@ -192,7 +192,7 @@ export default function Home() {
                 }}
               >
                 <span className="dot-on-dark" />
-                Employer-sponsored financial wellness
+                Financial wellness that people actually use.
               </div>
               <h1
                 className="mt-6 max-w-[660px] font-display text-[38px] font-normal leading-[1.1] tracking-[-0.021em] md:text-[50px]"
@@ -210,21 +210,51 @@ export default function Home() {
                 </span>
               </h1>
               <p
-                className="mt-6 max-w-[520px] text-[17px] leading-[1.6] md:text-[19px]"
+                className="mt-6 max-w-[560px] text-[17px] leading-[1.6] md:text-[19px]"
                 style={{ color: "var(--hero-cream-muted)" }}
               >
-                Help employees feel less alone with money. One trusted
-                financial coach, available by phone, email, or Zoom all
-                year&mdash;for everyday questions and the decisions that
-                actually matter.
+                Give every employee direct, one-on-one access to a real
+                financial coach&mdash;no products, no commissions, no sales
+                agenda. They get honest answers to real money questions. You
+                get a team that makes better decisions and finally uses the
+                benefits you already pay for. Not another portal. Not
+                another webinar.
               </p>
+              <p
+                className="mt-4 max-w-[560px] text-[14.5px] leading-[1.6]"
+                style={{ color: "var(--hero-cream-muted)" }}
+              >
+                Right now, every employee talks directly to Tony&mdash;not a
+                call center, not a rotating pool of coaches.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-[9px]">
+                {[
+                  "Should I pay off debt or save?",
+                  "Am I using my benefits right?",
+                  "Can we afford a house\u2014or another kid?",
+                  "What do I do with my 401(k)?",
+                  "How much emergency savings do I need?",
+                  "My parents need help\u2014what now?",
+                ].map((q) => (
+                  <span
+                    key={q}
+                    className="rounded-full border px-[13px] py-[6px] text-[12.5px] font-medium"
+                    style={{
+                      borderColor: "var(--hero-border)",
+                      color: "var(--hero-cream-muted)",
+                    }}
+                  >
+                    {q}
+                  </span>
+                ))}
+              </div>
               <div className="mt-8 flex flex-wrap items-center gap-[14px]">
                 <a
-                  href="/employers#contact"
+                  href="#pilot"
                   className="inline-flex items-center gap-[10px] rounded-full px-[28px] py-[15px] text-[16px] font-semibold transition-all hover:-translate-y-px"
                   style={{ background: "var(--hero-terra)", color: "#2c1608" }}
                 >
-                  Talk to us <span aria-hidden>&rarr;</span>
+                  Start a 90-Day Pilot <span aria-hidden>&rarr;</span>
                 </a>
                 <a
                   href="#pricing-preview"
@@ -235,16 +265,6 @@ export default function Home() {
                   }}
                 >
                   See pricing <span aria-hidden>&darr;</span>
-                </a>
-                <a
-                  href="/401k-questions"
-                  className="inline-flex items-center gap-[9px] rounded-full border px-[25px] py-[14px] text-[15px] font-semibold transition-all hover:bg-white/5"
-                  style={{
-                    borderColor: "var(--hero-border-hi)",
-                    color: "var(--hero-cream)",
-                  }}
-                >
-                  Free 401(k) answers <span aria-hidden>&rarr;</span>
                 </a>
               </div>
             </div>
@@ -268,6 +288,67 @@ export default function Home() {
                 </p>
               </div>
             ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* 90-DAY PILOT — prominent, early, the low-risk entry point */}
+      <section className="reveal border-b border-line bg-surface py-20" id="pilot">
+        <Container width="wide">
+          <div className="mx-auto max-w-[820px] rounded-3xl border border-accent/25 bg-white p-8 md:p-12">
+            <p className="text-[11.5px] font-semibold uppercase tracking-[0.17em] text-accent">
+              Not sure yet? Start small.
+            </p>
+            <h2 className="mt-4 font-display text-[26px] font-normal leading-[1.15] tracking-[-0.019em] text-ink md:text-[32px]">
+              The 90-Day Financial Wellness Pilot
+            </h2>
+            <p className="mt-5 text-[16px] leading-[1.65] text-ink-2">
+              Your company already pays for benefits. We give employees a
+              person who helps them actually understand and use them&mdash;and
+              somewhere trusted to go with the money questions that don&rsquo;t
+              fit inside a benefits portal. Not another portal. Not another
+              webinar. Not another financial company looking for leads.
+            </p>
+            <p className="mt-4 text-[15.5px] leading-[1.65] text-ink-2">
+              Give employees access to a real financial coach for 90
+              days&mdash;help them understand their benefits, make better
+              financial decisions, and get trusted answers to real money
+              questions.
+            </p>
+            <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {[
+                "No complicated integrations",
+                "No payroll integration or employee financial data required",
+                "No long-term commitment",
+              ].map((item) => (
+                <li
+                  key={item}
+                  className="rounded-xl border border-line bg-surface px-4 py-3 text-[13.5px] leading-[1.5] text-ink-2"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-6 border-t border-line pt-7">
+              <div>
+                <p className="font-display text-[28px] text-ink">
+                  $9,500
+                  <span className="text-[13px] font-sans text-muted">
+                    {" "}
+                    for companies under 100 employees
+                  </span>
+                </p>
+                <p className="mt-1 text-[13px] text-ink-2">
+                  $5,000 credits toward your first year if you continue.
+                </p>
+              </div>
+              <a
+                href="/employers#contact"
+                className="inline-flex items-center gap-[10px] rounded-full bg-accent px-[26px] py-[14px] text-[15px] font-semibold text-white transition-all hover:-translate-y-px hover:bg-accent-hover"
+              >
+                Start a 90-Day Pilot <span aria-hidden>&rarr;</span>
+              </a>
+            </div>
           </div>
         </Container>
       </section>
@@ -308,8 +389,10 @@ export default function Home() {
               A firm annual fee for your size — not a quote behind a form.
             </h2>
             <p className="mt-5 text-[16px] leading-[1.6] text-ink-2">
-              One annual fee. Every employee can use it. No per-user meter,
-              and no surprise bill when engagement grows.
+              One annual fee, sized to your team. Every employee is
+              eligible to participate, with a pool of private coaching
+              sessions built into every plan&mdash;no surprise per-session
+              billing.
             </p>
           </div>
           <div className="mx-auto mt-10 grid max-w-[980px] grid-cols-2 gap-5 sm:grid-cols-4">
