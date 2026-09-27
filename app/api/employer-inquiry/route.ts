@@ -8,6 +8,25 @@ import {
   sendEmail,
   isEmailConfigured,
 } from "@/lib/email";
+import { isRateLimited, getClientIp } from "@/lib/rate-limit";
+
+// Bot floor (Sept 2026): this endpoint was getting hit directly with
+// scripted junk in every field ("New employer inquiry: Hxkghwx LLC" —
+// random strings, throwaway email). Three independent, silent layers —
+// each alone is beatable, together they knock out the unsophisticated
+// bots actually hitting this form:
+//   1. Honeypot field ("website") — real users never see or fill it
+//      (visually hidden + aria-hidden + tabIndex -1); a browser-automation
+//      bot that fills every input on the page fills it too.
+//   2. Time trap — real people take more than a couple seconds to read
+//      four fields and type; the client sends elapsed ms since the form
+//      mounted (formLoadedAt) and anything under MIN_FILL_MS is rejected.
+//   3. Per-IP rate limit — no legitimate visitor submits this form more
+//      than a few times an hour.
+// All three fail *silently* with { ok: true } and no persistence, no
+// email — never tell an attacker which check tripped, and never let a
+// bot's blocked submission still cost Tony an inbox notification.
+const MIN_FILL_MS = 1500;
 
 /**
  * POST /api/employer-inquiry
@@ -35,6 +54,10 @@ type InquiryPayload = {
   email: string;
   teamSize?: string;
   message?: string;
+  /** Honeypot — must arrive empty. Any value means it's a bot. */
+  website?: string;
+  /** ms since the form mounted, per Date.now() on the client. */
+  formLoadedAt?: number;
 };
 
 const demoInquiries: InquiryPayload[] = [];
@@ -49,6 +72,20 @@ export async function POST(req: NextRequest) {
     body = (await req.json()) as InquiryPayload;
   } catch {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  }
+
+  // --- Bot floor: fail silently, never reveal which check tripped ---
+  if (body.website && body.website.trim() !== "") {
+    return NextResponse.json({ ok: true });
+  }
+  if (
+    typeof body.formLoadedAt === "number" &&
+    Date.now() - body.formLoadedAt < MIN_FILL_MS
+  ) {
+    return NextResponse.json({ ok: true });
+  }
+  if (isRateLimited(`employer-inquiry:${getClientIp(req)}`)) {
+    return NextResponse.json({ ok: true });
   }
 
   if (!isValidEmail(body.email)) {

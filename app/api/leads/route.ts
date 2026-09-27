@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { isRateLimited, getClientIp } from "@/lib/rate-limit";
 
 /**
  * POST /api/leads
@@ -19,6 +20,12 @@ const demoLeads: LeadPayload[] = [];
 
 export async function POST(req: NextRequest) {
   try {
+    // Same public, unauthenticated surface as /api/employer-inquiry —
+    // cap it per IP so a bot flood can't pollute the leads table.
+    if (isRateLimited(`leads:${getClientIp(req)}`, 10, 60 * 60 * 1000)) {
+      return NextResponse.json({ ok: true });
+    }
+
     const body = (await req.json()) as LeadPayload;
 
     if (!body.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {

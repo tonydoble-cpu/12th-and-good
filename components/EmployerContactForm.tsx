@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useRef, useEffect, FormEvent } from "react";
 
 const inputClass =
   "w-full rounded-[10px] border border-line bg-white px-[15px] py-[13px] text-[15px] text-ink placeholder:text-[#a7a196] transition-all focus:outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(58,90,125,0.12)]";
@@ -14,17 +14,38 @@ export default function EmployerContactForm() {
   const [email, setEmail] = useState("");
   const [teamSize, setTeamSize] = useState("");
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot — stays empty
+  // When this form mounted, for the server's time-trap check. Date.now()
+  // is impure, so it can't run during render (React purity rule) — set it
+  // in an effect instead, which only ever fires once on mount.
+  const formLoadedAt = useRef(0);
+  useEffect(() => {
+    formLoadedAt.current = Date.now();
+  }, []);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (status === "submitting") return;
+    // A filled honeypot means a bot — pretend success without sending it.
+    if (website.trim() !== "") {
+      setStatus("sent");
+      return;
+    }
     setStatus("submitting");
 
     try {
       const res = await fetch("/api/employer-inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, company, email, teamSize, message }),
+        body: JSON.stringify({
+          name,
+          company,
+          email,
+          teamSize,
+          message,
+          website,
+          formLoadedAt: formLoadedAt.current,
+        }),
       });
 
       if (!res.ok) {
@@ -53,6 +74,33 @@ export default function EmployerContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="rounded-2xl border border-line bg-surface p-8">
+      {/* Honeypot — visually hidden and unreachable by tab/screen reader,
+          never displayed to a real visitor. A bot that fills every input
+          it finds fills this too; the server rejects anything non-empty
+          here. Do not add a "name" the average bot dictionary wouldn't
+          target, and do not use display:none — some bots skip that. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          width: 1,
+          height: 1,
+          overflow: "hidden",
+          clip: "rect(0,0,0,0)",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <label htmlFor="ec-website">Website</label>
+        <input
+          id="ec-website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-[14px]">
         <div>
           <label htmlFor="ec-name" className="mb-[6px] block text-xs font-semibold text-ink-2">
